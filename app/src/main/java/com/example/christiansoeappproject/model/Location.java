@@ -1,11 +1,21 @@
 package com.example.christiansoeappproject.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.UUID;
 
 public abstract class Location {
+
+    @SerializedName("id")
     private String id;
+
+    @SerializedName("latitude")
     private double latitude;
+
+    @SerializedName("longitude")
     private double longitude;
+
+    @SerializedName("name")
     private String name;
 
     public Location(String id, double latitude, double longitude, String name) {
@@ -52,5 +62,15 @@ public abstract class Location {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "Location{" +
+                "id='" + id + '\'' +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", name='" + name + '\'' +
+                '}';
     }
 }
