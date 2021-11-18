@@ -5,8 +5,6 @@ import android.os.Bundle;
 import com.example.christiansoeappproject.model.Attraction;
 import com.example.christiansoeappproject.repository.AttractionRepository;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -16,8 +14,6 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.christiansoeappproject.databinding.ActivityMainBinding;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
