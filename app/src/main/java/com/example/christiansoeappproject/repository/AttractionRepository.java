@@ -1,32 +1,26 @@
 package com.example.christiansoeappproject.repository;
 
-import androidx.recyclerview.widget.RecyclerView;
-
+import com.example.christiansoeappproject.endpoint.IAttractionEndpoint;
 import com.example.christiansoeappproject.model.Attraction;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import io.reactivex.disposables.CompositeDisposable;
 
 public class AttractionRepository implements ICrudRepository<Attraction>{
 
-    public static final String BASE_URL = "https://10.0.2.2:5001/";
+    public static final String BASE_URL = "https://csrestapp.azurewebsites.net/";
     Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build();
-    //CompositeDisposable compositeDisposable;
+    final IAttractionEndpoint apiService = retrofit.create(IAttractionEndpoint.class);
+
 
     @Override
     public void create(Attraction attraction) {
@@ -35,7 +29,25 @@ public class AttractionRepository implements ICrudRepository<Attraction>{
 
     @Override
     public Attraction readById(String id) {
-        return null;
+        final Attraction[] attraction = {null};
+
+        Call<Attraction> call = apiService.readAttraction(id);
+        call.enqueue(new Callback<Attraction>() {
+            @Override
+            public void onResponse(Call<Attraction> call, Response<Attraction> response) {
+                if (response.body()!=null){
+                    System.out.println(response.body());
+                    attraction[0] = response.body();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Attraction> call, Throwable t) {
+                System.out.println(t.toString());
+            }
+        });
+
+        return attraction[0];
     }
 
     @Override
@@ -43,15 +55,13 @@ public class AttractionRepository implements ICrudRepository<Attraction>{
 
         List<Attraction> attractionList = new ArrayList<>();
 
-        final AttractionAPI apiService = retrofit.create(AttractionAPI.class);
-        Call<List<Attraction>> call = apiService.getAttractions();
+        Call<List<Attraction>> call = apiService.readAttractions();
         call.enqueue(new Callback<List<Attraction>>() {
             @Override
             public void onResponse(Call<List<Attraction>> call, Response<List<Attraction>> response) {
-                /*if (response.body()!=null) {
+                if (response.body()!=null) {
                     attractionList.addAll(response.body());
-                }*/
-                System.out.println(response.body());
+                }
             }
 
             @Override
@@ -71,14 +81,5 @@ public class AttractionRepository implements ICrudRepository<Attraction>{
     @Override
     public void delete(String id) {
 
-    }
-
-    public void test(){
-        try {
-            Document doc = Jsoup.connect("https://localhost:5001/api/attraction/attractions").get();
-            System.out.println(doc.body());
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
     }
 }
