@@ -71,6 +71,7 @@ public class AttractionRepository implements ICrudRepository<Attraction>{
             @Override
             public void onResponse(Call<List<Attraction>> call, Response<List<Attraction>> response) {
                 if (response.body()!=null) {
+                    System.out.println(response.body());
                     attractionList.addAll(response.body());
                 }
             }
@@ -86,11 +87,34 @@ public class AttractionRepository implements ICrudRepository<Attraction>{
 
     @Override
     public void update(Attraction attraction) {
+        Call<Attraction> call = apiService.updateAttraction(attraction);
+        call.enqueue(new Callback<Attraction>() {
+            @Override
+            public void onResponse(Call<Attraction> call, Response<Attraction> response) {
+                System.out.println(attraction + " has been updated!");
+            }
 
+            @Override
+            public void onFailure(Call<Attraction> call, Throwable t) {
+                System.out.println(t.toString());
+            }
+        });
     }
 
     @Override
     public void delete(String id) {
 
+        Call<Attraction> call = apiService.deleteAttraction(id);
+        call.enqueue(new Callback<Attraction>() {
+            @Override
+            public void onResponse(Call<Attraction> call, Response<Attraction> response) {
+                System.out.println("Attraction: " + id + " has been deleted!");
+            }
+
+            @Override
+            public void onFailure(Call<Attraction> call, Throwable t) {
+                System.out.println(t.toString());
+            }
+        });
     }
 }

@@ -5,8 +5,6 @@ import android.os.Bundle;
 import com.example.christiansoeappproject.model.Attraction;
 import com.example.christiansoeappproject.repository.AttractionRepository;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -16,8 +14,6 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.christiansoeappproject.databinding.ActivityMainBinding;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -39,9 +35,5 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
-
-        AttractionRepository attractionRepository = new AttractionRepository();
-        Attraction attraction = new Attraction(1,2,"name");
-        attractionRepository.create(attraction);
     }
 }
