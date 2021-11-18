@@ -24,7 +24,18 @@ public class AttractionRepository implements ICrudRepository<Attraction>{
 
     @Override
     public void create(Attraction attraction) {
+        Call<Attraction> call = apiService.createAttraction(attraction);
+        call.enqueue(new Callback<Attraction>() {
+            @Override
+            public void onResponse(Call<Attraction> call, Response<Attraction> response) {
+                System.out.println(response.body() + " has been created!");
+            }
 
+            @Override
+            public void onFailure(Call<Attraction> call, Throwable t) {
+                System.out.println(t.toString());
+            }
+        });
     }
 
     @Override
