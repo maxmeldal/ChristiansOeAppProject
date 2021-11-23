@@ -1,5 +1,7 @@
 package com.example.christiansoeappproject.service;
 
+import android.content.Context;
+
 import com.example.christiansoeappproject.model.Attraction;
 import com.example.christiansoeappproject.repository.AttractionRepository;
 
@@ -7,7 +9,17 @@ import java.util.List;
 
 public class AttractionService{
 
-    AttractionRepository repo = new AttractionRepository();
+    AttractionRepository repo;
+
+    public AttractionService(Context context) {
+        repo  = new AttractionRepository();
+        repo.init(context);
+
+    }
+
+    public List<Attraction> getAttractions(){
+        return repo.attractionList;
+    }
 
     public void create(Attraction attraction){
         repo.create(attraction);

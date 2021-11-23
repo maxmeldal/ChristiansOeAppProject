@@ -4,15 +4,19 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.text.method.DigitsKeyListener;
+import android.view.View;
 import android.widget.EditText;
 
 import com.example.christiansoeappproject.R;
+import com.example.christiansoeappproject.model.Attraction;
+import com.example.christiansoeappproject.service.AttractionService;
 
 public class AttractionDetailActivity extends AppCompatActivity {
     private EditText nameEditText;
     private EditText latitudeEditText;
     private EditText longitudeEditText;
     private Bundle extras;
+    private String id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +34,20 @@ public class AttractionDetailActivity extends AppCompatActivity {
 
             latitudeEditText.setText(extras.getString(latitude));
             longitudeEditText.setText(extras.getString(longitude));
+
+            id = extras.getString("id");
+
         }
+    }
+
+    public void updatePressed(View view){
+        AttractionsActivity.service.update(new Attraction(id, Double.parseDouble(latitudeEditText.getText().toString()), Double.parseDouble(longitudeEditText.getText().toString()), nameEditText.getText().toString()));
+    }
+
+    public void deletePressed(View view){
+        AttractionsActivity.service.delete(id);
+        //TODO - make use update instead
+        AttractionsActivity.adapter.notifyDataSetChanged();
+        finish();
     }
 }

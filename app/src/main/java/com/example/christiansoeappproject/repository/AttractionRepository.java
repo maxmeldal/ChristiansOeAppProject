@@ -17,7 +17,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class AttractionRepository implements ICrudRepository<Attraction>{
 
-    private static List<Attraction> attractionList = new ArrayList<>();
+    public List<Attraction> attractionList = new ArrayList<>();
+
     private static Updatable caller;
     Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(BaseUrl.BASE_URL)
@@ -26,13 +27,28 @@ public class AttractionRepository implements ICrudRepository<Attraction>{
     final IAttractionEndpoint apiService = retrofit.create(IAttractionEndpoint.class);
 
 
-    public static void init(Context context){
-        //caller
+    public void init(Context context) {
+        caller = (Updatable) context;
         startListener();
     }
 
-    private static void startListener(){
+    private void startListener() {
+        Call<List<Attraction>> call = apiService.readAttractions();
+        call.enqueue(new Callback<List<Attraction>>() {
+            @Override
+            public void onResponse(Call<List<Attraction>> call, Response<List<Attraction>> response) {
+                if (response.body() != null) {
+                    attractionList.clear();
+                    attractionList.addAll(response.body());
+                }
+                caller.update();
+            }
 
+            @Override
+            public void onFailure(Call<List<Attraction>> call, Throwable t) {
+                System.out.println(t.toString());
+            }
+        });
     }
 
 
