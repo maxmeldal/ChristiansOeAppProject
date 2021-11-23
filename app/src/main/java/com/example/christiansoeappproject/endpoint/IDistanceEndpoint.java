@@ -7,7 +7,7 @@ import retrofit2.http.Path;
 
 public interface IDistanceEndpoint {
 
-    //@GET("api/distance/?")
-    //Call<> readDistance(@Field("lat") double lat, @Field("lon") double lon);
+    @GET("api/distance/{lat}&{lon}")
+    Call<Double> readDistance(@Path("lat")double lat, @Path("lon") double lon);
 
 }
