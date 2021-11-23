@@ -1,6 +1,11 @@
 package com.example.christiansoeappproject.repository;
+import android.content.Context;
+
 import com.example.christiansoeappproject.endpoint.ITripEndpoint;
+import com.example.christiansoeappproject.model.Attraction;
 import com.example.christiansoeappproject.model.Trip;
+import com.example.christiansoeappproject.ui.Updatable;
+
 import java.util.ArrayList;
 import java.util.List;
 import retrofit2.Call;
@@ -14,8 +19,34 @@ public class TripRepository implements ICrudRepository<Trip>{
             .baseUrl(BaseUrl.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build();
+    public List<Trip> trips = new ArrayList<>();
+    private static Updatable caller;
     final ITripEndpoint apiService = retrofit.create(ITripEndpoint.class);
 
+
+    public void init(Context context) {
+        caller = (Updatable) context;
+        startListener();
+    }
+
+    private void startListener() {
+        Call<List<Trip>> call = apiService.readTrips();
+        call.enqueue(new Callback<List<Trip>>() {
+            @Override
+            public void onResponse(Call<List<Trip>> call, Response<List<Trip>> response) {
+                if (response.body() != null) {
+                    trips.clear();
+                    trips.addAll(response.body());
+                }
+                caller.update();
+            }
+
+            @Override
+            public void onFailure(Call<List<Trip>> call, Throwable t) {
+                System.out.println(t.toString());
+            }
+        });
+    }
 
     @Override
     public void create(Trip trip) {

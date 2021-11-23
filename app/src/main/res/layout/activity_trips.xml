@@ -4,30 +4,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.admin.AdminActivity">
+    tools:context=".ui.admin.trip.TripsActivity">
 
-    <Button
-        android:id="@+id/attractionsButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="136dp"
-        android:layout_marginTop="140dp"
-        android:layout_marginEnd="136dp"
-        android:text="Attractions"
-        android:onClick="attractionsPressed"
+    <ListView
+        android:id="@+id/tripsListView"
+        android:layout_width="330dp"
+        android:layout_height="499dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="26dp"
+        android:layout_marginEnd="41dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/tripsbutton"
-        android:layout_width="141dp"
-        android:layout_height="47dp"
-        android:layout_marginStart="135dp"
-        android:layout_marginEnd="135dp"
-        android:layout_marginBottom="441dp"
-        android:onClick="tripsPressed"
-        android:text="Trips"
+        android:id="@+id/createTripBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="157dp"
+        android:layout_marginEnd="160dp"
+        android:layout_marginBottom="96dp"
+        android:onClick="createPressed"
+        android:text="create"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
