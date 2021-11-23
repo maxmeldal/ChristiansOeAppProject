@@ -1,7 +1,10 @@
 package com.example.christiansoeappproject.repository;
 
+import android.content.Context;
+
 import com.example.christiansoeappproject.endpoint.IAttractionEndpoint;
 import com.example.christiansoeappproject.model.Attraction;
+import com.example.christiansoeappproject.ui.Updatable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,11 +17,23 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class AttractionRepository implements ICrudRepository<Attraction>{
 
+    private static List<Attraction> attractionList = new ArrayList<>();
+    private static Updatable caller;
     Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(BaseUrl.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build();
     final IAttractionEndpoint apiService = retrofit.create(IAttractionEndpoint.class);
+
+
+    public static void init(Context context){
+        //caller
+        startListener();
+    }
+
+    private static void startListener(){
+
+    }
 
 
     @Override
@@ -62,27 +77,30 @@ public class AttractionRepository implements ICrudRepository<Attraction>{
 
     @Override
     public List<Attraction> readAll() {
-
-        List<Attraction> attractionList = new ArrayList<>();
-
-        Call<List<Attraction>> call = apiService.readAttractions();
-        call.enqueue(new Callback<List<Attraction>>() {
-            @Override
-            public void onResponse(Call<List<Attraction>> call, Response<List<Attraction>> response) {
-                if (response.body()!=null) {
-                    System.out.println(response.body());
-                    attractionList.addAll(response.body());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Attraction>> call, Throwable t) {
-                System.out.println(t.toString());
-            }
-        });
-
-        return attractionList;
+        return null;
     }
+
+    //   @Override
+  //  public void readAll() {
+
+        //List<Attraction> attractionList = new ArrayList<>();
+
+    //    Call<List<Attraction>> call = apiService.readAttractions();
+    //    call.enqueue(new Callback<List<Attraction>>() {
+    //        @Override
+    //        public void onResponse(Call<List<Attraction>> call, Response<List<Attraction>> response) {
+   //             if (response.body()!=null) {
+    //                System.out.println(response.body());
+     //               attractionList.addAll(response.body());
+      //          }
+       //     }
+
+       //     @Override
+        //    public void onFailure(Call<List<Attraction>> call, Throwable t) {
+         //       System.out.println(t.toString());
+         //   }
+       // });
+   // }
 
     @Override
     public void update(Attraction attraction) {

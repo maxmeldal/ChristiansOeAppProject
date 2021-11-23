@@ -8,12 +8,13 @@ import android.widget.ListView;
 
 import com.example.christiansoeappproject.R;
 import com.example.christiansoeappproject.model.Attraction;
+import com.example.christiansoeappproject.ui.Updatable;
 import com.example.christiansoeappproject.ui.admin.attraction.AttractionAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AttractionsActivity extends AppCompatActivity {
+public class AttractionsActivity extends AppCompatActivity implements Updatable {
 
     private ListView listView;
     private List<Attraction> attractions = new ArrayList<>();
@@ -45,5 +46,10 @@ public class AttractionsActivity extends AppCompatActivity {
         attractions.add(new Attraction(12, 12, "Hej"));
         attractions.add(new Attraction(13, 12, "Name"));
         attractions.add(new Attraction(14, 12, "Name"));
+    }
+
+    @Override
+    public void update() {
+
     }
 }
