@@ -1,9 +1,10 @@
 package com.example.christiansoeappproject;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
-import com.example.christiansoeappproject.model.Attraction;
-import com.example.christiansoeappproject.repository.AttractionRepository;
+import com.example.christiansoeappproject.ui.admin.AdminActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,10 +31,15 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications)
+                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_admin)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
+    }
+
+    public void loginPressed(View view){
+        Intent intent = new Intent(this, AdminActivity.class);
+        startActivity(intent);
     }
 }
