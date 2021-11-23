@@ -42,6 +42,8 @@ public class AttractionDetailActivity extends AppCompatActivity {
 
     public void updatePressed(View view){
         AttractionsActivity.service.update(new Attraction(id, Double.parseDouble(latitudeEditText.getText().toString()), Double.parseDouble(longitudeEditText.getText().toString()), nameEditText.getText().toString()));
+        AttractionsActivity.adapter.notifyDataSetChanged();
+        finish();
     }
 
     public void deletePressed(View view){
