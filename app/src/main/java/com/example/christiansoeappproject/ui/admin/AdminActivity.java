@@ -8,6 +8,7 @@ import android.view.View;
 
 import com.example.christiansoeappproject.R;
 import com.example.christiansoeappproject.ui.admin.attraction.AttractionsActivity;
+import com.example.christiansoeappproject.ui.admin.facility.FacilityActivity;
 
 public class AdminActivity extends AppCompatActivity {
 
@@ -19,6 +20,11 @@ public class AdminActivity extends AppCompatActivity {
 
     public void attractionsPressed(View view){
         Intent intent = new Intent(this, AttractionsActivity.class);
+        startActivity(intent);
+    }
+
+    public void facilitiesPressed(View view){
+        Intent intent = new Intent(this, FacilityActivity.class);
         startActivity(intent);
     }
 }

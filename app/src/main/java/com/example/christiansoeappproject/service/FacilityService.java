@@ -3,6 +3,7 @@ package com.example.christiansoeappproject.service;
 import com.example.christiansoeappproject.model.Facility;
 import com.example.christiansoeappproject.repository.FacilityRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FacilityService {
@@ -27,5 +28,14 @@ public class FacilityService {
 
     public void delete(String id){
         repo.delete(id);
+    }
+
+    public List<Facility> getFacilities() {
+        List<Facility> facilities =new ArrayList<>();
+        facilities.add(new Facility(1,2,"hej"));
+        facilities.add(new Facility(1,2,"hej"));
+        facilities.add(new Facility(1,2,"hej"));
+        facilities.add(new Facility(1,2,"hej"));
+        return facilities;
     }
 }
