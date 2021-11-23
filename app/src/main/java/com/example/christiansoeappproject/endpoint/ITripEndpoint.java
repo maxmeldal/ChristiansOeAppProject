@@ -17,7 +17,7 @@ public interface ITripEndpoint {
     Call<Trip> readTrip(@Path("id") String id);
 
     @GET("api/trip/attractions")
-    Call<List<Trip>> readTrip();
+    Call<List<Trip>> readTrips();
 
     @PUT("api/trip/update")
     Call<Trip> updateTrip(@Body Trip trip);

@@ -14,9 +14,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class AttractionRepository implements ICrudRepository<Attraction>{
 
-    public static final String BASE_URL = "https://csrestapp.azurewebsites.net/";
     Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(BaseUrl.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build();
     final IAttractionEndpoint apiService = retrofit.create(IAttractionEndpoint.class);
