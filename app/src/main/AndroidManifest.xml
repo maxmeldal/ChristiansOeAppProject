@@ -17,6 +17,12 @@
             android:name=".ui.admin.trip.TripDetailActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.admin.facility.FacilityDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.admin.facility.FacilityActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.admin.attraction.AttractionDetailActivity"
             android:exported="false" />
         <activity
