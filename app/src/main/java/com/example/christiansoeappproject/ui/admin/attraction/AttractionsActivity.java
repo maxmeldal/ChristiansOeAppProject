@@ -50,6 +50,6 @@ public class AttractionsActivity extends AppCompatActivity implements Updatable 
 
     @Override
     public void update() {
-
+        adapter.notifyDataSetChanged();
     }
 }
