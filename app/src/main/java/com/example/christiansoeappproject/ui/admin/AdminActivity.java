@@ -8,6 +8,7 @@ import android.view.View;
 
 import com.example.christiansoeappproject.R;
 import com.example.christiansoeappproject.ui.admin.attraction.AttractionsActivity;
+import com.example.christiansoeappproject.ui.admin.restaurant.RestaurantActivity;
 import com.example.christiansoeappproject.ui.admin.trip.TripsActivity;
 import com.example.christiansoeappproject.ui.admin.facility.FacilityActivity;
 
@@ -31,6 +32,10 @@ public class AdminActivity extends AppCompatActivity {
 
     public void facilitiesPressed(View view){
         Intent intent = new Intent(this, FacilityActivity.class);
+        startActivity(intent);
+    }
+    public void restaurantsPressed(View view){
+        Intent intent = new Intent(this, RestaurantActivity.class);
         startActivity(intent);
     }
 }

@@ -10,13 +10,11 @@
         android:id="@+id/attractionsButton"
         android:layout_width="145dp"
         android:layout_height="47dp"
-        android:layout_marginStart="138dp"
-        android:layout_marginTop="140dp"
-        android:layout_marginEnd="138dp"
+        android:layout_marginTop="100dp"
         android:onClick="attractionsPressed"
         android:text="Attractions"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.518"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -24,29 +22,35 @@
         android:id="@+id/tripsbutton"
         android:layout_width="145dp"
         android:layout_height="47dp"
-        android:layout_marginStart="138dp"
-        android:layout_marginTop="33dp"
-        android:layout_marginEnd="138dp"
-        android:layout_marginBottom="28dp"
+        android:layout_marginTop="56dp"
         android:onClick="tripsPressed"
         android:text="Trips"
-        app:layout_constraintBottom_toTopOf="@+id/facilitiesButton"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/attractionsButton"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/attractionsButton"
         app:layout_constraintTop_toBottomOf="@+id/attractionsButton" />
 
     <Button
         android:id="@+id/facilitiesButton"
         android:layout_width="145dp"
         android:layout_height="47dp"
-        android:layout_marginStart="138dp"
-        android:layout_marginEnd="138dp"
-        android:layout_marginBottom="388dp"
+        android:layout_marginTop="72dp"
         android:onClick="facilitiesPressed"
         android:text="facilities"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/tripsbutton"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/tripsbutton"
+        app:layout_constraintTop_toBottomOf="@+id/tripsbutton" />
+
+    <Button
+        android:id="@+id/restaurantsButton"
+        android:layout_width="145dp"
+        android:layout_height="47dp"
+        android:layout_marginTop="88dp"
+        android:onClick="restaurantsPressed"
+        android:text="restaurants"
+        app:layout_constraintEnd_toEndOf="@+id/facilitiesButton"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="@+id/facilitiesButton"
+        app:layout_constraintTop_toBottomOf="@+id/facilitiesButton" />
 </androidx.constraintlayout.widget.ConstraintLayout>
