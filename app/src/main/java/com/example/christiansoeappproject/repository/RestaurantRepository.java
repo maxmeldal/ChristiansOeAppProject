@@ -34,23 +34,6 @@ public class RestaurantRepository implements ICrudRepository<Restaurant>{
         startListener();
     }
 
-    private void startListener() {
-        Call<List<Restaurant>> call = apiService.readRestaurants();
-        call.enqueue(new Callback<List<Restaurant>>() {
-            @Override
-            public void onResponse(Call<List<Restaurant>> call, Response<List<Restaurant>> response) {
-                if (response.body() != null){
-                    restaurantList.addAll(response.body());
-                }
-                caller.update();
-            }
-
-            @Override
-            public void onFailure(Call<List<Restaurant>> call, Throwable t) {
-                System.out.println(t.toString());
-            }
-        });
-    }
 
     @Override
     public void create(Restaurant restaurant) {
@@ -91,30 +74,45 @@ public class RestaurantRepository implements ICrudRepository<Restaurant>{
 
         return restaurants[0];
     }
+    private void startListener() {
+        Call<List<Restaurant>> call = apiService.readRestaurants();
+        call.enqueue(new Callback<List<Restaurant>>() {
+            @Override
+            public void onResponse(Call<List<Restaurant>> call, Response<List<Restaurant>> response) {
+                if (response.body() != null){
+                    restaurantList.addAll(response.body());
+                }
+                caller.update();
+            }
 
+            @Override
+            public void onFailure(Call<List<Restaurant>> call, Throwable t) {
+                System.out.println(t.toString());
+            }
+        });
+    }
     @Override
     public List<Restaurant> readAll() {
-        return null;
 
-//        List<Restaurant> restaurantList = new ArrayList<>();
-//
-//        Call<List<Restaurant>> call = apiService.readRestaurants();
-//        call.enqueue(new Callback<List<Restaurant>>() {
-//            @Override
-//            public void onResponse(Call<List<Restaurant>> call, Response<List<Restaurant>> response) {
-//                if (response.body()!=null) {
-//                    System.out.println(response.body());
-//                    restaurantList.addAll(response.body());
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<List<Restaurant>> call, Throwable t) {
-//                System.out.println(t.toString());
-//            }
-//        });
-//
-//        return restaurantList;
+        List<Restaurant> restaurantList = new ArrayList<>();
+
+        Call<List<Restaurant>> call = apiService.readRestaurants();
+        call.enqueue(new Callback<List<Restaurant>>() {
+            @Override
+            public void onResponse(Call<List<Restaurant>> call, Response<List<Restaurant>> response) {
+                if (response.body()!=null) {
+                    System.out.println(response.body());
+                    restaurantList.addAll(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Restaurant>> call, Throwable t) {
+                System.out.println(t.toString());
+            }
+        });
+
+        return restaurantList;
     }
 
     @Override

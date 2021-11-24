@@ -40,22 +40,28 @@ public class RestaurantActivity extends AppCompatActivity implements Updatable {
         adapter = new RestaurantAdapter(this, restaurants);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener((adapterView, view, i, l) -> {
-            Intent intent = new Intent(this, AttractionDetailActivity.class);
+            Intent intent = new Intent(this, RestaurantDetailActivity.class);
             intent.putExtra("latitude", restaurants.get(i).getLatitude());
             intent.putExtra("longitude", restaurants.get(i).getLongitude());
             intent.putExtra("name", restaurants.get(i).getName());
             intent.putExtra("id", restaurants.get(i).getId());
+            intent.putExtra("url", restaurants.get(i).getUrl());
+            intent.putExtra("open", restaurants.get(i).getOpen());
+            intent.putExtra("close", restaurants.get(i).getClose());
+
             startActivity(intent);
         });
     }
 
     public void create(View view){
         service.create(new Restaurant(0,0, "New Restaurant","www.happyDolphin.dk",11.00,23.59));
+        update();
     }
 
     @Override
     public void update() {
-        restaurants = service.getRestaurants();
+        //restaurants = service.getRestaurants();
         adapter.notifyDataSetChanged();
+        setupList();
     }
 }

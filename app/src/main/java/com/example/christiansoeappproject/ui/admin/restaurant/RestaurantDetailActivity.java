@@ -1,9 +1,11 @@
 package com.example.christiansoeappproject.ui.admin.restaurant;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.christiansoeappproject.R;
@@ -31,7 +33,7 @@ public class RestaurantDetailActivity extends AppCompatActivity {
         extras = getIntent().getExtras();
         if (extras!=null){
             nameEditText.setText(extras.getString("name"));
-            nameEditText.setText(extras.getString("url"));
+//            nameEditText.setText(extras.getString("url"));
 
             String latitude = String.valueOf(extras.getDouble("latitude"));
             String longitude = String.valueOf(extras.getDouble("longitude"));
@@ -40,8 +42,10 @@ public class RestaurantDetailActivity extends AppCompatActivity {
 
             String open = String.valueOf(extras.getDouble("opens"));
             String close = String.valueOf(extras.getDouble("closes"));
-            openEditText.setText(extras.getString(open));
-            openEditText.setText(extras.getString(close));
+            openEditText.setText(open);
+            closeEditText.setText(close);
+
+            restaurantURLEditText.setText(extras.getString("url"));
 
 
             id = extras.getString("id");
@@ -49,7 +53,7 @@ public class RestaurantDetailActivity extends AppCompatActivity {
     }
 
 
-    public void updatePressed(View view){
+    public void updateRestaurantPressed(View view){
         RestaurantActivity.service.update(new Restaurant(id, Double.parseDouble(latitudeEditText.getText().toString())
                                                             , Double.parseDouble(longitudeEditText.getText().toString())
                                                             ,nameEditText.getText().toString()
@@ -60,7 +64,8 @@ public class RestaurantDetailActivity extends AppCompatActivity {
         finish();
     }
 
-    public void deletePressed(View view){
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void deleteRestaurantPressed(View view){
         RestaurantActivity.service.delete(id);
         //TODO - make use update instead
         RestaurantActivity.adapter.notifyDataSetChanged();
