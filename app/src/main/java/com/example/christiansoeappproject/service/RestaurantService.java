@@ -3,6 +3,7 @@ package com.example.christiansoeappproject.service;
 import com.example.christiansoeappproject.model.Restaurant;
 import com.example.christiansoeappproject.repository.RestaurantRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RestaurantService {
@@ -26,5 +27,10 @@ public class RestaurantService {
 
     public void delete(String id){
         repo.delete(id);
+    }
+
+    public List<Restaurant> getRestaurants(){
+        List<Restaurant>restaurants = new ArrayList<>();
+        return restaurants;
     }
 }
