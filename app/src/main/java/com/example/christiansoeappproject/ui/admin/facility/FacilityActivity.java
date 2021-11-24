@@ -30,7 +30,7 @@ public class FacilityActivity extends AppCompatActivity implements Updatable {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_facility);
-        service = new FacilityService();
+        service = new FacilityService(this);
         setupList();
     }
 
@@ -40,7 +40,7 @@ public class FacilityActivity extends AppCompatActivity implements Updatable {
         adapter = new FacilityAdapter(this, facilities);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener((adapterView, view, i, l) -> {
-            Intent intent = new Intent(this, AttractionDetailActivity.class);
+            Intent intent = new Intent(this, FacilityDetailActivity.class);
             intent.putExtra("latitude", facilities.get(i).getLatitude());
             intent.putExtra("longitude", facilities.get(i).getLongitude());
             intent.putExtra("name", facilities.get(i).getName());
@@ -51,11 +51,12 @@ public class FacilityActivity extends AppCompatActivity implements Updatable {
 
     public void create(View view){
         service.create(new Facility(0,0, "New Facility"));
+        update();
     }
 
     @Override
     public void update() {
-        facilities = service.getFacilities();
         adapter.notifyDataSetChanged();
+        setupList();
     }
 }

@@ -30,7 +30,7 @@ public class RestaurantActivity extends AppCompatActivity implements Updatable {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurant);
-        service = new RestaurantService();
+        service = new RestaurantService(this);
         setupList();
     }
 

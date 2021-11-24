@@ -11,6 +11,7 @@ import com.example.christiansoeappproject.ui.Updatable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -21,8 +22,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class AttractionRepository implements ICrudRepository<Attraction>{
 
     public List<Attraction> attractionList = new ArrayList<>();
-
     private static Updatable caller;
+
     Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(BaseUrl.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
@@ -56,7 +57,6 @@ public class AttractionRepository implements ICrudRepository<Attraction>{
 
     @Override
     public void create(Attraction attraction) {
-        //adds to list before database
         attractionList.add(attraction);
         Call<Attraction> call = apiService.createAttraction(attraction);
         call.enqueue(new Callback<Attraction>() {
@@ -124,7 +124,6 @@ public class AttractionRepository implements ICrudRepository<Attraction>{
 
     @Override
     public void update(Attraction newAttraction) {
-        //updates from list before database
         for (Attraction oldAttraction : attractionList) {
             if (oldAttraction.getId().equals(newAttraction.getId())){
                 attractionList.remove(oldAttraction);
@@ -148,7 +147,6 @@ public class AttractionRepository implements ICrudRepository<Attraction>{
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void delete(String id) {
-        //delete from list before database
         attractionList.removeIf(attraction -> attraction.getId().equals(id));
 
         Call<Attraction> call = apiService.deleteAttraction(id);

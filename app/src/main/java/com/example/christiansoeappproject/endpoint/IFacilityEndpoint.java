@@ -16,7 +16,7 @@ public interface IFacilityEndpoint {
     @GET("api/facility/{id}")
     Call<Facility> readFacility(@Path("id") String id);
 
-    @GET("api/facility/attractions")
+    @GET("api/facility/facilities")
     Call<List<Facility>> readFacilities();
 
     @PUT("api/facility/update")
