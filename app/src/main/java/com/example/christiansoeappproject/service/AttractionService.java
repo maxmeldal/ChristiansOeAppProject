@@ -21,7 +21,7 @@ public class AttractionService{
     }
 
     public List<Attraction> getAttractions(){
-        return repo.attractionList;
+        return AttractionRepository.attractionList;
     }
 
     public void create(Attraction attraction){
