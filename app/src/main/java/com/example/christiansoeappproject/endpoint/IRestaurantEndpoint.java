@@ -16,7 +16,7 @@ public interface IRestaurantEndpoint {
     @GET("api/restaurant/{id}")
     Call<Restaurant> readRestaurant(@Path("id") String id);
 
-    @GET("api/restaurant/attractions")
+    @GET("api/restaurant/restaurants")
     Call<List<Restaurant>> readRestaurants();
 
     @PUT("api/restaurant/update")
