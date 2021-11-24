@@ -28,6 +28,10 @@
         <activity
             android:name=".ui.admin.attraction.AttractionsActivity"
             android:exported="false" />
+        <activity android:name=".ui.admin.restaurant.RestaurantActivity"
+            android:exported="false"/>
+        <activity android:name=".ui.admin.restaurant.RestaurantDetailActivity"
+            android:exported="false"/>
         <activity
             android:name=".ui.admin.AdminActivity"
             android:exported="false" />
