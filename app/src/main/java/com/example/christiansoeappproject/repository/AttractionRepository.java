@@ -1,6 +1,9 @@
 package com.example.christiansoeappproject.repository;
 
 import android.content.Context;
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
 
 import com.example.christiansoeappproject.endpoint.IAttractionEndpoint;
 import com.example.christiansoeappproject.model.Attraction;
@@ -38,7 +41,6 @@ public class AttractionRepository implements ICrudRepository<Attraction>{
             @Override
             public void onResponse(Call<List<Attraction>> call, Response<List<Attraction>> response) {
                 if (response.body() != null) {
-                    attractionList.clear();
                     attractionList.addAll(response.body());
                 }
                 caller.update();
@@ -54,6 +56,8 @@ public class AttractionRepository implements ICrudRepository<Attraction>{
 
     @Override
     public void create(Attraction attraction) {
+        //adds to list before database
+        attractionList.add(attraction);
         Call<Attraction> call = apiService.createAttraction(attraction);
         call.enqueue(new Callback<Attraction>() {
             @Override
@@ -119,12 +123,19 @@ public class AttractionRepository implements ICrudRepository<Attraction>{
    // }
 
     @Override
-    public void update(Attraction attraction) {
-        Call<Attraction> call = apiService.updateAttraction(attraction);
+    public void update(Attraction newAttraction) {
+        //updates from list before database
+        for (Attraction oldAttraction : attractionList) {
+            if (oldAttraction.getId().equals(newAttraction.getId())){
+                attractionList.remove(oldAttraction);
+                attractionList.add(newAttraction);
+            }
+        }
+        Call<Attraction> call = apiService.updateAttraction(newAttraction);
         call.enqueue(new Callback<Attraction>() {
             @Override
             public void onResponse(Call<Attraction> call, Response<Attraction> response) {
-                System.out.println(attraction + " has been updated!");
+                System.out.println(newAttraction + " has been updated!");
             }
 
             @Override
@@ -134,8 +145,11 @@ public class AttractionRepository implements ICrudRepository<Attraction>{
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void delete(String id) {
+        //delete from list before database
+        attractionList.removeIf(attraction -> attraction.getId().equals(id));
 
         Call<Attraction> call = apiService.deleteAttraction(id);
         call.enqueue(new Callback<Attraction>() {

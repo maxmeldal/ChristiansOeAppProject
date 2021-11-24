@@ -10,6 +10,7 @@ import android.widget.EditText;
 import com.example.christiansoeappproject.R;
 import com.example.christiansoeappproject.model.Attraction;
 import com.example.christiansoeappproject.service.AttractionService;
+import com.example.christiansoeappproject.ui.Updatable;
 
 public class AttractionDetailActivity extends AppCompatActivity {
     private EditText nameEditText;
@@ -48,7 +49,6 @@ public class AttractionDetailActivity extends AppCompatActivity {
 
     public void deletePressed(View view){
         AttractionsActivity.service.delete(id);
-        //TODO - make use update instead
         AttractionsActivity.adapter.notifyDataSetChanged();
         finish();
     }
