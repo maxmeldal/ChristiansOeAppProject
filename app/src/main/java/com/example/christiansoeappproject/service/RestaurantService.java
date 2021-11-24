@@ -1,5 +1,10 @@
 package com.example.christiansoeappproject.service;
 
+import android.content.Context;
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+
 import com.example.christiansoeappproject.model.Restaurant;
 import com.example.christiansoeappproject.repository.RestaurantRepository;
 
@@ -7,7 +12,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RestaurantService {
-    RestaurantRepository repo = new RestaurantRepository();
+    RestaurantRepository repo;
+
+    public RestaurantService(Context context){
+        repo = new RestaurantRepository();
+        repo.init(context);
+    }
+    public List<Restaurant> getRestaurants(){
+        return repo.restaurantList;
+    }
 
     public void create(Restaurant restaurant){
         repo.create(restaurant);
@@ -25,12 +38,10 @@ public class RestaurantService {
         repo.update(restaurant);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public void delete(String id){
         repo.delete(id);
     }
 
-    public List<Restaurant> getRestaurants(){
-        List<Restaurant>restaurants = new ArrayList<>();
-        return restaurants;
-    }
+
 }
