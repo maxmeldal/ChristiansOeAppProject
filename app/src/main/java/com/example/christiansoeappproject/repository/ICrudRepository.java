@@ -7,6 +7,7 @@ public interface ICrudRepository<T> {
     void create(T t);
 
     T readById(String id);
+
     List<T> readAll();
 
     void update(T t);

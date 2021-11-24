@@ -50,11 +50,12 @@ public class AttractionsActivity extends AppCompatActivity implements Updatable 
 
     public void create(View view){
         service.create(new Attraction(0,0, "New Attraction"));
+        update();
     }
 
     @Override
     public void update() {
-        attractions = service.getAttractions();
         adapter.notifyDataSetChanged();
+        setupList();
     }
 }

@@ -1,6 +1,9 @@
 package com.example.christiansoeappproject.service;
 
 import android.content.Context;
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
 
 import com.example.christiansoeappproject.model.Attraction;
 import com.example.christiansoeappproject.repository.AttractionRepository;
@@ -37,6 +40,7 @@ public class AttractionService{
         repo.update(attraction);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public void delete(String id){
         repo.delete(id);
     }
