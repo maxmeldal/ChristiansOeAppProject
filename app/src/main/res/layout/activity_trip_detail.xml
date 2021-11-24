@@ -65,21 +65,10 @@
         app:layout_constraintTop_toBottomOf="@+id/attractionsView" />
 
     <Button
-        android:id="@+id/createTripBtn2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="52dp"
-        android:layout_marginBottom="184dp"
-        android:onClick="createTripPressed"
-        android:text="Create"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
         android:id="@+id/updateTripBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="44dp"
+        android:layout_marginEnd="88dp"
         android:layout_marginBottom="184dp"
         android:onClick="updateTripPressed"
         android:text="Update"
@@ -90,14 +79,11 @@
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="18dp"
-        android:layout_marginEnd="20dp"
+        android:layout_marginEnd="60dp"
         android:layout_marginBottom="184dp"
         android:onClick="deleteTripPressed"
         android:text="delete"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/updateTripBtn"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/createTripBtn2" />
+        app:layout_constraintEnd_toStartOf="@+id/updateTripBtn" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

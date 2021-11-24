@@ -121,14 +121,12 @@ public class TripRepository implements ICrudRepository<Trip>{
 //        return tripList;
 //    }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void update(Trip trip) {
-        for (Trip oldTrip : trips) {
-            if (oldTrip.getId().equals(trip.getId())){
-                trips.remove(oldTrip);
-                trips.add(trip);
-            }
-        }
+        trips.removeIf(facility -> facility.getId().equals(trip.getId()));
+        trips.add(trip);
+
         Call<Trip> call = apiService.updateTrip(trip);
         call.enqueue(new Callback<Trip>() {
             @Override
