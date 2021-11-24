@@ -114,14 +114,12 @@ public class FacilityRepository implements ICrudRepository<Facility>{
         return facilityList;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void update(Facility newFacility) {
-        for (Facility oldFacility : facilities) {
-            if (oldFacility.getId().equals(newFacility.getId())){
-                facilities.remove(oldFacility);
-                facilities.add(newFacility);
-            }
-        }
+        facilities.removeIf(facility -> facility.getId().equals(newFacility.getId()));
+        facilities.add(newFacility);
+
         Call<Facility> call = apiService.updateFacility(newFacility);
         call.enqueue(new Callback<Facility>() {
             @Override

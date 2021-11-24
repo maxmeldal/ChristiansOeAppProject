@@ -122,19 +122,18 @@ public class AttractionRepository implements ICrudRepository<Attraction>{
        // });
    // }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void update(Attraction newAttraction) {
-        for (Attraction oldAttraction : attractionList) {
-            if (oldAttraction.getId().equals(newAttraction.getId())){
-                attractionList.remove(oldAttraction);
-                attractionList.add(newAttraction);
-            }
-        }
+        attractionList.removeIf(attraction -> attraction.getId().equals(newAttraction.getId()));
+        attractionList.add(newAttraction);
+
         Call<Attraction> call = apiService.updateAttraction(newAttraction);
         call.enqueue(new Callback<Attraction>() {
             @Override
             public void onResponse(Call<Attraction> call, Response<Attraction> response) {
                 System.out.println(newAttraction + " has been updated!");
+                caller.update();
             }
 
             @Override
