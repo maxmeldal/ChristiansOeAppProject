@@ -1,7 +1,9 @@
 package com.example.christiansoeappproject.ui.admin.attraction;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.text.method.DigitsKeyListener;
 import android.view.View;
@@ -41,13 +43,14 @@ public class AttractionDetailActivity extends AppCompatActivity {
         }
     }
 
-    public void updatePressed(View view){
+    public void updateAttractionPressed(View view){
         AttractionsActivity.service.update(new Attraction(id, Double.parseDouble(latitudeEditText.getText().toString()), Double.parseDouble(longitudeEditText.getText().toString()), nameEditText.getText().toString()));
         AttractionsActivity.adapter.notifyDataSetChanged();
         finish();
     }
 
-    public void deletePressed(View view){
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void deleteAttractionPressed(View view){
         AttractionsActivity.service.delete(id);
         AttractionsActivity.adapter.notifyDataSetChanged();
         finish();

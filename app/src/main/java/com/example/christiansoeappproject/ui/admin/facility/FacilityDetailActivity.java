@@ -1,7 +1,9 @@
 package com.example.christiansoeappproject.ui.admin.facility;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -40,13 +42,14 @@ public class FacilityDetailActivity extends AppCompatActivity {
         }
     }
 
-    public void updatePressed(View view){
+    public void updateFacilityPressed(View view){
         FacilityActivity.service.update(new Facility(id, Double.parseDouble(latitudeEditText.getText().toString()), Double.parseDouble(longitudeEditText.getText().toString()), nameEditText.getText().toString()));
         FacilityActivity.adapter.notifyDataSetChanged();
         finish();
     }
 
-    public void deletePressed(View view){
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void deleteFacilityPressed(View view){
         FacilityActivity.service.delete(id);
         //TODO - make use update instead
         FacilityActivity.adapter.notifyDataSetChanged();
