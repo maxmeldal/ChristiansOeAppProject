@@ -4,11 +4,14 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.christiansoeappproject.R;
@@ -35,6 +38,7 @@ public class TripDetailActivity extends AppCompatActivity {
     private String id;
     private EditText nameEditText;
     private EditText infoEditText;
+    private Spinner theme;
 
 
     @Override
@@ -44,6 +48,13 @@ public class TripDetailActivity extends AppCompatActivity {
         dropdown = findViewById(R.id.attractionsView);
         nameEditText = findViewById(R.id.editTripName);
         infoEditText = findViewById(R.id.editTripInfo);
+        theme = findViewById(R.id.themeSpinner);
+
+        @SuppressLint("ResourceType")
+        ArrayAdapter<String> myAdapter = new ArrayAdapter<>(TripDetailActivity.this,
+                android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.themes));
+        myAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        theme.setAdapter(myAdapter);
 
         extras = getIntent().getExtras();
         if (extras!=null){
@@ -51,10 +62,10 @@ public class TripDetailActivity extends AppCompatActivity {
             infoEditText.setText(extras.getString("info"));
             id = extras.getString("id");
         }
-
+        //System.out.println(service.getAttractions().size());
         String[] attractionsArr = new String[attractions.size()];
         for (int i = 0; i < attractionsArr.length; i++) {
-            attractionsArr[i] = attractions.get(i).getName();
+            //attractionsArr[i] = service.getAttractions().get(i).getName();
         }
         selectedAttraction = new boolean[attractionsArr.length];
 
@@ -102,8 +113,13 @@ public class TripDetailActivity extends AppCompatActivity {
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public void updateTripPressed(View view){
-        TripsActivity.service.update(new Trip(id, nameEditText.getText().toString(), infoEditText.getText().toString(), 1, null));
+        List<Attraction> temp = new ArrayList<>();
+        temp.add(new Attraction(0,0,"new Attraction"));
+        temp.add(new Attraction(0,0,"new Attraction"));
+        temp.add(new Attraction(0,0,"new Attraction"));
+        TripsActivity.service.update(new Trip(id, nameEditText.getText().toString(), infoEditText.getText().toString(), getTheme(theme.getSelectedItem().toString()), temp));
         TripsActivity.adapter.notifyDataSetChanged();
         finish();
     }
@@ -115,9 +131,16 @@ public class TripDetailActivity extends AppCompatActivity {
         finish();
     }
 
-    public void createTripPressed(View view){
-        List<Attraction> attractions = new ArrayList<>();
-        //TripsActivity.service.create(new Trip("name", "info", Theme.None, attractions));
+    public int getTheme(String context){
+        if(context.equals("Nature")){
+            return 1;
+        } else if(context.equals("History")){
+            return 2;
+        } else if(context.equals("War")){
+            return 3;
+        }
+        return 4;
     }
+
     
 }

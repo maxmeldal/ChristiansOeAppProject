@@ -38,6 +38,7 @@ public class TripService {
         return repo.readAll();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public void update(Trip trip){
         repo.update(trip);
     }
