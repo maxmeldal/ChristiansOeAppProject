@@ -118,5 +118,10 @@ public class TripDetailActivity extends AppCompatActivity {
         TripsActivity.adapter.notifyDataSetChanged();
         finish();
     }
+
+    public void createPressed(View view){
+        List<Attraction> attractions = new ArrayList<>();
+        TripsActivity.service.create(new Trip("name", "info", Theme.None, attractions));
+    }
     
 }
