@@ -28,6 +28,7 @@ public class TripDetailActivity extends AppCompatActivity {
     private List<Attraction> attractions = new ArrayList<Attraction>();
     private boolean[] selectedAttraction;
     private ArrayList<Integer> dropdownList = new ArrayList<>();
+    private static List<Attraction> attractionDropdown = new ArrayList<>();
     //public static AttractionService service;
     private TextView dropdown;
     private Bundle extras;
@@ -43,7 +44,7 @@ public class TripDetailActivity extends AppCompatActivity {
         dropdown = findViewById(R.id.attractionsView);
         nameEditText = findViewById(R.id.editTripName);
         infoEditText = findViewById(R.id.editTripInfo);
-        //fillAttractions();
+
         extras = getIntent().getExtras();
         if (extras!=null){
             nameEditText.setText(extras.getString("name"));
@@ -101,16 +102,8 @@ public class TripDetailActivity extends AppCompatActivity {
         });
     }
 
-    public void fillAttractions(){
-        attractions.add(new Attraction(0,0, "New Attraction"));
-        attractions.add(new Attraction(0,0, "New Attraction"));
-        attractions.add(new Attraction(0,0, "New Attraction"));
-        attractions.add(new Attraction(0,0, "New Attraction"));
-        attractions.add(new Attraction(0,0, "New Attraction"));
-    }
-
     public void updateTripPressed(View view){
-        //TripsActivity.service.update(new Trip(id, nameEditText.getText().toString(), infoEditText.getText().toString(), Integer.parseInt(), null));
+        TripsActivity.service.update(new Trip(id, nameEditText.getText().toString(), infoEditText.getText().toString(), 1, null));
         TripsActivity.adapter.notifyDataSetChanged();
         finish();
     }
