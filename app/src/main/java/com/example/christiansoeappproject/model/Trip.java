@@ -17,11 +17,11 @@ public class Trip {
     private String info;
 
     @SerializedName("theme")
-    private Theme theme;
+    private int theme;
 
     private List<Attraction> attractions;
 
-    public Trip(String id, String name, String info, Theme theme, List<Attraction> attractions)
+    public Trip(String id, String name, String info, int theme, List<Attraction> attractions)
     {
         this.id = id;
         this.name = name;
@@ -29,7 +29,7 @@ public class Trip {
         this.theme = theme;
         this.attractions = attractions;
     }
-    public Trip(String name, String info, Theme theme, List<Attraction> attractions)
+    public Trip(String name, String info, int theme, List<Attraction> attractions)
     {
         this.id = UUID.randomUUID().toString();
         this.name = name;
@@ -62,11 +62,11 @@ public class Trip {
         this.info = info;
     }
 
-    public Theme getTheme() {
+    public int getTheme() {
         return theme;
     }
 
-    public void setTheme(Theme theme) {
+    public void setTheme(int theme) {
         this.theme = theme;
     }
 

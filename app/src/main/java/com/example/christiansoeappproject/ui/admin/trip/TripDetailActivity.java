@@ -1,9 +1,11 @@
 package com.example.christiansoeappproject.ui.admin.trip;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -41,7 +43,7 @@ public class TripDetailActivity extends AppCompatActivity {
         dropdown = findViewById(R.id.attractionsView);
         nameEditText = findViewById(R.id.editTripName);
         infoEditText = findViewById(R.id.editTripInfo);
-        fillAttractions();
+        //fillAttractions();
         extras = getIntent().getExtras();
         if (extras!=null){
             nameEditText.setText(extras.getString("name"));
@@ -107,21 +109,22 @@ public class TripDetailActivity extends AppCompatActivity {
         attractions.add(new Attraction(0,0, "New Attraction"));
     }
 
-    public void updatePressed(View view){
-        TripsActivity.service.update(new Trip(id, nameEditText.getText().toString(), infoEditText.getText().toString(), Theme.None, null));
+    public void updateTripPressed(View view){
+        //TripsActivity.service.update(new Trip(id, nameEditText.getText().toString(), infoEditText.getText().toString(), Integer.parseInt(), null));
         TripsActivity.adapter.notifyDataSetChanged();
         finish();
     }
 
-    public void deletePressed(View view){
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void deleteTripPressed(View view){
         TripsActivity.service.delete(id);
         TripsActivity.adapter.notifyDataSetChanged();
         finish();
     }
 
-    public void createPressed(View view){
+    public void createTripPressed(View view){
         List<Attraction> attractions = new ArrayList<>();
-        TripsActivity.service.create(new Trip("name", "info", Theme.None, attractions));
+        //TripsActivity.service.create(new Trip("name", "info", Theme.None, attractions));
     }
     
 }

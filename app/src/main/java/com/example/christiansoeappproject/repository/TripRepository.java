@@ -1,5 +1,8 @@
 package com.example.christiansoeappproject.repository;
 import android.content.Context;
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
 
 import com.example.christiansoeappproject.endpoint.ITripEndpoint;
 import com.example.christiansoeappproject.model.Attraction;
@@ -50,6 +53,8 @@ public class TripRepository implements ICrudRepository<Trip>{
 
     @Override
     public void create(Trip trip) {
+        //adds to list before database
+        trips.add(trip);
         Call<Trip> call = apiService.createTrip(trip);
         call.enqueue(new Callback<Trip>() {
             @Override
@@ -89,30 +94,41 @@ public class TripRepository implements ICrudRepository<Trip>{
 
     @Override
     public List<Trip> readAll() {
-
-        List<Trip> tripList = new ArrayList<>();
-
-        Call<List<Trip>> call = apiService.readTrips();
-        call.enqueue(new Callback<List<Trip>>() {
-            @Override
-            public void onResponse(Call<List<Trip>> call, Response<List<Trip>> response) {
-                if (response.body()!=null) {
-                    System.out.println(response.body());
-                    tripList.addAll(response.body());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Trip>> call, Throwable t) {
-                System.out.println(t.toString());
-            }
-        });
-
-        return tripList;
+        return null;
     }
+
+//    @Override
+//    public List<Trip> readAll() {
+//
+//        List<Trip> tripList = new ArrayList<>();
+//
+//        Call<List<Trip>> call = apiService.readTrips();
+//        call.enqueue(new Callback<List<Trip>>() {
+//            @Override
+//            public void onResponse(Call<List<Trip>> call, Response<List<Trip>> response) {
+//                if (response.body()!=null) {
+//                    System.out.println(response.body());
+//                    tripList.addAll(response.body());
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<List<Trip>> call, Throwable t) {
+//                System.out.println(t.toString());
+//            }
+//        });
+//
+//        return tripList;
+//    }
 
     @Override
     public void update(Trip trip) {
+        for (Trip oldTrip : trips) {
+            if (oldTrip.getId().equals(trip.getId())){
+                trips.remove(oldTrip);
+                trips.add(trip);
+            }
+        }
         Call<Trip> call = apiService.updateTrip(trip);
         call.enqueue(new Callback<Trip>() {
             @Override
@@ -127,8 +143,11 @@ public class TripRepository implements ICrudRepository<Trip>{
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void delete(String id) {
+
+        trips.removeIf(attraction -> attraction.getId().equals(id));
 
         Call<Trip> call = apiService.deleteTrip(id);
         call.enqueue(new Callback<Trip>() {

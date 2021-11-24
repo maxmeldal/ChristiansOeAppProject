@@ -42,6 +42,7 @@ public class TripsActivity extends AppCompatActivity implements Updatable {
             intent.putExtra("info", trips.get(i).getInfo());
             intent.putExtra("theme",trips.get(i).getTheme());
             intent.putExtra("attractions", trips.get(i).getAttractions().toString());
+            System.out.println(trips);
             startActivity(intent);
         });
     }
@@ -53,7 +54,7 @@ public class TripsActivity extends AppCompatActivity implements Updatable {
 
     @Override
     public void update() {
-        trips = service.readAll();
+        //update();
         adapter.notifyDataSetChanged();
     }
 }

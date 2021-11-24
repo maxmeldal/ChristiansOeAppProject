@@ -1,6 +1,9 @@
 package com.example.christiansoeappproject.service;
 
 import android.content.Context;
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
 
 import com.example.christiansoeappproject.model.Attraction;
 import com.example.christiansoeappproject.model.Theme;
@@ -20,14 +23,7 @@ public class TripService {
     }
 
     public List<Trip> getTrips(){
-        List<Attraction> attractions = new ArrayList<>();
-        List<Trip> trips = new ArrayList<>();
-        trips.add(new Trip("name", "info", Theme.None, attractions));
-        trips.add(new Trip("name", "info", Theme.None, attractions));
-        trips.add(new Trip("name", "info", Theme.None, attractions));
-        trips.add(new Trip("name", "info", Theme.None, attractions));
-        trips.add(new Trip("name", "info", Theme.None, attractions));
-        return trips;
+        return repo.trips;
     }
 
     public void create(Trip trip){
@@ -45,6 +41,7 @@ public class TripService {
     public void update(Trip trip){
         repo.update(trip);
     }
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public void delete(String id){
         repo.delete(id);
     }
