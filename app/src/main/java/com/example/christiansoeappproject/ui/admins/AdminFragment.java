@@ -1,4 +1,4 @@
-package com.example.christiansoeappproject.ui.notifications;
+package com.example.christiansoeappproject.ui.admins;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.christiansoeappproject.MainActivity;
 import com.example.christiansoeappproject.databinding.FragmentAdminBinding;
 
 public class AdminFragment extends Fragment {
@@ -26,7 +25,7 @@ public class AdminFragment extends Fragment {
         binding = FragmentAdminBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textNotifications;
+        final TextView textView = binding.passwordEditText;
         adminViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {

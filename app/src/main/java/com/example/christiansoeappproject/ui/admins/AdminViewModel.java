@@ -1,4 +1,4 @@
-package com.example.christiansoeappproject.ui.notifications;
+package com.example.christiansoeappproject.ui.admins;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
