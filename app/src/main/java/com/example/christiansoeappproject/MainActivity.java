@@ -3,6 +3,8 @@ package com.example.christiansoeappproject;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.christiansoeappproject.ui.admin.AdminActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -40,6 +42,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void loginPressed(View view){
         Intent intent = new Intent(this, AdminActivity.class);
-        startActivity(intent);
+        EditText pas = findViewById(R.id.passwordEditText);
+        String password = pas.getText().toString();
+        String expected = "1";
+        if(password.equals(expected)){
+            startActivity(intent);
+        } else {
+            Toast.makeText(this, "Wrong password", Toast.LENGTH_SHORT).show();
+        }
     }
 }
