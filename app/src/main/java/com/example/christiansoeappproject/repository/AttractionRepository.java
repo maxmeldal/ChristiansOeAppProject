@@ -21,7 +21,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class AttractionRepository implements ICrudRepository<Attraction>{
 
-    public List<Attraction> attractionList = new ArrayList<>();
+    public static List<Attraction> attractionList = new ArrayList<>();
     private static Updatable caller;
 
     Retrofit retrofit = new Retrofit.Builder()

@@ -32,6 +32,7 @@ public class FacilityService {
         return repo.readAll();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public void update(Facility facility){
         repo.update(facility);
     }

@@ -36,6 +36,7 @@ public class AttractionService{
         return repo.readAll();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public void update(Attraction attraction){
         repo.update(attraction);
     }
