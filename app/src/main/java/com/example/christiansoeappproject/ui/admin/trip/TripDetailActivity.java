@@ -23,8 +23,10 @@ import com.example.christiansoeappproject.ui.admin.attraction.AttractionAdapter;
 import com.example.christiansoeappproject.ui.admin.attraction.AttractionsActivity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 public class TripDetailActivity extends AppCompatActivity {
@@ -62,10 +64,10 @@ public class TripDetailActivity extends AppCompatActivity {
             infoEditText.setText(extras.getString("info"));
             id = extras.getString("id");
         }
-        //System.out.println(service.getAttractions().size());
-        String[] attractionsArr = new String[attractions.size()];
+
+        String[] attractionsArr = new String[TripsActivity.attractionService.getAttractions().size()];
         for (int i = 0; i < attractionsArr.length; i++) {
-            //attractionsArr[i] = service.getAttractions().get(i).getName();
+            attractionsArr[i] = TripsActivity.attractionService.getAttractions().get(i).getName();
         }
         selectedAttraction = new boolean[attractionsArr.length];
 
@@ -75,6 +77,7 @@ public class TripDetailActivity extends AppCompatActivity {
                 AlertDialog.Builder builder = new AlertDialog.Builder(
                         TripDetailActivity.this
                 );
+
                 builder.setTitle("Select attractions");
                 builder.setCancelable(false);
                 builder.setMultiChoiceItems(attractionsArr, selectedAttraction, new DialogInterface.OnMultiChoiceClickListener() {
@@ -82,11 +85,14 @@ public class TripDetailActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int i, boolean isChecked) {
                         if(isChecked){
                            dropdownList.add(i);
+                           attractionDropdown.add(TripsActivity.attractionService.getAttractions().get(i));
                         } else{
-                           dropdownList.remove(i);
+                            attractionDropdown.remove(TripsActivity.attractionService.getAttractions().get(i));
+                            dropdownList.remove(i);
                         }
                     }
                 });
+
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int i) {
@@ -115,11 +121,7 @@ public class TripDetailActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void updateTripPressed(View view){
-        List<Attraction> temp = new ArrayList<>();
-        temp.add(new Attraction(0,0,"new Attraction"));
-        temp.add(new Attraction(0,0,"new Attraction"));
-        temp.add(new Attraction(0,0,"new Attraction"));
-        TripsActivity.service.update(new Trip(id, nameEditText.getText().toString(), infoEditText.getText().toString(), getTheme(theme.getSelectedItem().toString()), temp));
+        TripsActivity.service.update(new Trip(id, nameEditText.getText().toString(), infoEditText.getText().toString(), getTheme(theme.getSelectedItem().toString()), attractionDropdown));
         TripsActivity.adapter.notifyDataSetChanged();
         finish();
     }

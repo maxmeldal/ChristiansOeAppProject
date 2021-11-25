@@ -9,6 +9,7 @@ import com.example.christiansoeappproject.R;
 import com.example.christiansoeappproject.model.Attraction;
 import com.example.christiansoeappproject.model.Theme;
 import com.example.christiansoeappproject.model.Trip;
+import com.example.christiansoeappproject.service.AttractionService;
 import com.example.christiansoeappproject.service.TripService;
 import com.example.christiansoeappproject.ui.Updatable;
 
@@ -21,12 +22,14 @@ public class TripsActivity extends AppCompatActivity implements Updatable {
     private List<Trip> trips = new ArrayList<>();
     public static TripAdapter adapter;
     public static TripService service;
+    public static AttractionService attractionService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trips);
         service = new TripService(this);
+        attractionService = new AttractionService(this);
         setupList();
     }
 
@@ -48,8 +51,11 @@ public class TripsActivity extends AppCompatActivity implements Updatable {
     }
 
     public void createPressed(View view){
-        Intent intent = new Intent(this, TripDetailActivity.class);
-        startActivity(intent);
+        //Intent intent = new Intent(this, TripDetailActivity.class);
+        //startActivity(intent);
+        List<Attraction> temp = new ArrayList<>();
+        service.create(new Trip("new trip", "...", 4, temp));
+        update();
     }
 
     @Override
