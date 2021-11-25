@@ -87,6 +87,8 @@ public class TripDetailActivity extends AppCompatActivity {
             }
         }
 
+        attractionDropdown.addAll(attractions);
+
         dropdown.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -103,8 +105,8 @@ public class TripDetailActivity extends AppCompatActivity {
                            dropdownList.add(i);
                            attractionDropdown.add(TripsActivity.attractionService.getAttractions().get(i));
                         } else{
-                            attractionDropdown.remove(TripsActivity.attractionService.getAttractions().get(i));
-                            dropdownList.remove(i);
+                            attractionDropdown.removeIf(attraction -> attraction.getName().equals(attractionsArr[i]));
+                            dropdownList.removeIf(integer -> integer==i);
                         }
                     }
                 });
