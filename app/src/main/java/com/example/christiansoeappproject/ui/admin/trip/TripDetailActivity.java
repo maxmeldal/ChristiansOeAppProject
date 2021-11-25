@@ -33,7 +33,7 @@ public class TripDetailActivity extends AppCompatActivity {
     private List<Attraction> attractions = new ArrayList<Attraction>();
     private boolean[] selectedAttraction;
     private ArrayList<Integer> dropdownList = new ArrayList<>();
-    private static List<Attraction> attractionDropdown = new ArrayList<>();
+    private List<Attraction> attractionDropdown = new ArrayList<>();
     //public static AttractionService service;
     private TextView dropdown;
     private Bundle extras;
