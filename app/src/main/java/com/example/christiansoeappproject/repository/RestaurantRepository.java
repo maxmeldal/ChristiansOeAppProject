@@ -20,7 +20,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RestaurantRepository implements ICrudRepository<Restaurant>{
 
-    public List<Restaurant> restaurantList = new ArrayList<>();
+    public static List<Restaurant> restaurantList = new ArrayList<>();
 
     private static Updatable caller;
     Retrofit retrofit = new Retrofit.Builder()
@@ -115,15 +115,13 @@ public class RestaurantRepository implements ICrudRepository<Restaurant>{
         return restaurantList;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void update(Restaurant newRestaurant) {
-        for (Restaurant oldRestaurant:restaurantList) {
-            if (oldRestaurant.getId().equals(newRestaurant.getId())){
-                restaurantList.remove(oldRestaurant);
-                restaurantList.add(newRestaurant);
-            }
 
-        }
+        restaurantList.removeIf(attraction -> attraction.getId().equals(newRestaurant.getId()));
+        restaurantList.add(newRestaurant);
+
         Call<Restaurant> call = apiService.updateRestaurant(newRestaurant);
         call.enqueue(new Callback<Restaurant>() {
             @Override

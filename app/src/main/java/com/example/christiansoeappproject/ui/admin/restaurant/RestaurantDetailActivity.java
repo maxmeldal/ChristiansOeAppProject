@@ -33,20 +33,13 @@ public class RestaurantDetailActivity extends AppCompatActivity {
         extras = getIntent().getExtras();
         if (extras!=null){
             nameEditText.setText(extras.getString("name"));
-//            nameEditText.setText(extras.getString("url"));
-
-            String latitude = String.valueOf(extras.getDouble("latitude"));
-            String longitude = String.valueOf(extras.getDouble("longitude"));
-            latitudeEditText.setText(extras.getString(latitude));
-            longitudeEditText.setText(extras.getString(longitude));
-
-            String open = String.valueOf(extras.getDouble("opens"));
-            String close = String.valueOf(extras.getDouble("closes"));
-            openEditText.setText(open);
-            closeEditText.setText(close);
-
             restaurantURLEditText.setText(extras.getString("url"));
 
+            latitudeEditText.setText(String.valueOf(extras.getDouble("latitude")));
+            longitudeEditText.setText(String.valueOf(extras.getDouble("longitude")));
+
+            openEditText.setText(String.valueOf(extras.getDouble("open")));
+            closeEditText.setText(String.valueOf(extras.getDouble("close")));
 
             id = extras.getString("id");
         }
