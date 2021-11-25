@@ -32,17 +32,15 @@ public class AttractionDetailActivity extends AppCompatActivity {
         extras = getIntent().getExtras();
         if (extras!=null){
             nameEditText.setText(extras.getString("name"));
-            String latitude = String.valueOf(extras.getDouble("latitude"));
-            String longitude = String.valueOf(extras.getDouble("longitude"));
 
-            latitudeEditText.setText(extras.getString(latitude));
-            longitudeEditText.setText(extras.getString(longitude));
+            latitudeEditText.setText(String.valueOf(extras.getDouble("longitude")));
+            longitudeEditText.setText(String.valueOf(extras.getDouble("longitude")));
 
             id = extras.getString("id");
-
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public void updateAttractionPressed(View view){
         AttractionsActivity.service.update(new Attraction(id, Double.parseDouble(latitudeEditText.getText().toString()), Double.parseDouble(longitudeEditText.getText().toString()), nameEditText.getText().toString()));
         AttractionsActivity.adapter.notifyDataSetChanged();

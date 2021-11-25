@@ -14,9 +14,10 @@
         android:layout_marginStart="100dp"
         android:layout_marginTop="168dp"
         android:layout_marginEnd="101dp"
+        android:autoText="false"
         android:ems="10"
         android:hint="Input password"
-        android:inputType="textPersonName"
+        android:inputType="none|numberPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
