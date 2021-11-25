@@ -28,6 +28,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 public class TripDetailActivity extends AppCompatActivity {
     private List<Attraction> attractions = new ArrayList<Attraction>();
@@ -44,6 +45,7 @@ public class TripDetailActivity extends AppCompatActivity {
     private int themeId;
 
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,12 +70,22 @@ public class TripDetailActivity extends AppCompatActivity {
         theme.setAdapter(myAdapter);
         theme.setSelection(themeId-1);
 
+        List<Trip> trips = TripsActivity.service.getTrips();
+        attractions = Objects.requireNonNull(trips.stream().filter(trip -> trip.getId().equals(id)).findAny().orElse(null)).getAttractions();
+
 
         String[] attractionsArr = new String[TripsActivity.attractionService.getAttractions().size()];
         for (int i = 0; i < attractionsArr.length; i++) {
             attractionsArr[i] = TripsActivity.attractionService.getAttractions().get(i).getName();
         }
         selectedAttraction = new boolean[attractionsArr.length];
+        for (int i = 0; i < attractionsArr.length; i++) {
+            for (Attraction attraction : attractions) {
+                if(attractionsArr[i].equals(attraction.getName())){
+                    selectedAttraction[i] = true;
+                }
+            }
+        }
 
         dropdown.setOnClickListener(new View.OnClickListener() {
             @Override
