@@ -10,6 +10,7 @@ import com.example.christiansoeappproject.model.Trip;
 import com.example.christiansoeappproject.ui.Updatable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -22,7 +23,7 @@ public class TripRepository implements ICrudRepository<Trip>{
             .baseUrl(BaseUrl.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build();
-    public List<Trip> trips = new ArrayList<>();
+    public static List<Trip> trips = new ArrayList<>();
     private static Updatable caller;
     final ITripEndpoint apiService = retrofit.create(ITripEndpoint.class);
 
@@ -30,6 +31,19 @@ public class TripRepository implements ICrudRepository<Trip>{
     public void init(Context context) {
         caller = (Updatable) context;
         startListener();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void deleteAttractionFromTrips(String id){
+        List<Trip> update = new ArrayList<>();
+        for (Trip trip : trips) {
+            if(trip.getAttractions().removeIf(attraction -> attraction.getId().equals(id))){
+                update.add(trip);
+            }
+        }
+        for (Trip trip : update) {
+            update(trip);
+        }
     }
 
     private void startListener() {

@@ -33,7 +33,7 @@ public class TripDetailActivity extends AppCompatActivity {
     private List<Attraction> attractions = new ArrayList<Attraction>();
     private boolean[] selectedAttraction;
     private ArrayList<Integer> dropdownList = new ArrayList<>();
-    private static List<Attraction> attractionDropdown = new ArrayList<>();
+    private List<Attraction> attractionDropdown = new ArrayList<>();
     //public static AttractionService service;
     private TextView dropdown;
     private Bundle extras;
@@ -41,6 +41,7 @@ public class TripDetailActivity extends AppCompatActivity {
     private EditText nameEditText;
     private EditText infoEditText;
     private Spinner theme;
+    private int themeId;
 
 
     @Override
@@ -52,18 +53,21 @@ public class TripDetailActivity extends AppCompatActivity {
         infoEditText = findViewById(R.id.editTripInfo);
         theme = findViewById(R.id.themeSpinner);
 
-        @SuppressLint("ResourceType")
-        ArrayAdapter<String> myAdapter = new ArrayAdapter<>(TripDetailActivity.this,
-                android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.themes));
-        myAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        theme.setAdapter(myAdapter);
-
         extras = getIntent().getExtras();
         if (extras!=null){
             nameEditText.setText(extras.getString("name"));
             infoEditText.setText(extras.getString("info"));
+            themeId = extras.getInt("theme");
             id = extras.getString("id");
         }
+        @SuppressLint("ResourceType")
+        ArrayAdapter<String> myAdapter = new ArrayAdapter<>(TripDetailActivity.this,
+                android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.themes));
+
+        myAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        theme.setAdapter(myAdapter);
+        theme.setSelection(themeId-1);
+
 
         String[] attractionsArr = new String[TripsActivity.attractionService.getAttractions().size()];
         for (int i = 0; i < attractionsArr.length; i++) {

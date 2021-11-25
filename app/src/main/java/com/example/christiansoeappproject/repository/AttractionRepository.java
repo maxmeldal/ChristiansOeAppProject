@@ -42,6 +42,7 @@ public class AttractionRepository implements ICrudRepository<Attraction>{
             @Override
             public void onResponse(Call<List<Attraction>> call, Response<List<Attraction>> response) {
                 if (response.body() != null) {
+                    attractionList.clear();
                     attractionList.addAll(response.body());
                 }
                 caller.update();

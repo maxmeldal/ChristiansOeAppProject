@@ -11,6 +11,7 @@ import android.widget.ListView;
 import com.example.christiansoeappproject.R;
 import com.example.christiansoeappproject.model.Attraction;
 import com.example.christiansoeappproject.service.AttractionService;
+import com.example.christiansoeappproject.service.TripService;
 import com.example.christiansoeappproject.ui.Updatable;
 import com.example.christiansoeappproject.ui.admin.attraction.AttractionAdapter;
 
@@ -23,6 +24,7 @@ public class AttractionsActivity extends AppCompatActivity implements Updatable 
     private List<Attraction> attractions = new ArrayList<>();
     public static AttractionAdapter adapter;
     public static AttractionService service;
+    public static TripService tripService;
 
 
     @Override
@@ -30,6 +32,7 @@ public class AttractionsActivity extends AppCompatActivity implements Updatable 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_attractions);
         service = new AttractionService(this);
+        tripService = new TripService(this);
         setupList();
     }
 

@@ -50,6 +50,7 @@ public class AttractionDetailActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void deleteAttractionPressed(View view){
         AttractionsActivity.service.delete(id);
+        AttractionsActivity.tripService.deleteAttractionFromTrips(id);
         AttractionsActivity.adapter.notifyDataSetChanged();
         finish();
     }
