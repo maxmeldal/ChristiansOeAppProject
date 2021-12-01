@@ -39,6 +39,7 @@ public class AttractionRepository implements ICrudRepository<Attraction>{
     private void startListener() {
         Call<List<Attraction>> call = apiService.readAttractions();
         call.enqueue(new Callback<List<Attraction>>() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onResponse(Call<List<Attraction>> call, Response<List<Attraction>> response) {
                 if (response.body() != null) {
@@ -100,28 +101,6 @@ public class AttractionRepository implements ICrudRepository<Attraction>{
     public List<Attraction> readAll() {
         return null;
     }
-
-    //   @Override
-  //  public void readAll() {
-
-        //List<Attraction> attractionList = new ArrayList<>();
-
-    //    Call<List<Attraction>> call = apiService.readAttractions();
-    //    call.enqueue(new Callback<List<Attraction>>() {
-    //        @Override
-    //        public void onResponse(Call<List<Attraction>> call, Response<List<Attraction>> response) {
-   //             if (response.body()!=null) {
-    //                System.out.println(response.body());
-     //               attractionList.addAll(response.body());
-      //          }
-       //     }
-
-       //     @Override
-        //    public void onFailure(Call<List<Attraction>> call, Throwable t) {
-         //       System.out.println(t.toString());
-         //   }
-       // });
-   // }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
