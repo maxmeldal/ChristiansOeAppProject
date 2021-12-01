@@ -12,10 +12,10 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.example.christiansoeappproject.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        android:id="@+id/navigation_trips"
+        android:name="com.example.christiansoeappproject.ui.dashboard.ThemeFragment"
+        android:label="@string/title_trip_theme"
+        tools:layout="@layout/fragment_themes" />
 
     <fragment
         android:id="@+id/navigation_admin"
