@@ -19,7 +19,7 @@ public class RestaurantService {
         repo.init(context);
     }
     public List<Restaurant> getRestaurants(){
-        return repo.restaurantList;
+        return RestaurantRepository.restaurantList;
     }
 
     public void create(Restaurant restaurant){
