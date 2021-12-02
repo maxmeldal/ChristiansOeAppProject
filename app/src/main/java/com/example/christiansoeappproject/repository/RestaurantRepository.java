@@ -80,6 +80,7 @@ public class RestaurantRepository implements ICrudRepository<Restaurant>{
             @Override
             public void onResponse(Call<List<Restaurant>> call, Response<List<Restaurant>> response) {
                 if (response.body() != null){
+                    restaurantList.clear();
                     restaurantList.addAll(response.body());
                 }
                 caller.update();

@@ -3,6 +3,7 @@ package com.example.christiansoeappproject;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -21,6 +22,7 @@ import com.example.christiansoeappproject.databinding.ActivityMainBinding;
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
+    Button button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +40,16 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
+
+        button = findViewById(R.id.res_and_butik_BTN);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                resOgButikBTN(view);
+            }
+        });
+
+
     }
 
     public void loginPressed(View view){
@@ -51,4 +63,9 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "Wrong password", Toast.LENGTH_SHORT).show();
         }
     }
+    public void resOgButikBTN(View view){
+        Intent intent = new Intent(MainActivity.this,MapsActivity.class);
+        startActivity(intent);
+    }
+
 }
