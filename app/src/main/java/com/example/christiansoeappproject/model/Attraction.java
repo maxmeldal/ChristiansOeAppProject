@@ -40,35 +40,49 @@ public class Attraction extends Location {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public byte[] getVideo() {
-        if (video != null) {
-            return Base64.getDecoder().decode(video.getBytes());
-        }
+        if (video != null) return Base64.getDecoder().decode(video.getBytes());
         return null;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void setVideo(byte[] video) {
-        this.video = Base64.getEncoder().encodeToString(video);
+        if (video!=null) this.video = Base64.getEncoder().encodeToString(video);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public byte[] getAudio() {
-        if (audio != null) {
-            return Base64.getDecoder().decode(audio.getBytes());
-        }
+        if (audio != null) return Base64.getDecoder().decode(audio.getBytes());
         return null;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void setAudio(byte[] audio) {
-        this.audio = Base64.getEncoder().encodeToString(audio);
+        if (audio!=null) this.audio = Base64.getEncoder().encodeToString(audio);
     }
 
     @Override
     public String toString() {
+        if (audio==null && video==null){
+            return super.toString() + "Attraction{" +
+                    "video='null" + '\'' +
+                    ", audio='null" + '\'' +
+                    '}';
+        }
+        if (audio == null){
+            return super.toString() + "Attraction{" +
+                    "video='" + video.substring(0, 10) + '\'' +
+                    ", audio='null" + '\'' +
+                    '}';
+        }
+        if (video==null){
+            return super.toString() + "Attraction{" +
+                    "video='null" + '\'' +
+                    ", audio='" + audio.substring(0, 10) + '\'' +
+                    '}';
+        }
         return super.toString() + "Attraction{" +
-                "video='" + video + '\'' +
-                ", audio='" + audio + '\'' +
+                "video='" + video.substring(0, 10) + '\'' +
+                ", audio='" + audio.substring(0, 10) + '\'' +
                 '}';
     }
 }

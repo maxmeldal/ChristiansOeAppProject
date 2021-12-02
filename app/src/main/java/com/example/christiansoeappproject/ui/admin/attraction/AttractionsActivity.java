@@ -1,8 +1,10 @@
 package com.example.christiansoeappproject.ui.admin.attraction;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.View;
@@ -36,6 +38,7 @@ public class AttractionsActivity extends AppCompatActivity implements Updatable 
         setupList();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void setupList(){
         listView = findViewById(R.id.attractionsListView);
         attractions = service.getAttractions();

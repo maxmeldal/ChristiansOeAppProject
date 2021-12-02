@@ -112,7 +112,7 @@ public class AttractionRepository implements ICrudRepository<Attraction>{
         call.enqueue(new Callback<Attraction>() {
             @Override
             public void onResponse(Call<Attraction> call, Response<Attraction> response) {
-                System.out.println(newAttraction + " has been updated!");
+                System.out.println("updated: " + newAttraction);
                 caller.update();
             }
 

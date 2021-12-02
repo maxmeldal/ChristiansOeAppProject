@@ -1,10 +1,14 @@
 package com.example.christiansoeappproject.ui.admin.attraction;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.method.DigitsKeyListener;
 import android.view.View;
 import android.widget.EditText;
@@ -14,12 +18,19 @@ import com.example.christiansoeappproject.model.Attraction;
 import com.example.christiansoeappproject.service.AttractionService;
 import com.example.christiansoeappproject.ui.Updatable;
 
+import org.apache.commons.io.IOUtils;
+
+import java.io.InputStream;
+
 public class AttractionDetailActivity extends AppCompatActivity {
     private EditText nameEditText;
     private EditText latitudeEditText;
     private EditText longitudeEditText;
     private Bundle extras;
+    private byte[] video;
+    private byte[] audio;
     private String id;
+    private ActivityResultLauncher<Intent> galleryLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +41,7 @@ public class AttractionDetailActivity extends AppCompatActivity {
         longitudeEditText = findViewById(R.id.longitudeEditText);
 
         extras = getIntent().getExtras();
-        if (extras!=null){
+        if (extras != null) {
             nameEditText.setText(extras.getString("name"));
 
             latitudeEditText.setText(String.valueOf(extras.getDouble("longitude")));
@@ -38,20 +49,52 @@ public class AttractionDetailActivity extends AppCompatActivity {
 
             id = extras.getString("id");
         }
+
+        setupGalleryLauncher();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    public void updateAttractionPressed(View view){
-        AttractionsActivity.service.update(new Attraction(id, Double.parseDouble(latitudeEditText.getText().toString()), Double.parseDouble(longitudeEditText.getText().toString()), nameEditText.getText().toString()));
+    private void setupGalleryLauncher() {
+        galleryLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    System.out.println("back from gallery");
+                    try {
+                        InputStream is = getContentResolver().openInputStream(result.getData().getData());
+                        video = IOUtils.toByteArray(is);
+                    } catch (Exception e) {
+                        System.out.println("error: " + e.getMessage());
+                    }
+                }
+        );
+    }
+
+    public void galleryPressed(View view){
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
+        galleryLauncher.launch(intent);
+    }
+
+
+    /**
+     * Method to update the fields for the attraction
+     */
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void updateAttractionPressed(View view) {
+        Attraction update = new Attraction(id, Double.parseDouble(latitudeEditText.getText().toString()), Double.parseDouble(longitudeEditText.getText().toString()), nameEditText.getText().toString());
+        update.setVideo(video);
+        update.setAudio(audio);
+        AttractionsActivity.service.update(update);
         AttractionsActivity.adapter.notifyDataSetChanged();
         finish();
     }
 
+    /**
+     * Method to delete the attraction from the database, also removes the attraction from any trips that might have it
+     */
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public void deleteAttractionPressed(View view){
+    public void deleteAttractionPressed(View view) {
         AttractionsActivity.service.delete(id);
         AttractionsActivity.tripService.deleteAttractionFromTrips(id);
         AttractionsActivity.adapter.notifyDataSetChanged();
         finish();
     }
-}
+};
