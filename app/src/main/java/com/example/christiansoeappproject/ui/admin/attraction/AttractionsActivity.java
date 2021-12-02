@@ -29,6 +29,7 @@ public class AttractionsActivity extends AppCompatActivity implements Updatable 
     public static TripService tripService;
 
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
