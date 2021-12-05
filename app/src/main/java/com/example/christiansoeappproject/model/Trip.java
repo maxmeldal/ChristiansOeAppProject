@@ -58,6 +58,17 @@ public class Trip {
         return info;
     }
 
+    public String themeToString(int i){
+        if(i == 1){
+            return "Nature";
+        } else if(i == 2){
+            return "History";
+        } else if(i == 3){
+            return "War";
+        }
+        return "Other";
+    }
+
     public void setInfo(String info) {
         this.info = info;
     }
