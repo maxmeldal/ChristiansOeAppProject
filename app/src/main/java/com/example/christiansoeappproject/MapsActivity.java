@@ -4,6 +4,7 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
@@ -16,6 +17,9 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -28,6 +32,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.example.christiansoeappproject.databinding.ActivityMapsBinding;
 import com.google.android.material.snackbar.Snackbar;
@@ -35,10 +40,10 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, Updatable {
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, Updatable {
 
     private GoogleMap mMap;
-    private MarkerOptions options = new MarkerOptions();
+    private final MarkerOptions options = new MarkerOptions();
     private ActivityMapsBinding binding;
     ActivityResultLauncher<String> permissionLauncher;
     LocationManager locationManager;
@@ -125,14 +130,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         }
 
-       // addMarkersToMap();
         List<Restaurant> resliste = restaurantService.getRestaurants();
 
         System.out.println("res listen er: " + resliste.size());
         for (int i = 0; i<resliste.size(); i++){
             LatLng latll = new LatLng(resliste.get(i).getLatitude(),resliste.get(i).getLongitude());
-            String name = new String(resliste.get(i).getName());
+            String name = resliste.get(i).getName();
             mMap.addMarker(new MarkerOptions().position(latll).title(name));
+
+            mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                @Override
+                public boolean onMarkerClick(@NonNull Marker marker) {
+                    Toast.makeText(MapsActivity.this,"marker: ",Toast.LENGTH_LONG).show();
+                    return false;
+                }
+            });
         }
 
 
@@ -196,20 +208,38 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
     }
 
-    public void addMarkersToMap(){
-        //mMap.clear();
-        List<Restaurant> resliste = restaurantService.getRestaurants();
-
-        System.out.println("res listen har størrelsen: " + resliste.size());
-        for (int i = 0; i<resliste.size(); i++){
-            LatLng latll = new LatLng(resliste.get(i).getLatitude(),resliste.get(i).getLongitude());
-            mMap.addMarker(new MarkerOptions().position(latll).title("Fisk"));
-        }
-    }
 
 
     @Override
     public void update() {
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+            MenuInflater inflater = getMenuInflater();
+            inflater.inflate(R.menu.map_options, menu);
+            return true;
+
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Change the map type based on the user's selection.
+        switch (item.getItemId()) {
+            case R.id.normal_map:
+                mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                return true;
+            case R.id.hybrid_map:
+                mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+                return true;
+            case R.id.satellite_map:
+                mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                return true;
+            case R.id.terrain_map:
+                mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
