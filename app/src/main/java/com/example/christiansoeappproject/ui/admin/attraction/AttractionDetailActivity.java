@@ -5,6 +5,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,8 +22,10 @@ import com.example.christiansoeappproject.ui.Updatable;
 import org.apache.commons.io.IOUtils;
 
 import java.io.InputStream;
+import java.util.Arrays;
 
 public class AttractionDetailActivity extends AppCompatActivity {
+    private static final int REQUEST_GET_AUDIO_ARRAY = 0;
     private EditText nameEditText;
     private EditText latitudeEditText;
     private EditText longitudeEditText;
@@ -97,4 +100,17 @@ public class AttractionDetailActivity extends AppCompatActivity {
         AttractionsActivity.adapter.notifyDataSetChanged();
         finish();
     }
-};
+
+    public void audioPressed(View view){
+        Intent intent = new Intent(this, AudioActivity.class);
+        startActivityForResult(intent, REQUEST_GET_AUDIO_ARRAY);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_GET_AUDIO_ARRAY && resultCode == Activity.RESULT_OK) {
+            audio = data.getByteArrayExtra("audio");
+        }
+    }
+}
