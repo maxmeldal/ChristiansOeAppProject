@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements Updatable {
         service = new TripService(this);
         attractionService = new AttractionService(this);
         //TODO: switch getTripsData with getTrips when it works
-        allTrips = service.getTripsData();
+        allTrips = service.getTrips();
 
         button = findViewById(R.id.res_and_butik_BTN);
         button.setOnClickListener(new View.OnClickListener() {
