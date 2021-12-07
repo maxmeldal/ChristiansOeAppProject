@@ -21,14 +21,12 @@ import java.io.InputStream;
 
 public class AudioActivity extends AppCompatActivity {
     private final MediaRecorder recorder = new MediaRecorder();
-    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+
     private byte[] audio;
 
     public void start(View view){
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, 0);
-
         } else {
 
             ParcelFileDescriptor[] descriptors = new ParcelFileDescriptor[0];
@@ -42,22 +40,22 @@ public class AudioActivity extends AppCompatActivity {
             ParcelFileDescriptor parcelWrite = new ParcelFileDescriptor(descriptors[1]);
 
             recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-            recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+            recorder.setOutputFormat(MediaRecorder.OutputFormat.AMR_NB);
             recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
             recorder.setOutputFile(parcelWrite.getFileDescriptor());
 
             InputStream inputStream = new ParcelFileDescriptor.AutoCloseInputStream(parcelRead);
-            try {
+            try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
                 recorder.prepare();
                 recorder.start();
 
                 int read;
                 byte[] data = new byte[16384];
-
                 while ((read = inputStream.read(data, 0, data.length)) != -1) {
-                    byteArrayOutputStream.write(data, 0, read);
+                    baos.write(data, 0, read);
                 }
-                audio = byteArrayOutputStream.toByteArray();
+                audio = baos.toByteArray();
+                baos.flush();
 
             } catch (IOException e) {
                 System.out.println(e.getMessage());
