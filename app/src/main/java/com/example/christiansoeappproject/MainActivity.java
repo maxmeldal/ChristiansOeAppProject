@@ -87,6 +87,7 @@ public class MainActivity extends AppCompatActivity implements Updatable {
         startActivity(intent);
     }
 
+    //TODO:Remember to compress images or chose lower dif images
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void naturePressed(View view){

@@ -11,13 +11,13 @@
         android:id="@+id/tripName"
         android:layout_width="310dp"
         android:layout_height="60dp"
-        android:layout_marginTop="80dp"
-        android:layout_marginBottom="20dp"
-        android:ems="10"
-        android:hint="Name"
-        android:gravity="center"
-        android:textSize="17dp"
+        android:layout_marginTop="48dp"
+        android:layout_marginBottom="24dp"
         android:background="@drawable/spinner_background"
+        android:ems="10"
+        android:gravity="center"
+        android:hint="Name"
+        android:textSize="17dp"
         app:layout_constraintBottom_toTopOf="@+id/tripInfo"
         app:layout_constraintEnd_toEndOf="@+id/tripInfo"
         app:layout_constraintStart_toStartOf="@+id/tripInfo"
@@ -27,20 +27,29 @@
         android:id="@+id/tripInfo"
         android:layout_width="310dp"
         android:layout_height="60dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="24dp"
-        android:ems="10"
-        android:hint="Info"
-        android:gravity="center"
-        android:textSize="17dp"
+        android:layout_marginTop="24dp"
         android:background="@drawable/spinner_background"
-        app:layout_constraintBottom_toTopOf="@+id/tripTheme"
-        app:layout_constraintEnd_toEndOf="@+id/tripTheme"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/tripTheme"
-        app:layout_constraintTop_toBottomOf="@+id/tripName" />
+        android:ems="10"
+        android:gravity="center"
+        android:hint="Info"
+        android:textSize="17dp"
+        app:layout_constraintTop_toBottomOf="@+id/tripName"
+        tools:layout_editor_absoluteX="50dp" />
 
-    <TextView
+
+    <fragment
+        android:id="@+id/tripMap"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="413dp"
+        android:layout_height="350dp"
+        android:layout_marginTop="60dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tripInfo"
+        tools:context=".TripThemeActivity" />
+
+    <!--<TextView
         android:id="@+id/tripTheme"
         android:layout_width="311dp"
         android:layout_height="60dp"
@@ -54,9 +63,9 @@
         app:layout_constraintEnd_toEndOf="@+id/tripAttractions"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/tripAttractions"
-        app:layout_constraintTop_toBottomOf="@+id/tripInfo" />
+        app:layout_constraintTop_toBottomOf="@+id/tripInfo" />-->
 
-    <TextView
+    <!--<TextView
         android:id="@+id/tripAttractions"
         android:layout_width="310dp"
         android:layout_height="60dp"
@@ -68,5 +77,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tripTheme" />
+        app:layout_constraintTop_toBottomOf="@+id/tripTheme" />-->
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
