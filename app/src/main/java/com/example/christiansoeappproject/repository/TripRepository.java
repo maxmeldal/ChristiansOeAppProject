@@ -138,7 +138,7 @@ public class TripRepository implements ICrudRepository<Trip>{
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void update(Trip trip) {
-        trips.removeIf(facility -> facility.getId().equals(trip.getId()));
+        trips.removeIf(oldTrip -> oldTrip.getId().equals(trip.getId()));
         trips.add(trip);
 
         Call<Trip> call = apiService.updateTrip(trip);
@@ -159,7 +159,7 @@ public class TripRepository implements ICrudRepository<Trip>{
     @Override
     public void delete(String id) {
 
-        trips.removeIf(attraction -> attraction.getId().equals(id));
+        trips.removeIf(trip -> trip.getId().equals(id));
 
         Call<Trip> call = apiService.deleteTrip(id);
         call.enqueue(new Callback<Trip>() {
