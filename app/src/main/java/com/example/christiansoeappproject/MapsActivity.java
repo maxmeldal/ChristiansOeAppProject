@@ -4,17 +4,20 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -35,6 +38,9 @@ import com.example.christiansoeappproject.databinding.ActivityMapsBinding;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, Updatable {
 
@@ -48,6 +54,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     boolean info;
    // ArrayList<LatLng> butikListe = new ArrayList<>();
     RestaurantService restaurantService;
+    List<Restaurant> resliste;
 
 //    LatLng sirenehuset = new LatLng(55.32007928389102, 15.186848922143419);
 //    LatLng christiansøGlas = new LatLng(55.319892754738305, 15.186976409042497);
@@ -59,9 +66,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         restaurantService = new RestaurantService(this);
 
-
         binding = ActivityMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        resliste = restaurantService.getRestaurants();
 
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -75,6 +82,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         //vi gemmer vores location på telefonens hukommelse
         sharedPreferences = this.getSharedPreferences("com.example.christiansoeappproject",MODE_PRIVATE);
         info = false;
+
 
 
     }
@@ -125,8 +133,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             mMap.setMyLocationEnabled(true);
 
         }
-
-        List<Restaurant> resliste = restaurantService.getRestaurants();
+        resliste = restaurantService.getRestaurants();
 
         System.out.println("res listen er: " + resliste.size());
         for (int i = 0; i<resliste.size(); i++){
@@ -135,10 +142,25 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             mMap.addMarker(new MarkerOptions().position(latll).title(name));
 
             mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                @RequiresApi(api = Build.VERSION_CODES.N)
                 @Override
                 public boolean onMarkerClick(@NonNull Marker marker) {
-                    Toast.makeText(MapsActivity.this,"marker: ",Toast.LENGTH_LONG).show();
-                    return false;
+                    //Toast.makeText(MapsActivity.this,marker.getTitle(),Toast.LENGTH_LONG).show();
+
+                    Optional<Restaurant> selected = resliste.stream().filter(restaurant -> restaurant.getName().equals(marker.getTitle())).findFirst();
+                    if ((!selected.isPresent())) {
+                        Toast.makeText(MapsActivity.this,"Could not select restarant",Toast.LENGTH_LONG).show();
+                        return false;
+                    }
+                    Intent intent = new Intent(MapsActivity.this,ShowRestaurantActivity.class);
+                    Restaurant restaurant = selected.get();
+                    intent.putExtra("name", restaurant.getName());
+                    intent.putExtra("close", restaurant.getClose());
+                    intent.putExtra("open", restaurant.getOpen());
+                    intent.putExtra("url", restaurant.getUrl());
+                    startActivity(intent);
+
+                    return true;
                 }
             });
         }
@@ -208,6 +230,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void update() {
+        resliste = restaurantService.getRestaurants();
 
     }
 
