@@ -25,7 +25,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.christiansoeappproject.model.Facility;
 import com.example.christiansoeappproject.model.Restaurant;
+import com.example.christiansoeappproject.service.FacilityService;
 import com.example.christiansoeappproject.service.RestaurantService;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -52,23 +54,22 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     LocationListener locationListener;
     SharedPreferences sharedPreferences;
     boolean info;
-   // ArrayList<LatLng> butikListe = new ArrayList<>();
+    // ArrayList<LatLng> butikListe = new ArrayList<>();
     RestaurantService restaurantService;
+    FacilityService facilityService;
     List<Restaurant> resliste;
-
-//    LatLng sirenehuset = new LatLng(55.32007928389102, 15.186848922143419);
-//    LatLng christiansøGlas = new LatLng(55.319892754738305, 15.186976409042497);
-//    LatLng christiansøKiosk = new LatLng(55.32082021048631, 15.186639479372074);
-//    LatLng christiansøGæstgiveri = new LatLng(55.32072522067318, 15.186493780058843);
+    List<Facility> facilities;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         restaurantService = new RestaurantService(this);
+        facilityService = new FacilityService(this);
 
         binding = ActivityMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         resliste = restaurantService.getRestaurants();
+        facilities = facilityService.getFacilities();
 
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -80,11 +81,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         registerLauncher();
 
         //vi gemmer vores location på telefonens hukommelse
-        sharedPreferences = this.getSharedPreferences("com.example.christiansoeappproject",MODE_PRIVATE);
+        sharedPreferences = this.getSharedPreferences("com.example.christiansoeappproject", MODE_PRIVATE);
         info = false;
-
-
-
     }
 
 
@@ -99,17 +97,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             public void onLocationChanged(@NonNull Location location) {
 
                 info = sharedPreferences.getBoolean("info", false);
-                if (!info){
-                    LatLng userLocation = new LatLng(location.getLatitude(),location.getLongitude());
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation,17));
-                    sharedPreferences.edit().putBoolean("info",true).apply();
+                if (!info) {
+                    LatLng userLocation = new LatLng(location.getLatitude(), location.getLongitude());
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 17));
+                    sharedPreferences.edit().putBoolean("info", true).apply();
                 }
             }
         };
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.ACCESS_FINE_LOCATION)){
-                Snackbar.make(binding.getRoot(),"Tilladelse nødvendig for maps",Snackbar.LENGTH_INDEFINITE).setAction("Giv Tilladelse", new View.OnClickListener() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                Snackbar.make(binding.getRoot(), "Tilladelse nødvendig for maps", Snackbar.LENGTH_INDEFINITE).setAction("Giv Tilladelse", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         //request permission
@@ -122,125 +120,94 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 permissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
             }
         } else {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,10000,10000,locationListener);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 10000, locationListener);
 
             Location lastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            if (lastLocation != null){
-                LatLng lastUserLocation = new LatLng(lastLocation.getLatitude(),lastLocation.getLongitude());
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lastUserLocation,17));
+            if (lastLocation != null) {
+                LatLng lastUserLocation = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lastUserLocation, 17));
             }
             //viser vores position med en blå cirkel
             mMap.setMyLocationEnabled(true);
 
         }
-        resliste = restaurantService.getRestaurants();
 
-        System.out.println("res listen er: " + resliste.size());
-        for (int i = 0; i<resliste.size(); i++){
-            LatLng latll = new LatLng(resliste.get(i).getLatitude(),resliste.get(i).getLongitude());
-            String name = resliste.get(i).getName();
-            mMap.addMarker(new MarkerOptions().position(latll).title(name));
+        if (getIntent().getExtras().getString("type").equals("restaurant")) {
+            System.out.println("res listen er: " + resliste.size());
+            for (int i = 0; i < resliste.size(); i++) {
+                LatLng latll = new LatLng(resliste.get(i).getLatitude(), resliste.get(i).getLongitude());
+                String name = resliste.get(i).getName();
+                mMap.addMarker(new MarkerOptions().position(latll).title(name));
 
-            mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-                @RequiresApi(api = Build.VERSION_CODES.N)
-                @Override
-                public boolean onMarkerClick(@NonNull Marker marker) {
-                    //Toast.makeText(MapsActivity.this,marker.getTitle(),Toast.LENGTH_LONG).show();
-
-                    Optional<Restaurant> selected = resliste.stream().filter(restaurant -> restaurant.getName().equals(marker.getTitle())).findFirst();
-                    if ((!selected.isPresent())) {
-                        Toast.makeText(MapsActivity.this,"Could not select restarant",Toast.LENGTH_LONG).show();
-                        return false;
+                mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                    @RequiresApi(api = Build.VERSION_CODES.N)
+                    @Override
+                    public void onInfoWindowClick(@NonNull Marker marker) {
+                        Optional<Restaurant> selected = resliste.stream().filter(restaurant -> restaurant.getName().equals(marker.getTitle())).findFirst();
+                        if ((!selected.isPresent())) {
+                            Toast.makeText(MapsActivity.this, "Could not select restaurant", Toast.LENGTH_LONG).show();
+                            return;
+                        }
+                        Intent intent = new Intent(MapsActivity.this, ShowRestaurantActivity.class);
+                        Restaurant restaurant = selected.get();
+                        intent.putExtra("name", restaurant.getName());
+                        intent.putExtra("close", restaurant.getClose());
+                        intent.putExtra("open", restaurant.getOpen());
+                        intent.putExtra("url", restaurant.getUrl());
+                        startActivity(intent);
                     }
-                    Intent intent = new Intent(MapsActivity.this,ShowRestaurantActivity.class);
-                    Restaurant restaurant = selected.get();
-                    intent.putExtra("name", restaurant.getName());
-                    intent.putExtra("close", restaurant.getClose());
-                    intent.putExtra("open", restaurant.getOpen());
-                    intent.putExtra("url", restaurant.getUrl());
-                    startActivity(intent);
-
-                    return true;
-                }
-            });
+                });
+            }
+        } else if (getIntent().getExtras().getString("type").equals("facility")) {
+            for (Facility facility : facilities) {
+                System.out.println("here");
+                LatLng latll = new LatLng(facility.getLatitude(), facility.getLongitude());
+                String name = facility.getName();
+                mMap.addMarker(new MarkerOptions().position(latll).title(name));
+            }
         }
-
-
-
-
-
-        // sirenehuset 55.32007928389102, 15.186848922143419
-        // christiansø glas 55.319892754738305, 15.186976409042497
-        // Christiansø kiosk 55.32082021048631, 15.186639479372074
-        // Christiansø Gæstgiveri 55.32072522067318, 15.186493780058843
-//        butikListe.add(new LatLng(55.32007928389102, 15.186848922143419));
-//        butikListe.add(new LatLng(55.319892754738305, 15.186976409042497));
-//        butikListe.add(new LatLng(55.32082021048631, 15.186639479372074));
-//        butikListe.add(new LatLng(55.32072522067318, 15.186493780058843));
-//        for (LatLng latLng: butikListe) {
-//            options.position(latLng);
-//            options.title("Butikker og restauranter");
-//            mMap.addMarker(options);
-//
-//        }
-
-        //lat, long
-        //55.320169382013646, 15.188192360514055
-        //LatLng christiansoe = new LatLng(55.320169382013646, 15.188192360514055);
-//        mMap.addMarker(new MarkerOptions()
-//                .position(christiansoe)
-//                .title("Marker i Christiansoe"))
-//                .showInfoWindow();
-        //mMap.moveCamera(CameraUpdateFactory.newLatLng(christiansoe));
-
-        // Kongens Bastion 55.31792723678517, 15.188481968614353
-   //     LatLng kongensBastion = new LatLng(55.31792723678517, 15.188481968614353);
-//        mMap.addMarker(new MarkerOptions()
-//                .position(christiansoe)
-//                .title("Kongens Bastion"))
-//                .showInfoWindow();
-        //mMap.moveCamera(CameraUpdateFactory.newLatLng(kongensBastion));
     }
-    public void registerLauncher(){
+
+    public void registerLauncher() {
         permissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), new ActivityResultCallback<Boolean>() {
             @Override
             public void onActivityResult(Boolean result) {
-                if (result){
-                    if (ContextCompat.checkSelfPermission(MapsActivity.this,Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+                if (result) {
+                    if (ContextCompat.checkSelfPermission(MapsActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
 
                         //permission granted
-                        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,10000,10000,locationListener);
+                        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 10000, locationListener);
 
                         Location lastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                        if (lastLocation != null){
-                            LatLng lastUserLocation = new LatLng(lastLocation.getLatitude(),lastLocation.getLongitude());
-                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lastUserLocation,17));
+                        if (lastLocation != null) {
+                            LatLng lastUserLocation = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lastUserLocation, 17));
                         }
                     }
 
-                }else {
+                } else {
                     //permission denied
-                    Toast.makeText(MapsActivity.this,"Tilladelse nødvendig!",Toast.LENGTH_LONG).show();
+                    Toast.makeText(MapsActivity.this, "Tilladelse nødvendig!", Toast.LENGTH_LONG).show();
                 }
             }
         });
     }
 
 
-
     @Override
     public void update() {
         resliste = restaurantService.getRestaurants();
-
+        facilities = facilityService.getFacilities();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-            MenuInflater inflater = getMenuInflater();
-            inflater.inflate(R.menu.map_options, menu);
-            return true;
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.map_options, menu);
+        return true;
 
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Change the map type based on the user's selection.

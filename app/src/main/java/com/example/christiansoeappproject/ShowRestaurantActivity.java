@@ -2,6 +2,7 @@ package com.example.christiansoeappproject;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
 import android.widget.ImageView;
@@ -13,6 +14,7 @@ public class ShowRestaurantActivity extends AppCompatActivity {
     ImageView imageViewRes;
 
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,7 +22,6 @@ public class ShowRestaurantActivity extends AppCompatActivity {
 
         textViewName = findViewById(R.id.textViewName);
         textViewURL = findViewById(R.id.textViewURL);
-        textViewURL.setMovementMethod(LinkMovementMethod.getInstance());
         textViewHours = findViewById(R.id.textViewOpenClose);
         textViewDescription = findViewById(R.id.textViewDescription);
         imageViewRes = findViewById(R.id.imageViewRestaurant);
@@ -28,13 +29,14 @@ public class ShowRestaurantActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         if (!bundle.isEmpty()){
             textViewName.setText(bundle.getString("name"));
-            textViewName.setText(bundle.getString("open-close"));
-            textViewName.setText(bundle.getString("open"));
-            textViewName.setText(bundle.getString("url"));
+            textViewHours.setText(bundle.getDouble("open") + "-" + bundle.getDouble("close"));
+            String url = bundle.getString("url");
+            if (url!=null && !url.isEmpty()){
+                textViewURL.setText(url);
+                textViewURL.setMovementMethod(LinkMovementMethod.getInstance());
+            } else {
+                textViewURL.setText("Der er ikke et link til denne restaurant");
+            }
         }
-
-
-
-
     }
 }
