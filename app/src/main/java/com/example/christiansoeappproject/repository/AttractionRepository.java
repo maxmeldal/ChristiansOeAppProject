@@ -7,11 +7,10 @@ import androidx.annotation.RequiresApi;
 
 import com.example.christiansoeappproject.endpoint.IAttractionEndpoint;
 import com.example.christiansoeappproject.model.Attraction;
-import com.example.christiansoeappproject.ui.Updatable;
+import com.example.christiansoeappproject.Updatable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;

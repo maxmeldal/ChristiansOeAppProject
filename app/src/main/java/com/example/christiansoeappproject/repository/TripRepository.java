@@ -5,12 +5,10 @@ import android.os.Build;
 import androidx.annotation.RequiresApi;
 
 import com.example.christiansoeappproject.endpoint.ITripEndpoint;
-import com.example.christiansoeappproject.model.Attraction;
 import com.example.christiansoeappproject.model.Trip;
-import com.example.christiansoeappproject.ui.Updatable;
+import com.example.christiansoeappproject.Updatable;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;

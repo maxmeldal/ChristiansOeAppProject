@@ -11,7 +11,6 @@ import android.widget.Toast;
 import com.example.christiansoeappproject.model.Trip;
 import com.example.christiansoeappproject.service.AttractionService;
 import com.example.christiansoeappproject.service.TripService;
-import com.example.christiansoeappproject.ui.Updatable;
 import com.example.christiansoeappproject.ui.admin.AdminActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 

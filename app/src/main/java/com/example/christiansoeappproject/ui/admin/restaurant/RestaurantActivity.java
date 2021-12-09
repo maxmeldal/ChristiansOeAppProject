@@ -8,13 +8,9 @@ import android.widget.ListView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.christiansoeappproject.R;
-import com.example.christiansoeappproject.model.Facility;
 import com.example.christiansoeappproject.model.Restaurant;
-import com.example.christiansoeappproject.service.FacilityService;
 import com.example.christiansoeappproject.service.RestaurantService;
-import com.example.christiansoeappproject.ui.Updatable;
-import com.example.christiansoeappproject.ui.admin.attraction.AttractionDetailActivity;
-import com.example.christiansoeappproject.ui.admin.facility.FacilityAdapter;
+import com.example.christiansoeappproject.Updatable;
 
 import java.util.ArrayList;
 import java.util.List;

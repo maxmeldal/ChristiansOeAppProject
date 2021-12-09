@@ -7,11 +7,10 @@ import android.widget.ListView;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.christiansoeappproject.R;
 import com.example.christiansoeappproject.model.Attraction;
-import com.example.christiansoeappproject.model.Theme;
 import com.example.christiansoeappproject.model.Trip;
 import com.example.christiansoeappproject.service.AttractionService;
 import com.example.christiansoeappproject.service.TripService;
-import com.example.christiansoeappproject.ui.Updatable;
+import com.example.christiansoeappproject.Updatable;
 
 import java.util.ArrayList;
 import java.util.List;

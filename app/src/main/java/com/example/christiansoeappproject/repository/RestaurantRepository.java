@@ -1,14 +1,12 @@
 package com.example.christiansoeappproject.repository;
 import android.content.Context;
 import android.os.Build;
-import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 
 import com.example.christiansoeappproject.endpoint.IRestaurantEndpoint;
 import com.example.christiansoeappproject.model.Restaurant;
-import com.example.christiansoeappproject.ui.Updatable;
-import com.example.christiansoeappproject.ui.admin.restaurant.RestaurantActivity;
+import com.example.christiansoeappproject.Updatable;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -7,7 +7,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
 import android.content.Context;
@@ -24,9 +23,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.christiansoeappproject.model.Restaurant;
-import com.example.christiansoeappproject.repository.RestaurantRepository;
 import com.example.christiansoeappproject.service.RestaurantService;
-import com.example.christiansoeappproject.ui.Updatable;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -37,7 +34,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.example.christiansoeappproject.databinding.ActivityMapsBinding;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, Updatable {

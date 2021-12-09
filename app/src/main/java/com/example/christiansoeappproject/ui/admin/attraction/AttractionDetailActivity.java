@@ -5,26 +5,20 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.text.method.DigitsKeyListener;
 import android.view.View;
 import android.widget.EditText;
 
 import com.example.christiansoeappproject.R;
 import com.example.christiansoeappproject.model.Attraction;
-import com.example.christiansoeappproject.service.AttractionService;
-import com.example.christiansoeappproject.ui.Updatable;
 
 import org.apache.commons.io.IOUtils;
 
 import java.io.InputStream;
-import java.util.Arrays;
 
 public class AttractionDetailActivity extends AppCompatActivity {
     private static final int REQUEST_GET_AUDIO_ARRAY = 0;
