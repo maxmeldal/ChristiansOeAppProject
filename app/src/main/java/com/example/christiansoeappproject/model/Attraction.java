@@ -17,16 +17,22 @@ public class Attraction extends Location {
     @SerializedName("audio")
     private String audio;
 
-    public Attraction(String id, double latitude, double longitude, String name, String video, String audio) {
+    @SerializedName("image")
+    private String image;
+
+    public Attraction(String id, double latitude, double longitude, String name, String video, String audio, String image) {
         super(id, latitude, longitude, name);
         this.video = video;
         this.audio = audio;
+        this.image = image;
     }
 
-    public Attraction(double latitude, double longitude, String name, String video, String audio) {
+    public Attraction(double latitude, double longitude, String name, String video, String audio, String image) {
         super(latitude, longitude, name);
         this.video = video;
         this.audio = audio;
+        this.image = image;
+
     }
 
 
@@ -60,24 +66,45 @@ public class Attraction extends Location {
         if (audio!=null) this.audio = Base64.getEncoder().encodeToString(audio);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public byte[] getImage(){
+        if (image!=null) return Base64.getDecoder().decode(image.getBytes());
+        return null;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void setImage(byte[] image) {
+        if (image!=null) this.image = Base64.getEncoder().encodeToString(image);
+    }
+
     @Override
     public String toString() {
+        if (audio==null && video==null && image==null){
+            return super.toString() + "Attraction{" +
+                    "video='null" + '\'' +
+                    ", audio='null" + '\'' +
+                    ", image='null" + '\'' +
+                    '}';
+        }
+        if (audio == null && image==null){
+            return super.toString() + "Attraction{" +
+                    "video='" + video.substring(0, 10) + '\'' +
+                    ", audio='null" + '\'' +
+                    ", image='null" + '\'' +
+                    '}';
+        }
+        if (video==null && image==null){
+            return super.toString() + "Attraction{" +
+                    "video='null" + '\'' +
+                    ", audio='" + audio.substring(0, 10) + '\'' +
+                    ", image='null" + '\'' +
+                    '}';
+        }
         if (audio==null && video==null){
             return super.toString() + "Attraction{" +
                     "video='null" + '\'' +
                     ", audio='null" + '\'' +
-                    '}';
-        }
-        if (audio == null){
-            return super.toString() + "Attraction{" +
-                    "video='" + video.substring(0, 10) + '\'' +
-                    ", audio='null" + '\'' +
-                    '}';
-        }
-        if (video==null){
-            return super.toString() + "Attraction{" +
-                    "video='null" + '\'' +
-                    ", audio='" + audio.substring(0, 10) + '\'' +
+                    ", image='" + image +  '\'' +
                     '}';
         }
         return super.toString() + "Attraction{" +
