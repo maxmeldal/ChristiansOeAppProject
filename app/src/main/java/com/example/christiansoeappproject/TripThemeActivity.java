@@ -2,8 +2,10 @@ package com.example.christiansoeappproject;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
@@ -19,11 +21,14 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.example.christiansoeappproject.databinding.ActivityMapsBinding;
+import com.example.christiansoeappproject.model.Attraction;
+import com.example.christiansoeappproject.model.Restaurant;
 import com.example.christiansoeappproject.model.Trip;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -45,6 +50,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 public class TripThemeActivity extends AppCompatActivity implements OnMapReadyCallback {
@@ -138,38 +144,63 @@ public class TripThemeActivity extends AppCompatActivity implements OnMapReadyCa
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 10000, locationListener);
 
             Location lastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            if (lastLocation != null) {
-                LatLng lastUserLocation = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lastUserLocation, 17));
-            }
+            LatLng userLocation = new LatLng(55.320535766, 15.1887);
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 15.10F));
+
             //viser vores position med en blå cirkel
             mMap.setMyLocationEnabled(true);
         }
-        Polyline polyline = null;
-        for (int i = 0; i< currentTrip.getAttractions().size(); i++){
-            LatLng latll = new LatLng(currentTrip.getAttractions().get(i).getLatitude(),currentTrip.getAttractions().get(i).getLongitude());
-            String name = currentTrip.getAttractions().get(i).getName();
-            mMap.addMarker(new MarkerOptions().position(latll).title(name));
-            polyline = mMap.addPolyline(new PolylineOptions().clickable(true).add(
-                     new LatLng(currentTrip.getAttractions().get(i).getLatitude(), currentTrip.getAttractions().get(i).getLongitude())
-            ));
-            mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-                @Override
-                public boolean onMarkerClick(@NonNull Marker marker) {
-                    Toast.makeText(TripThemeActivity.this,"marker: ",Toast.LENGTH_LONG).show();
-                    return false;
+        PolylineOptions options = new PolylineOptions();
+        options.color(Color.argb(0,0,0,0));
+        LatLng startLatLng = null;
+        LatLng endLatLng = null;
+        if(currentTrip.getAttractions().size() > 0){
+            for (int i = 0; i< currentTrip.getAttractions().size(); i++){
+                LatLng dest = new LatLng(currentTrip.getAttractions().get(i).getLatitude(),currentTrip.getAttractions().get(i).getLongitude());
+                String name = currentTrip.getAttractions().get(i).getName();
+                mMap.addMarker(new MarkerOptions().position(dest).title(name));
+                //polyline = mMap.addPolyline(new PolylineOptions().clickable(true).add(
+                //         new LatLng(currentTrip.getAttractions().get(i).getLatitude(), currentTrip.getAttractions().get(i).getLongitude())
+                //));
+                mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                    @RequiresApi(api = Build.VERSION_CODES.N)
+                    @Override
+                    public void onInfoWindowClick(@NonNull Marker marker) {
+                        Optional<Attraction> selected = currentTrip.getAttractions().stream().filter(attraction -> attraction.getName().equals(marker.getTitle())).findFirst();
+                        if ((!selected.isPresent())) {
+                            Toast.makeText(TripThemeActivity.this, "Could not select attraction", Toast.LENGTH_LONG).show();
+                            return;
+                        }
+                        Intent intent = new Intent(TripThemeActivity.this, ShowTripAttractionActivity.class);
+                        Attraction attraction = selected.get();
+                        intent.putExtra("name", attraction.getName());
+                        startActivity(intent);
+                    }
+                });
+
+                LatLng latLng = new LatLng(currentTrip.getAttractions().get(i).getLatitude(), currentTrip.getAttractions().get(i).getLongitude());
+
+                if(i == 0){
+                   startLatLng = latLng;
                 }
-            });
+
+                if(i == currentTrip.getAttractions().size() - 1){
+                   endLatLng = latLng;
+                }
+                options.add(latLng);
+                //String url = getDirectionsURL(startLatLng, endLatLng);
+                //Download
+            }
         }
-        polyline.setTag('A');
-        assert polyline != null;
-        stylePolyline(polyline);
+        mMap.addPolyline(options);
+        //polyline.setTag('A');
+        //assert polyline != null;
+        //stylePolyline(polyline);
 
     }
 
-    private void stylePolyline(Polyline polyline) {
-
-    }
+    //private void stylePolyline(Polyline polyline) {
+    //}
 
 
     public void registerLauncher(){
@@ -195,6 +226,22 @@ public class TripThemeActivity extends AppCompatActivity implements OnMapReadyCa
                 }
             }
         });
+    }
+
+    public String getDirectionsURL(LatLng origin, LatLng dest){
+        String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
+
+        String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
+
+        String sensor = "sensor=false";
+
+        String parameters = str_origin + "&" + str_dest + "&" + sensor;
+
+        String output = "json";
+
+        String url = "http://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
+
+        return url;
     }
 
 }
