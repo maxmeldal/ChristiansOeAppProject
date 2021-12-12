@@ -7,17 +7,21 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.example.christiansoeappproject.R;
 import com.example.christiansoeappproject.model.Attraction;
 
 import org.apache.commons.io.IOUtils;
 
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 
 public class AttractionDetailActivity extends AppCompatActivity {
@@ -25,11 +29,14 @@ public class AttractionDetailActivity extends AppCompatActivity {
     private EditText nameEditText;
     private EditText latitudeEditText;
     private EditText longitudeEditText;
+    private ImageView selectedImage;
     private Bundle extras;
     private byte[] video;
     private byte[] audio;
+    private byte[] image;
     private String id;
-    private ActivityResultLauncher<Intent> galleryLauncher;
+    private ActivityResultLauncher<Intent> videoGalleryLauncher;
+    private ActivityResultLauncher<Intent> imageGalleryLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +45,7 @@ public class AttractionDetailActivity extends AppCompatActivity {
         nameEditText = findViewById(R.id.nameEditText);
         latitudeEditText = findViewById(R.id.latitudeEditText);
         longitudeEditText = findViewById(R.id.longitudeEditText);
+        selectedImage = findViewById(R.id.selectedImage);
 
         extras = getIntent().getExtras();
         if (extras != null) {
@@ -46,14 +54,46 @@ public class AttractionDetailActivity extends AppCompatActivity {
             latitudeEditText.setText(String.valueOf(extras.getDouble("longitude")));
             longitudeEditText.setText(String.valueOf(extras.getDouble("longitude")));
 
+            byte[] imageBytes = extras.getByteArray("image");
+            if (imageBytes!=null){
+                Bitmap bitmap = BitmapFactory.decodeByteArray(imageBytes,0, imageBytes.length);
+                selectedImage.setImageBitmap(bitmap);
+            }
+
             id = extras.getString("id");
         }
 
-        setupGalleryLauncher();
+        setupVideoGalleryLauncher();
+        setupImageGalleryLauncher();
     }
 
-    private void setupGalleryLauncher() {
-        galleryLauncher = registerForActivityResult(
+    private void setupImageGalleryLauncher() {
+        imageGalleryLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    System.out.println("Back from gallery");
+                    try {
+                        InputStream is = getContentResolver().openInputStream(result.getData().getData());
+                        Bitmap bitmap = BitmapFactory.decodeStream(is);
+                        selectedImage.setImageBitmap(bitmap);
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                        image = baos.toByteArray();
+
+                    } catch (Exception e) {
+                        System.out.println("error: " + e.getMessage());
+                    }
+                }
+        );
+    }
+
+    public void imagePressed(View view){
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        imageGalleryLauncher.launch(intent);
+    }
+
+    private void setupVideoGalleryLauncher() {
+        videoGalleryLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     System.out.println("back from gallery");
@@ -67,9 +107,9 @@ public class AttractionDetailActivity extends AppCompatActivity {
         );
     }
 
-    public void galleryPressed(View view){
+    public void videoPressed(View view) {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
-        galleryLauncher.launch(intent);
+        videoGalleryLauncher.launch(intent);
     }
 
 
@@ -81,6 +121,7 @@ public class AttractionDetailActivity extends AppCompatActivity {
         Attraction update = new Attraction(id, Double.parseDouble(latitudeEditText.getText().toString()), Double.parseDouble(longitudeEditText.getText().toString()), nameEditText.getText().toString());
         update.setVideo(video);
         update.setAudio(audio);
+        update.setImage(image);
         AttractionsActivity.service.update(update);
         AttractionsActivity.adapter.notifyDataSetChanged();
         finish();
@@ -97,7 +138,7 @@ public class AttractionDetailActivity extends AppCompatActivity {
         finish();
     }
 
-    public void audioPressed(View view){
+    public void audioPressed(View view) {
         Intent intent = new Intent(this, AudioActivity.class);
         startActivityForResult(intent, REQUEST_GET_AUDIO_ARRAY);
     }

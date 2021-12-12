@@ -49,15 +49,18 @@ public class AttractionsActivity extends AppCompatActivity implements Updatable 
             intent.putExtra("longitude", attractions.get(i).getLongitude());
             intent.putExtra("name", attractions.get(i).getName());
             intent.putExtra("id", attractions.get(i).getId());
+            intent.putExtra("image", attractions.get(i).getImage());
             startActivity(intent);
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void create(View view){
         service.create(new Attraction(0,0, "New Attraction"));
         update();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void update() {
         adapter.notifyDataSetChanged();
