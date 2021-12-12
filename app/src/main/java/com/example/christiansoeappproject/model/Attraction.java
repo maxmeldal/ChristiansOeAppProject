@@ -35,11 +35,17 @@ public class Attraction extends Location {
 
     }
 
-
+    /**
+     * Constructor bliver brugt til at oprette Attraction med video audio og image, ud fra byte arrays
+     * Setter bliver kaldt i stedet for constructor
+     */
     public Attraction(String id, double latitude, double longitude, String name) {
         super(id, latitude, longitude, name);
     }
 
+    /**
+     * Constructor til testdata
+     */
     public Attraction(double latitude, double longitude, String name) {
         super(latitude, longitude, name);
     }
