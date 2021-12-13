@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -18,6 +17,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
+
+import com.example.christiansoeappproject.databinding.ActivityMainBinding;
 import com.example.christiansoeappproject.model.Trip;
 import com.example.christiansoeappproject.repository.WeatherRepository;
 import com.example.christiansoeappproject.service.AttractionService;
@@ -25,21 +38,10 @@ import com.example.christiansoeappproject.service.DistanceService;
 import com.example.christiansoeappproject.service.TripService;
 import com.example.christiansoeappproject.ui.admin.AdminActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-
-import com.example.christiansoeappproject.databinding.ActivityMainBinding;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -49,13 +51,16 @@ public class MainActivity extends AppCompatActivity implements Updatable, Locati
 
     public static TripService service;
     public static AttractionService attractionService;
+    ActivityResultLauncher<String> permissionLauncher;//bruges til at søge om tilladelser
     private List<Trip> allTrips = new ArrayList<>();
     public static List<Trip> themeTrips = new ArrayList<>();
     LocationManager locationManager;
+    LocationListener locationListener;
     TextView textViewDistance;
     DistanceService distanceService;
     private ImageView weatherImageView;
 
+    @SuppressLint({"MissingPermission", "SetTextI18n"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +77,10 @@ public class MainActivity extends AppCompatActivity implements Updatable, Locati
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
+
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        registerLauncher();
+
 
         weatherImageView =findViewById(R.id.weatherImageView);
         Thread thread = new Thread(){
@@ -96,22 +105,38 @@ public class MainActivity extends AppCompatActivity implements Updatable, Locati
         thread.start();
 
 
+        locationListener = new LocationListener() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onLocationChanged(@NonNull Location location) {
+                textViewDistance.setText(Math.round(distanceService.distanceToFerry(location.getLatitude(), location.getLongitude()) * 1000) + "m");
+            }
+        };
 
         distanceService = new DistanceService();
         textViewDistance = findViewById(R.id.textViewDistance);
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            /*
+             * shouldShowRequestPermissionRationale er her for at fortælle brugeren hvorfor man har brug for tilladelsen
+             * Snackbar viser beskeden og hvor længe den skal vises.
+             * setAction er en button med string som tekst og hvad der sker når der clikkes på den.
+             */
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                Snackbar.make(binding.getRoot(), "Tilladelse nødvendig for location service", Snackbar.LENGTH_INDEFINITE).setAction("Giv Tilladelse", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        //request permission ved at kalde permissionLauncher og fortælle hvilken tilladelse man ønsker
+                        permissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
+                    }
+                }).show();
+            } else {
+                //request permission ved at kalde permissionLauncher og fortælle hvilken tilladelse man ønsker
+                permissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
+            }
+        } else {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 10000, locationListener);
         }
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 5, this);
 
         service = new TripService(this);
         attractionService = new AttractionService(this);
@@ -119,10 +144,28 @@ public class MainActivity extends AppCompatActivity implements Updatable, Locati
         allTrips = service.getTrips();
     }
 
+   public void registerLauncher() {
+       permissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), new ActivityResultCallback<Boolean>() {
+           @SuppressLint({"MissingPermission", "SetTextI18n"})
+           @Override
+           public void onActivityResult(Boolean result) {
+               if (result) {
+                   if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                       //permission granted, og hvad der så skal ske efterfølgende
+                       locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 10000, locationListener);
+                   }
+               } else {
+                   //permission denied
+                   Toast.makeText(MainActivity.this, "Tilladelse nødvendig!", Toast.LENGTH_LONG).show();
+               }
+           }
+       });
+   }
+
     @SuppressLint("SetTextI18n")
     @Override
     public void onLocationChanged(@NonNull Location location) {
-        textViewDistance.setText(Math.round(distanceService.distanceToFerry(location.getLatitude(), location.getLongitude()) * 1000) + "m");
+        //textViewDistance.setText(Math.round(distanceService.distanceToFerry(location.getLatitude(), location.getLongitude()) * 1000) + "m");
     }
 
     public void loginPressed(View view){
