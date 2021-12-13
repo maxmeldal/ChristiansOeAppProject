@@ -152,11 +152,11 @@ public class TripDetailActivity extends AppCompatActivity {
     }
 
     public int getTheme(String context){
-        if(context.equals("Nature")){
+        if(context.equals("Natur")){
             return 1;
-        } else if(context.equals("History")){
+        } else if(context.equals("Historie")){
             return 2;
-        } else if(context.equals("War")){
+        } else if(context.equals("Krig")){
             return 3;
         }
         return 4;

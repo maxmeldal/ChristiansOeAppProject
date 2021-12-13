@@ -46,16 +46,16 @@ public class TripAdapter extends BaseAdapter {
         titleTextView.setText(trips.get(i).getName());
         TextView subtitleTextView = view.findViewById(R.id.subtitleTextView);
         System.out.println(trips.get(i).getTheme());
-        subtitleTextView.setText(trips.get(i).getInfo()+ ", Theme: " + convertToTheme(trips.get(i).getTheme()));
+        subtitleTextView.setText(trips.get(i).getInfo()+ ", Tema: " + convertToTheme(trips.get(i).getTheme()));
 
         return view;
     }
 
     public String convertToTheme(int i){
-        if(i == 1){ return Theme.Nature.name();
-        } else if(i == 2){ return Theme.History.name();
-        } else if(i == 3){ return Theme.War.name();
+        if(i == 1){ return Theme.Natur.name();
+        } else if(i == 2){ return Theme.Historie.name();
+        } else if(i == 3){ return Theme.Krig.name();
         }
-        return Theme.None.name();
+        return Theme.Ingen.name();
     }
 }

@@ -8,11 +8,11 @@
 
     <Button
         android:id="@+id/attractionsButton"
-        android:layout_width="145dp"
-        android:layout_height="47dp"
+        android:layout_width="160dp"
+        android:layout_height="52dp"
         android:layout_marginTop="100dp"
         android:onClick="attractionsPressed"
-        android:text="Attractions"
+        android:text="Attraktioner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.518"
         app:layout_constraintStart_toStartOf="parent"
@@ -20,11 +20,11 @@
 
     <Button
         android:id="@+id/tripsbutton"
-        android:layout_width="145dp"
-        android:layout_height="47dp"
+        android:layout_width="160dp"
+        android:layout_height="52dp"
         android:layout_marginTop="56dp"
         android:onClick="tripsPressed"
-        android:text="Trips"
+        android:text="Router"
         app:layout_constraintEnd_toEndOf="@+id/attractionsButton"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/attractionsButton"
@@ -32,11 +32,11 @@
 
     <Button
         android:id="@+id/facilitiesButton"
-        android:layout_width="145dp"
-        android:layout_height="47dp"
+        android:layout_width="160dp"
+        android:layout_height="52dp"
         android:layout_marginTop="72dp"
         android:onClick="facilitiesPressed"
-        android:text="facilities"
+        android:text="Faciliteter"
         app:layout_constraintEnd_toEndOf="@+id/tripsbutton"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/tripsbutton"
@@ -44,11 +44,11 @@
 
     <Button
         android:id="@+id/restaurantsButton"
-        android:layout_width="145dp"
-        android:layout_height="47dp"
+        android:layout_width="160dp"
+        android:layout_height="52dp"
         android:layout_marginTop="88dp"
         android:onClick="restaurantsPressed"
-        android:text="restaurants"
+        android:text="restauranter"
         app:layout_constraintEnd_toEndOf="@+id/facilitiesButton"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/facilitiesButton"

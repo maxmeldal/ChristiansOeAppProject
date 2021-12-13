@@ -13,7 +13,7 @@
         android:layout_marginTop="123dp"
         android:layout_marginBottom="20dp"
         android:ems="10"
-        android:hint="Name"
+        android:hint="Navn"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toTopOf="@+id/editTripInfo"
         app:layout_constraintEnd_toEndOf="@+id/editTripInfo"
@@ -27,7 +27,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginBottom="24dp"
         android:ems="10"
-        android:hint="Info"
+        android:hint="Beskrivelse"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toTopOf="@+id/attractionsView"
         app:layout_constraintEnd_toEndOf="@+id/attractionsView"
@@ -45,8 +45,8 @@
         android:drawableEnd="@drawable/down_arrow"
         android:drawablePadding="10dp"
         android:gravity="left"
+        android:hint="Vælg attraktioner"
         android:textSize="17dp"
-        android:hint="Select attractions"
         app:layout_constraintEnd_toEndOf="@+id/themeSpinner"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/themeSpinner"
@@ -71,24 +71,24 @@
         android:id="@+id/updateTripBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="62dp"
-        android:layout_marginEnd="84dp"
-        android:layout_marginBottom="136dp"
+        android:layout_marginStart="101dp"
+        android:layout_marginEnd="28dp"
+        android:layout_marginBottom="94dp"
         android:onClick="updateTripPressed"
-        android:text="Update"
+        android:text="Opdater"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/button" />
+        app:layout_constraintEnd_toStartOf="@+id/button"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="84dp"
-        android:layout_marginBottom="136dp"
+        android:layout_marginEnd="101dp"
+        android:layout_marginBottom="94dp"
         android:onClick="deleteTripPressed"
-        android:text="delete"
+        android:text="Slet"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

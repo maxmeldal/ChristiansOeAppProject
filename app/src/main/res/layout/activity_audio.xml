@@ -14,7 +14,7 @@
         android:layout_marginEnd="162dp"
         android:layout_marginBottom="278dp"
         android:onClick="savePressed"
-        android:text="Save"
+        android:text="Gem"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
