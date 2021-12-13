@@ -22,15 +22,5 @@ public class WeatherRepository {
         String imageUrl = img.replace("http", "https");
         URL url = new URL(imageUrl);
         return BitmapFactory.decodeStream(url.openConnection().getInputStream());
-
-        /*
-        Connection.Response response = Jsoup.connect(imageUrl).ignoreContentType(true).execute();
-        byte[] imageBytes = response.bodyAsBytes();
-        return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
-
-         */
-
-
-
     }
 }
