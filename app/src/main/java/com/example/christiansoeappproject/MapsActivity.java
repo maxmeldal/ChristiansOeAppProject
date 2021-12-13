@@ -10,6 +10,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -29,6 +30,7 @@ import com.example.christiansoeappproject.model.Facility;
 import com.example.christiansoeappproject.model.Restaurant;
 import com.example.christiansoeappproject.service.FacilityService;
 import com.example.christiansoeappproject.service.RestaurantService;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -49,12 +51,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private GoogleMap mMap;
     private final MarkerOptions options = new MarkerOptions();
     private ActivityMapsBinding binding;
-    ActivityResultLauncher<String> permissionLauncher;
+    ActivityResultLauncher<String> permissionLauncher;//bruges til at søge om tilladelser
     LocationManager locationManager;
     LocationListener locationListener;
     SharedPreferences sharedPreferences;
     boolean info;
-    // ArrayList<LatLng> butikListe = new ArrayList<>();
     RestaurantService restaurantService;
     FacilityService facilityService;
     List<Restaurant> resliste;
@@ -86,6 +87,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
+    @SuppressLint("MissingPermission")
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
@@ -93,30 +95,42 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         //Casting ved at caste siger jeg at jeg er sikker på at det er Location service jeg vil have
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         locationListener = new LocationListener() {
+            @SuppressLint("MissingPermission")
             @Override
             public void onLocationChanged(@NonNull Location location) {
 
                 info = sharedPreferences.getBoolean("info", false);
                 if (!info) {
                     LatLng userLocation = new LatLng(location.getLatitude(), location.getLongitude());
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 17));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 17.0f));
                     sharedPreferences.edit().putBoolean("info", true).apply();
                 }
+                mMap.setMyLocationEnabled(true);
+
             }
         };
 
+        /*
+        * hvis ikke man har fået tilladelse spørges der om det her.
+        * ContextCompat for at det også skal kunne virke på tidligere versioner.
+        * checkSelfPermission: tjekker tilladelserne
+        */
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            /*
+            * shouldShowRequestPermissionRationale er her for at fortælle brugeren hvorfor man har brug for tilladelsen
+            * Snackbar viser beskeden og hvor længe den skal vises.
+            * setAction er en button med string som tekst og hvad der sker når der clikkes på den.
+             */
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
                 Snackbar.make(binding.getRoot(), "Tilladelse nødvendig for maps", Snackbar.LENGTH_INDEFINITE).setAction("Giv Tilladelse", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        //request permission
+                        //request permission ved at kalde permissionLauncher og fortælle hvilken tilladelse man ønsker
                         permissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
-
                     }
                 }).show();
             } else {
-                //request permission
+                //request permission ved at kalde permissionLauncher og fortælle hvilken tilladelse man ønsker
                 permissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
             }
         } else {
@@ -125,7 +139,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             Location lastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             if (lastLocation != null) {
                 LatLng lastUserLocation = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lastUserLocation, 17));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lastUserLocation, 17.0f));
             }
             //viser vores position med en blå cirkel
             mMap.setMyLocationEnabled(true);
@@ -159,8 +173,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 });
             }
         } else if (getIntent().getExtras().getString("type").equals("facility")) {
+            System.out.println("facility listen er: " + facilities.size());
+
             for (Facility facility : facilities) {
-                System.out.println("here");
+                System.out.println("her kaldes foreach løkke for facility");
                 LatLng latll = new LatLng(facility.getLatitude(), facility.getLongitude());
                 String name = facility.getName();
                 mMap.addMarker(new MarkerOptions().position(latll).title(name));
@@ -168,23 +184,22 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
+    // registerForActivityResult registrerer en results callback og har brug for en contract og en callback.
     public void registerLauncher() {
         permissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), new ActivityResultCallback<Boolean>() {
+            @SuppressLint("MissingPermission")
             @Override
             public void onActivityResult(Boolean result) {
                 if (result) {
                     if (ContextCompat.checkSelfPermission(MapsActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-
-                        //permission granted
+                        //permission granted, og hvad der så skal ske efterfølgende
                         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 10000, locationListener);
-
                         Location lastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                         if (lastLocation != null) {
                             LatLng lastUserLocation = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lastUserLocation, 17));
                         }
                     }
-
                 } else {
                     //permission denied
                     Toast.makeText(MapsActivity.this, "Tilladelse nødvendig!", Toast.LENGTH_LONG).show();
@@ -200,6 +215,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         facilities = facilityService.getFacilities();
     }
 
+    //oprette en menu til map udseende
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();

@@ -43,6 +43,6 @@ public class FacilityService {
     }
 
     public List<Facility> getFacilities() {
-        return repo.facilities;
+        return FacilityRepository.facilities;
     }
 }

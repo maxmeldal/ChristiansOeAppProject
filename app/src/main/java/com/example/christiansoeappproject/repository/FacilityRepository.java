@@ -17,7 +17,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class FacilityRepository implements ICrudRepository<Facility>{
-    public List<Facility> facilities = new ArrayList<>();
+    public static List<Facility> facilities = new ArrayList<>();
     private static Updatable caller;
 
     Retrofit retrofit = new Retrofit.Builder()
@@ -77,6 +77,7 @@ public class FacilityRepository implements ICrudRepository<Facility>{
             @Override
             public void onResponse(Call<List<Facility>> call, Response<List<Facility>> response) {
                 if (response.body()!=null) {
+                    facilities.clear();
                     facilities.addAll(response.body());
                 }
                 caller.update();
