@@ -55,7 +55,6 @@ public class MainActivity extends AppCompatActivity implements Updatable, Locati
     TextView textViewDistance;
     DistanceService distanceService;
     private ImageView weatherImageView;
-    private Bitmap weatherBitMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements Updatable, Locati
         Thread thread = new Thread(){
             public void run() {
                 try {
-                    weatherBitMap = WeatherRepository.getWeather();
+                    Bitmap weatherBitMap = WeatherRepository.getWeather();
                     synchronized (this) {
 
                         runOnUiThread(new Runnable() {
