@@ -174,25 +174,26 @@ public class TripThemeActivity extends AppCompatActivity implements OnMapReadyCa
                         Intent intent = new Intent(TripThemeActivity.this, ShowTripAttractionActivity.class);
                         Attraction attraction = selected.get();
                         intent.putExtra("name", attraction.getName());
+                        intent.putExtra("description", attraction.getDescription());
                         startActivity(intent);
                     }
                 });
 
-                LatLng latLng = new LatLng(currentTrip.getAttractions().get(i).getLatitude(), currentTrip.getAttractions().get(i).getLongitude());
+                //LatLng latLng = new LatLng(currentTrip.getAttractions().get(i).getLatitude(), currentTrip.getAttractions().get(i).getLongitude());
 
-                if(i == 0){
+                /*if(i == 0){
                    startLatLng = latLng;
                 }
 
                 if(i == currentTrip.getAttractions().size() - 1){
                    endLatLng = latLng;
-                }
-                options.add(latLng);
+                }*/
+                //options.add(latLng);
                 //String url = getDirectionsURL(startLatLng, endLatLng);
                 //Download
             }
         }
-        mMap.addPolyline(options);
+        //mMap.addPolyline(options);
         //polyline.setTag('A');
         //assert polyline != null;
         //stylePolyline(polyline);
