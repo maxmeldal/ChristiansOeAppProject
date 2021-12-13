@@ -54,7 +54,7 @@ public class AttractionDetailActivity extends AppCompatActivity {
         if (extras != null) {
             nameEditText.setText(extras.getString("name"));
 
-            latitudeEditText.setText(String.valueOf(extras.getDouble("longitude")));
+            latitudeEditText.setText(String.valueOf(extras.getDouble("latitude")));
             longitudeEditText.setText(String.valueOf(extras.getDouble("longitude")));
             descriptionEditText.setText(extras.getString("description"));
 
