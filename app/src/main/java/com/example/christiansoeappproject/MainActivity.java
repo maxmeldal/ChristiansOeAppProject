@@ -4,45 +4,42 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.christiansoeappproject.model.Trip;
+import com.example.christiansoeappproject.repository.WeatherRepository;
 import com.example.christiansoeappproject.service.AttractionService;
 import com.example.christiansoeappproject.service.DistanceService;
 import com.example.christiansoeappproject.service.TripService;
 import com.example.christiansoeappproject.ui.admin.AdminActivity;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.christiansoeappproject.databinding.ActivityMainBinding;
-import com.google.android.material.snackbar.Snackbar;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -57,6 +54,8 @@ public class MainActivity extends AppCompatActivity implements Updatable, Locati
     LocationManager locationManager;
     TextView textViewDistance;
     DistanceService distanceService;
+    private ImageView weatherImageView;
+    private Bitmap weatherBitMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +73,30 @@ public class MainActivity extends AppCompatActivity implements Updatable, Locati
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
+
+        weatherImageView =findViewById(R.id.weatherImageView);
+        Thread thread = new Thread(){
+            public void run() {
+                try {
+                    weatherBitMap = WeatherRepository.getWeather();
+                    synchronized (this) {
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                weatherImageView.setImageBitmap(weatherBitMap);
+                            }
+                        });
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    System.out.println(e.getMessage());
+                }
+            }
+        };
+        thread.start();
+
+
 
         distanceService = new DistanceService();
         textViewDistance = findViewById(R.id.textViewDistance);
