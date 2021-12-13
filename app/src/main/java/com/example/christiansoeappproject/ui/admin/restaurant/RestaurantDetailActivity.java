@@ -12,7 +12,7 @@ import com.example.christiansoeappproject.R;
 import com.example.christiansoeappproject.model.Restaurant;
 
 public class RestaurantDetailActivity extends AppCompatActivity {
-    private EditText nameEditText, latitudeEditText, longitudeEditText,restaurantURLEditText ,openEditText, closeEditText;
+    private EditText nameEditText, latitudeEditText, longitudeEditText,restaurantURLEditText ,openEditText, closeEditText, descriptionEditText;
 
     private Bundle extras;
     private String id;
@@ -28,6 +28,7 @@ public class RestaurantDetailActivity extends AppCompatActivity {
         restaurantURLEditText = findViewById(R.id.restaurantURLEditText);
         latitudeEditText = findViewById(R.id.restaurantLatitudeEditText);
         longitudeEditText = findViewById(R.id.restaurantLongitudeEditText);
+        descriptionEditText = findViewById(R.id.restaurantDescriptionEditText);
 
 
         extras = getIntent().getExtras();
@@ -41,6 +42,8 @@ public class RestaurantDetailActivity extends AppCompatActivity {
             openEditText.setText(String.valueOf(extras.getDouble("open")));
             closeEditText.setText(String.valueOf(extras.getDouble("close")));
 
+            descriptionEditText.setText(extras.getString("description"));
+
             id = extras.getString("id");
         }
     }
@@ -48,11 +51,12 @@ public class RestaurantDetailActivity extends AppCompatActivity {
 
     public void updateRestaurantPressed(View view){
         RestaurantActivity.service.update(new Restaurant(id, Double.parseDouble(latitudeEditText.getText().toString())
-                                                            , Double.parseDouble(longitudeEditText.getText().toString())
+                                                            ,Double.parseDouble(longitudeEditText.getText().toString())
                                                             ,nameEditText.getText().toString()
                                                             ,restaurantURLEditText.getText().toString()
                                                             ,Double.parseDouble(openEditText.getText().toString())
-                                                            ,Double.parseDouble(closeEditText.getText().toString())));
+                                                            ,Double.parseDouble(closeEditText.getText().toString())
+                                                            ,descriptionEditText.getText().toString()));
         RestaurantActivity.adapter.notifyDataSetChanged();
         finish();
     }

@@ -44,13 +44,14 @@ public class RestaurantActivity extends AppCompatActivity implements Updatable {
             intent.putExtra("url", restaurants.get(i).getUrl());
             intent.putExtra("open", restaurants.get(i).getOpen());
             intent.putExtra("close", restaurants.get(i).getClose());
+            intent.putExtra("description", restaurants.get(i).getDescription());
 
             startActivity(intent);
         });
     }
 
     public void create(View view){
-        service.create(new Restaurant(0,0, "New Restaurant","www.happyDolphin.dk",11.00,23.59));
+        service.create(new Restaurant(0,0, "New Restaurant","www.happyDolphin.dk",08.00,20.00, "description"));
         update();
     }
 

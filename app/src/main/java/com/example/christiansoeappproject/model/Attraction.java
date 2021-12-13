@@ -20,34 +20,37 @@ public class Attraction extends Location {
     @SerializedName("image")
     private String image;
 
-    public Attraction(String id, double latitude, double longitude, String name, String video, String audio, String image) {
+    @SerializedName("description")
+    private String description;
+
+    public Attraction(String id, double latitude, double longitude, String name, String video, String audio, String image, String description) {
         super(id, latitude, longitude, name);
         this.video = video;
         this.audio = audio;
         this.image = image;
+        this.description = description;
     }
 
-    public Attraction(double latitude, double longitude, String name, String video, String audio, String image) {
+    public Attraction(double latitude, double longitude, String name, String video, String audio, String image, String description) {
         super(latitude, longitude, name);
         this.video = video;
         this.audio = audio;
         this.image = image;
-
+        this.description = description;
     }
 
     /**
      * Constructor bliver brugt til at oprette Attraction med video audio og image, ud fra byte arrays
      * Setter bliver kaldt i stedet for constructor
      */
-    public Attraction(String id, double latitude, double longitude, String name) {
+    public Attraction(String id, double latitude, double longitude, String name, String description) {
         super(id, latitude, longitude, name);
+        this.description = description;
     }
 
-    /**
-     * Constructor til testdata
-     */
-    public Attraction(double latitude, double longitude, String name) {
+    public Attraction(double latitude, double longitude, String name, String description) {
         super(latitude, longitude, name);
+        this.description = description;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -83,6 +86,14 @@ public class Attraction extends Location {
         if (image!=null) this.image = Base64.getEncoder().encodeToString(image);
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     @Override
     public String toString() {
         if (audio==null && video==null && image==null){
@@ -110,7 +121,7 @@ public class Attraction extends Location {
             return super.toString() + "Attraction{" +
                     "video='null" + '\'' +
                     ", audio='null" + '\'' +
-                    ", image='" + image +  '\'' +
+                    ", image='" + image.substring(0,10) +  '\'' +
                     '}';
         }
         return super.toString() + "Attraction{" +

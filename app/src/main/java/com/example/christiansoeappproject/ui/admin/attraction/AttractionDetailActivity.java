@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -29,6 +30,7 @@ public class AttractionDetailActivity extends AppCompatActivity {
     private EditText nameEditText;
     private EditText latitudeEditText;
     private EditText longitudeEditText;
+    private EditText descriptionEditText;
     private ImageView selectedImage;
     private Bundle extras;
     private byte[] video;
@@ -46,6 +48,7 @@ public class AttractionDetailActivity extends AppCompatActivity {
         latitudeEditText = findViewById(R.id.latitudeEditText);
         longitudeEditText = findViewById(R.id.longitudeEditText);
         selectedImage = findViewById(R.id.selectedImage);
+        descriptionEditText = findViewById(R.id.descriptionEditText);
 
         extras = getIntent().getExtras();
         if (extras != null) {
@@ -53,6 +56,7 @@ public class AttractionDetailActivity extends AppCompatActivity {
 
             latitudeEditText.setText(String.valueOf(extras.getDouble("longitude")));
             longitudeEditText.setText(String.valueOf(extras.getDouble("longitude")));
+            descriptionEditText.setText(extras.getString("description"));
 
             byte[] imageBytes = extras.getByteArray("image");
             if (imageBytes!=null){
@@ -118,7 +122,7 @@ public class AttractionDetailActivity extends AppCompatActivity {
      */
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void updateAttractionPressed(View view) {
-        Attraction update = new Attraction(id, Double.parseDouble(latitudeEditText.getText().toString()), Double.parseDouble(longitudeEditText.getText().toString()), nameEditText.getText().toString());
+        Attraction update = new Attraction(id, Double.parseDouble(latitudeEditText.getText().toString()), Double.parseDouble(longitudeEditText.getText().toString()), nameEditText.getText().toString(), descriptionEditText.getText().toString());
         update.setVideo(video);
         update.setAudio(audio);
         update.setImage(image);
