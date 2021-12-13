@@ -23,21 +23,7 @@ public class TripService {
     }
 
     public List<Trip> getTrips(){
-        return repo.trips;
-    }
-
-    public List<Trip> getTripsData(){
-        List<Trip> tempTrips = new ArrayList<>();
-        List<Attraction> tempAttractions = new ArrayList<>();
-        tempAttractions.add(new Attraction(0,0, "New Attraction"));
-        tempAttractions.add(new Attraction(0,0, "New Attraction"));
-        tempTrips.add(new Trip("nature 1", "...", 1, tempAttractions));
-        tempTrips.add(new Trip("nature 2", "...", 1, tempAttractions));
-        tempTrips.add(new Trip("nature 3", "...", 1, tempAttractions));
-        tempTrips.add(new Trip("new trip", "...", 4, tempAttractions));
-        tempTrips.add(new Trip("random trip", "...", 2, tempAttractions));
-        tempTrips.add(new Trip("not nature trip", "...", 3, tempAttractions));
-        return tempTrips;
+        return TripRepository.trips;
     }
 
     public void create(Trip trip){
