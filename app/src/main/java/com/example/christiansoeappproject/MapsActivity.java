@@ -168,6 +168,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         intent.putExtra("close", restaurant.getClose());
                         intent.putExtra("open", restaurant.getOpen());
                         intent.putExtra("url", restaurant.getUrl());
+                        intent.putExtra("description", restaurant.getDescription());
                         startActivity(intent);
                     }
                 });

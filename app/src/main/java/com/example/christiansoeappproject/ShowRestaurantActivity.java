@@ -26,17 +26,18 @@ public class ShowRestaurantActivity extends AppCompatActivity {
         textViewDescription = findViewById(R.id.textViewDescription);
         imageViewRes = findViewById(R.id.imageViewRestaurant);
 
-        Bundle bundle = getIntent().getExtras();
-        if (!bundle.isEmpty()){
-            textViewName.setText(bundle.getString("name"));
-            textViewHours.setText(bundle.getDouble("open") + "-" + bundle.getDouble("close"));
-            String url = bundle.getString("url");
+        Bundle extras = getIntent().getExtras();
+        if (!extras.isEmpty()){
+            textViewName.setText(extras.getString("name"));
+            textViewHours.setText(extras.getDouble("open") + "-" + extras.getDouble("close"));
+            String url = extras.getString("url");
             if (url!=null && !url.isEmpty()){
                 textViewURL.setText(url);
                 textViewURL.setMovementMethod(LinkMovementMethod.getInstance());
             } else {
                 textViewURL.setText("Der er ikke et link til denne restaurant");
             }
+            textViewDescription.setText(extras.getString("description"));
         }
     }
 }
