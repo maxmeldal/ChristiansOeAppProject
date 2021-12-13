@@ -47,7 +47,11 @@ public class AttractionAdapter extends BaseAdapter {
         titleTextView.setText(attractions.get(i).getName());
 
         TextView subtitleTextView = view.findViewById(R.id.subtitleTextView);
-        subtitleTextView.setText(attractions.get(i).getLatitude() + ", " + attractions.get(i).getLongitude());
+        if (attractions.get(i).getDescription().length()>14){
+            subtitleTextView.setText(attractions.get(i).getDescription().substring(0,15) + "...");
+        } else {
+            subtitleTextView.setText(attractions.get(i).getDescription());
+        }
 
         return view;
     }

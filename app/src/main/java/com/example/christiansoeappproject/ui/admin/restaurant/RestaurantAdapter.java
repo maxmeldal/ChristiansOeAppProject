@@ -47,7 +47,11 @@ public class RestaurantAdapter extends BaseAdapter {
             titleTextView.setText(restaurants.get(i).getName());
 
             TextView subtitleTextView = view.findViewById(R.id.subtitleTextView);
-            subtitleTextView.setText(restaurants.get(i).getLatitude() + ", " + restaurants.get(i).getLongitude());
+            if (restaurants.get(i).getDescription().length()>14){
+                subtitleTextView.setText(restaurants.get(i).getDescription().substring(0,15) + "...");
+            } else {
+                subtitleTextView.setText(restaurants.get(i).getDescription());
+            }
 
             return view;
         }
