@@ -46,7 +46,7 @@ public class FacilityActivity extends AppCompatActivity implements Updatable {
     }
 
     public void create(View view){
-        service.create(new Facility(0,0, "New Facility"));
+        service.create(new Facility(0,0, "Ny facilitet"));
         update();
     }
 

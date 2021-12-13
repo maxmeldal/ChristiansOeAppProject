@@ -52,8 +52,8 @@ public class TripsActivity extends AppCompatActivity implements Updatable {
     public void createPressed(View view){
         //Intent intent = new Intent(this, TripDetailActivity.class);
         //startActivity(intent);
-        List<Attraction> temp = new ArrayList<>();
-        service.create(new Trip("new trip", "...", 4, temp));
+        List<Attraction> list = new ArrayList<>();
+        service.create(new Trip("Ny route", "...", 4, list));
         update();
     }
 

@@ -51,7 +51,7 @@ public class RestaurantActivity extends AppCompatActivity implements Updatable {
     }
 
     public void create(View view){
-        service.create(new Restaurant(0,0, "New Restaurant","www.happyDolphin.dk",08.00,20.00, "description"));
+        service.create(new Restaurant(0,0, "Ny Restaurant","Ingen webadresse/URL",08.00,20.00, "Ingen beskrivelse"));
         update();
     }
 

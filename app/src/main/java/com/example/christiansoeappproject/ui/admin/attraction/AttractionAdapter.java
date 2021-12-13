@@ -48,7 +48,7 @@ public class AttractionAdapter extends BaseAdapter {
 
         TextView subtitleTextView = view.findViewById(R.id.subtitleTextView);
         if (attractions.get(i).getDescription().length()>14){
-            subtitleTextView.setText(attractions.get(i).getDescription().substring(0,15) + "...");
+            subtitleTextView.setText(attractions.get(i).getDescription().substring(0,16) + "...");
         } else {
             subtitleTextView.setText(attractions.get(i).getDescription());
         }
