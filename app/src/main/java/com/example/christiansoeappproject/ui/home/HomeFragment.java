@@ -47,6 +47,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Upda
     private FragmentHomeBinding binding;
 
     private DistanceService distanceService;
+
     private RestaurantService restaurantService;
     private FacilityService facilityService;
 
@@ -64,37 +65,42 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Upda
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        restaurantsButton = binding.restaurantsHomeButton;
-        facilitiesButton = binding.facilitiesHomeButton;
-        restaurantsButton.setOnClickListener(this);
-        facilitiesButton.setOnClickListener(this);
-
         distanceService = new DistanceService();
-        restaurantService = new RestaurantService(this);
-        facilityService = new FacilityService(this);
-
-        restaurants = (ArrayList<Restaurant>) restaurantService.getRestaurants();
-        facilities = (ArrayList<Facility>) facilityService.getFacilities();
-
         final TextView textView = binding.textViewDistance;
+        if (MainActivity.lastDistanceToFerry!=null) textView.setText(MainActivity.lastDistanceToFerry);
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
             LocationListener locationListener = new LocationListener() {
                 @Override
                 public void onLocationChanged(@NonNull Location location) {
-                    textView.setText(Math.round(distanceService.distanceToFerry(location.getLatitude(), location.getLongitude()) * 1000) + "m");
+                    String distance = Math.round(distanceService.distanceToFerry(location.getLatitude(), location.getLongitude()) * 1000) + "m";
+                    textView.setText(distance);
+                    MainActivity.lastDistanceToFerry = distance;
                 }
             };
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5, locationListener);
         }
 
         final ImageView imageView = binding.weatherImageView;
+        if(MainActivity.lastWeatherBitmap!=null) imageView.setImageBitmap(MainActivity.lastWeatherBitmap);
         homeViewModel.getImage().observe(getViewLifecycleOwner(), new Observer<Bitmap>() {
             @Override
             public void onChanged(Bitmap bitmap) {
-                imageView.setImageBitmap(bitmap);
+                    imageView.setImageBitmap(bitmap);
+                    MainActivity.lastWeatherBitmap = bitmap;
             }
         });
+
+        restaurantsButton = binding.restaurantsHomeButton;
+        facilitiesButton = binding.facilitiesHomeButton;
+        restaurantsButton.setOnClickListener(this);
+        facilitiesButton.setOnClickListener(this);
+
+        restaurantService = new RestaurantService(this);
+        facilityService = new FacilityService(this);
+
+        restaurants = (ArrayList<Restaurant>) restaurantService.getRestaurants();
+        facilities = (ArrayList<Facility>) facilityService.getFacilities();
 
         return root;
     }
