@@ -5,7 +5,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -13,7 +12,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,7 +30,6 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.christiansoeappproject.databinding.ActivityMainBinding;
 import com.example.christiansoeappproject.model.Trip;
-import com.example.christiansoeappproject.repository.WeatherRepository;
 import com.example.christiansoeappproject.service.AttractionService;
 import com.example.christiansoeappproject.service.DistanceService;
 import com.example.christiansoeappproject.service.TripService;
@@ -40,13 +37,13 @@ import com.example.christiansoeappproject.ui.admin.AdminActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 
-public class MainActivity extends AppCompatActivity implements Updatable, LocationListener {
+public class MainActivity extends AppCompatActivity implements Updatable {
+
     private ActivityMainBinding binding;
 
     public static TripService service;
@@ -54,11 +51,6 @@ public class MainActivity extends AppCompatActivity implements Updatable, Locati
     ActivityResultLauncher<String> permissionLauncher;//bruges til at søge om tilladelser
     private List<Trip> allTrips = new ArrayList<>();
     public static List<Trip> themeTrips = new ArrayList<>();
-    LocationManager locationManager;
-    LocationListener locationListener;
-    TextView textViewDistance;
-    DistanceService distanceService;
-    private ImageView weatherImageView;
 
     @SuppressLint({"MissingPermission", "SetTextI18n"})
     @Override
@@ -78,45 +70,20 @@ public class MainActivity extends AppCompatActivity implements Updatable, Locati
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
 
-        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        registerLauncher();
-
-
-        weatherImageView =findViewById(R.id.weatherImageView);
-        Thread thread = new Thread(){
-            public void run() {
-                try {
-                    Bitmap weatherBitMap = WeatherRepository.getWeather();
-                    synchronized (this) {
-
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                weatherImageView.setImageBitmap(weatherBitMap);
-                            }
-                        });
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    System.out.println(e.getMessage());
-                }
-            }
-        };
-        thread.start();
-
-
-        locationListener = new LocationListener() {
-            @SuppressLint("SetTextI18n")
-            @Override
-            public void onLocationChanged(@NonNull Location location) {
-                textViewDistance.setText(Math.round(distanceService.distanceToFerry(location.getLatitude(), location.getLongitude()) * 1000) + "m");
-            }
-        };
-
-        distanceService = new DistanceService();
-        textViewDistance = findViewById(R.id.textViewDistance);
-
+        /**
+         * Ask for location permissions
+         */
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            permissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), new ActivityResultCallback<Boolean>() {
+                @SuppressLint({"MissingPermission", "SetTextI18n"})
+                @Override
+                public void onActivityResult(Boolean result) {
+                    if (!result) {
+                        //permission denied
+                        Toast.makeText(MainActivity.this, "Tilladelse nødvendig!", Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
             /*
              * shouldShowRequestPermissionRationale er her for at fortælle brugeren hvorfor man har brug for tilladelsen
              * Snackbar viser beskeden og hvor længe den skal vises.
@@ -134,38 +101,12 @@ public class MainActivity extends AppCompatActivity implements Updatable, Locati
                 //request permission ved at kalde permissionLauncher og fortælle hvilken tilladelse man ønsker
                 permissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
             }
-        } else {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 10000, locationListener);
         }
 
         service = new TripService(this);
         attractionService = new AttractionService(this);
         //TODO: switch getTripsData with getTrips when it works
         allTrips = service.getTrips();
-    }
-
-   public void registerLauncher() {
-       permissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), new ActivityResultCallback<Boolean>() {
-           @SuppressLint({"MissingPermission", "SetTextI18n"})
-           @Override
-           public void onActivityResult(Boolean result) {
-               if (result) {
-                   if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                       //permission granted, og hvad der så skal ske efterfølgende
-                       locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 10000, locationListener);
-                   }
-               } else {
-                   //permission denied
-                   Toast.makeText(MainActivity.this, "Tilladelse nødvendig!", Toast.LENGTH_LONG).show();
-               }
-           }
-       });
-   }
-
-    @SuppressLint("SetTextI18n")
-    @Override
-    public void onLocationChanged(@NonNull Location location) {
-        //textViewDistance.setText(Math.round(distanceService.distanceToFerry(location.getLatitude(), location.getLongitude()) * 1000) + "m");
     }
 
     public void loginPressed(View view){

@@ -1,19 +1,33 @@
 package com.example.christiansoeappproject.ui.home;
 
+import android.graphics.Bitmap;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.christiansoeappproject.repository.WeatherRepository;
+
 public class HomeViewModel extends ViewModel {
 
-    private MutableLiveData<String> mText;
+    private MutableLiveData<Bitmap> mImage;
 
     public HomeViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is home fragment");
+        mImage = new MutableLiveData<>();
+        Thread thread = new Thread(){
+            @Override
+            public void run() {
+                Bitmap bitmap = WeatherRepository.getBitmap();
+                if (bitmap!=null){
+                    mImage.postValue(bitmap);
+                }
+            }
+        };
+        thread.start();
+
     }
 
-    public LiveData<String> getText() {
-        return mText;
+    public LiveData<Bitmap> getImage(){
+        return mImage;
     }
 }
