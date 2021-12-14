@@ -42,7 +42,7 @@ import java.util.List;
 import java.util.Random;
 
 
-public class MainActivity extends AppCompatActivity implements Updatable {
+public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
     ActivityResultLauncher<String> permissionLauncher;//bruges til at søge om tilladelser
@@ -97,10 +97,5 @@ public class MainActivity extends AppCompatActivity implements Updatable {
                 permissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
             }
         }
-    }
-
-    @Override
-    public void update() {
-
     }
 }

@@ -45,6 +45,18 @@ public class Restaurant extends Location implements Parcelable {
         description = in.readString();
     }
 
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(this.getId());
+        parcel.writeDouble(this.getLatitude());
+        parcel.writeDouble(this.getLongitude());
+        parcel.writeString(this.getName());
+        parcel.writeString(this.url);
+        parcel.writeDouble(this.open);
+        parcel.writeDouble(this.close);
+        parcel.writeString(this.description);
+    }
+
     public static final Creator<Restaurant> CREATOR = new Creator<Restaurant>() {
         @Override
         public Restaurant createFromParcel(Parcel in) {
@@ -92,17 +104,5 @@ public class Restaurant extends Location implements Parcelable {
     @Override
     public int describeContents() {
         return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(this.getId());
-        parcel.writeDouble(this.getLatitude());
-        parcel.writeDouble(this.getLongitude());
-        parcel.writeString(this.getName());
-        parcel.writeString(this.url);
-        parcel.writeDouble(this.open);
-        parcel.writeDouble(this.close);
-        parcel.writeString(this.description);
     }
 }
