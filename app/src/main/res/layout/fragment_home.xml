@@ -2,10 +2,12 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.home.HomeFragment"
     android:fillViewport="true">
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -109,6 +111,18 @@
             android:src="@android:drawable/ic_dialog_info"
             app:layout_constraintEnd_toStartOf="@+id/imageView2"
             app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="376dp"
+            android:layout_height="235dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="80dp"
+            android:layout_marginEnd="20dp"
+            android:text="den noi ohj ijh oij oihj oihj oiltkrejhng oitregoikjtrnegploiket rjyilkortejhopilrtnjhoritlnhopirtjhynoprithnjmrepothjimper5oih  r hptroie hjprteo hjretpoh jerth oerth"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
