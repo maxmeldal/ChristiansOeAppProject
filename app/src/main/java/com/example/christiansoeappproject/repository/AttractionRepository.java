@@ -11,7 +11,9 @@ import com.example.christiansoeappproject.Updatable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -26,6 +28,7 @@ public class AttractionRepository implements ICrudRepository<Attraction>{
     Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(BaseUrl.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
+            .client(okClient())
             .build();
     final IAttractionEndpoint apiService = retrofit.create(IAttractionEndpoint.class);
 
@@ -139,5 +142,13 @@ public class AttractionRepository implements ICrudRepository<Attraction>{
                 System.out.println(t.toString());
             }
         });
+    }
+
+    private OkHttpClient okClient(){
+        OkHttpClient client = new OkHttpClient.Builder()
+                .connectTimeout(15, TimeUnit.SECONDS)
+                .readTimeout(15, TimeUnit.SECONDS)
+                .build();
+        return client;
     }
 }
