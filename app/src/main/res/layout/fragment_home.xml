@@ -50,7 +50,7 @@
             app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
         <ImageButton
-            android:id="@+id/res_and_butik_BTN"
+            android:id="@+id/restaurantsHomeButton"
             android:layout_width="77dp"
             android:layout_height="40dp"
             android:layout_marginStart="12dp"
@@ -58,23 +58,23 @@
             android:layout_marginEnd="19dp"
             android:adjustViewBounds="true"
             android:background="@drawable/roundcorner"
-            android:onClick="resOgButikBTN"
+            android:onClick="onClick"
             android:scaleType="fitCenter"
             android:src="@drawable/restaurant_store_icon_white"
-            app:layout_constraintBottom_toBottomOf="@+id/button4"
-            app:layout_constraintEnd_toStartOf="@+id/button4"
+            app:layout_constraintBottom_toBottomOf="@+id/facilitiesHomeButton"
+            app:layout_constraintEnd_toStartOf="@+id/facilitiesHomeButton"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView" />
 
         <ImageButton
-            android:id="@+id/button4"
+            android:id="@+id/facilitiesHomeButton"
             android:layout_width="77dp"
             android:layout_height="40dp"
             android:layout_marginTop="17dp"
             android:layout_marginEnd="221dp"
             android:adjustViewBounds="true"
             android:background="@drawable/roundcorner"
-            android:onClick="facilitiesPressed"
+            android:onClick="onClick"
             android:scaleType="fitCenter"
             android:src="@drawable/facility_icon_white_2"
             app:layout_constraintEnd_toEndOf="parent"

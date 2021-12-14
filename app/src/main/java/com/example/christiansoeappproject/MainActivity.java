@@ -109,18 +109,6 @@ public class MainActivity extends AppCompatActivity implements Updatable {
         allTrips = service.getTrips();
     }
 
-    public void resOgButikBTN(View view){
-        Intent intent = new Intent(MainActivity.this,MapsActivity.class);
-        intent.putExtra("type", "restaurant");
-        startActivity(intent);
-    }
-
-    public void facilitiesPressed(View view){
-        Intent intent = new Intent(MainActivity.this,MapsActivity.class);
-        intent.putExtra("type", "facility");
-        startActivity(intent);
-    }
-
     //TODO:Remember to compress images or chose lower dif images
 
     @RequiresApi(api = Build.VERSION_CODES.N)

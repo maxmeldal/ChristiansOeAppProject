@@ -3,6 +3,7 @@ package com.example.christiansoeappproject.ui.home;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.location.Location;
@@ -12,6 +13,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,16 +27,18 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.christiansoeappproject.MainActivity;
+import com.example.christiansoeappproject.MapsActivity;
 import com.example.christiansoeappproject.R;
 import com.example.christiansoeappproject.databinding.FragmentHomeBinding;
 import com.example.christiansoeappproject.repository.WeatherRepository;
 import com.example.christiansoeappproject.service.DistanceService;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements View.OnClickListener {
 
     private HomeViewModel homeViewModel;
     private FragmentHomeBinding binding;
     private DistanceService distanceService;
+    private ImageButton restaurantsButton, facilitiesButton;
 
     @SuppressLint("MissingPermission")
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -43,6 +48,11 @@ public class HomeFragment extends Fragment {
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+
+        restaurantsButton = binding.restaurantsHomeButton;
+        facilitiesButton = binding.facilitiesHomeButton;
+        restaurantsButton.setOnClickListener(this);
+        facilitiesButton.setOnClickListener(this);
 
         distanceService = new DistanceService();
         final TextView textView = binding.textViewDistance;
@@ -72,5 +82,23 @@ public class HomeFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case (R.id.restaurantsHomeButton):
+                openMap("restaurant");
+                break;
+            case (R.id.facilitiesHomeButton):
+                openMap("facility");
+                break;
+        }
+    }
+
+    public void openMap(String type){
+        Intent intent = new Intent(getActivity(),MapsActivity.class);
+        intent.putExtra("type", type);
+        startActivity(intent);
     }
 }
