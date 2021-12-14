@@ -29,15 +29,30 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.christiansoeappproject.MainActivity;
 import com.example.christiansoeappproject.MapsActivity;
 import com.example.christiansoeappproject.R;
+import com.example.christiansoeappproject.Updatable;
 import com.example.christiansoeappproject.databinding.FragmentHomeBinding;
+import com.example.christiansoeappproject.model.Facility;
+import com.example.christiansoeappproject.model.Restaurant;
 import com.example.christiansoeappproject.repository.WeatherRepository;
 import com.example.christiansoeappproject.service.DistanceService;
+import com.example.christiansoeappproject.service.FacilityService;
+import com.example.christiansoeappproject.service.RestaurantService;
 
-public class HomeFragment extends Fragment implements View.OnClickListener {
+import java.util.ArrayList;
+import java.util.List;
+
+public class HomeFragment extends Fragment implements View.OnClickListener, Updatable {
 
     private HomeViewModel homeViewModel;
     private FragmentHomeBinding binding;
+
     private DistanceService distanceService;
+    private RestaurantService restaurantService;
+    private FacilityService facilityService;
+
+    private ArrayList<Restaurant> restaurants;
+    private ArrayList<Facility> facilities;
+
     private ImageButton restaurantsButton, facilitiesButton;
 
     @SuppressLint("MissingPermission")
@@ -55,6 +70,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         facilitiesButton.setOnClickListener(this);
 
         distanceService = new DistanceService();
+        restaurantService = new RestaurantService(this);
+        facilityService = new FacilityService(this);
+
+        restaurants = (ArrayList<Restaurant>) restaurantService.getRestaurants();
+        facilities = (ArrayList<Facility>) facilityService.getFacilities();
+
         final TextView textView = binding.textViewDistance;
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
@@ -99,6 +120,20 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     public void openMap(String type){
         Intent intent = new Intent(getActivity(),MapsActivity.class);
         intent.putExtra("type", type);
+        switch (type){
+            case ("restaurant"):
+                intent.putParcelableArrayListExtra("list", restaurants);
+                break;
+            case ("facility"):
+                intent.putParcelableArrayListExtra("list", facilities);
+                break;
+        }
         startActivity(intent);
+    }
+
+    @Override
+    public void update() {
+        restaurants = (ArrayList<Restaurant>) restaurantService.getRestaurants();
+        facilities = (ArrayList<Facility>) facilityService.getFacilities();
     }
 }

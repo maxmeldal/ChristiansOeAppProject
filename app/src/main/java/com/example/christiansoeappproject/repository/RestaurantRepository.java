@@ -27,8 +27,8 @@ public class RestaurantRepository implements ICrudRepository<Restaurant>{
             .build();
     final IRestaurantEndpoint apiService = retrofit.create(IRestaurantEndpoint.class);
 
-    public void init(Context context){
-        caller = (Updatable) context;
+    public void init(Updatable updatable){
+        caller = updatable;
         startListener();
     }
 

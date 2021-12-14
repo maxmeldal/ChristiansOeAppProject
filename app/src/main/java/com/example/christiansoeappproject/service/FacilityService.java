@@ -5,6 +5,7 @@ import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
+import com.example.christiansoeappproject.Updatable;
 import com.example.christiansoeappproject.model.Facility;
 import com.example.christiansoeappproject.repository.FacilityRepository;
 
@@ -15,9 +16,9 @@ public class FacilityService {
 
     FacilityRepository repo;
 
-    public FacilityService(Context context) {
+    public FacilityService(Updatable updatable) {
         this.repo = new FacilityRepository();
-        repo.init(context);
+        repo.init(updatable);
     }
 
     public void create(Facility facility){

@@ -5,6 +5,7 @@ import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
+import com.example.christiansoeappproject.Updatable;
 import com.example.christiansoeappproject.model.Restaurant;
 import com.example.christiansoeappproject.repository.RestaurantRepository;
 
@@ -14,9 +15,9 @@ import java.util.List;
 public class RestaurantService {
     RestaurantRepository repo;
 
-    public RestaurantService(Context context){
+    public RestaurantService(Updatable updatable){
         repo = new RestaurantRepository();
-        repo.init(context);
+        repo.init(updatable);
     }
     public List<Restaurant> getRestaurants(){
         return RestaurantRepository.restaurantList;

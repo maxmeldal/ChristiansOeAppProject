@@ -1,8 +1,13 @@
 package com.example.christiansoeappproject.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
-public class Restaurant extends Location{
+import java.io.Serializable;
+
+public class Restaurant extends Location implements Parcelable {
 
     @SerializedName("url")
     private String url;
@@ -31,6 +36,26 @@ public class Restaurant extends Location{
         this.close = close;
         this.description = description;
     }
+
+    protected Restaurant(Parcel in) {
+        super(in.readString(), in.readDouble(), in.readDouble(), in.readString());
+        url = in.readString();
+        open = in.readDouble();
+        close = in.readDouble();
+        description = in.readString();
+    }
+
+    public static final Creator<Restaurant> CREATOR = new Creator<Restaurant>() {
+        @Override
+        public Restaurant createFromParcel(Parcel in) {
+            return new Restaurant(in);
+        }
+
+        @Override
+        public Restaurant[] newArray(int size) {
+            return new Restaurant[size];
+        }
+    };
 
     public String getUrl() {
         return url;
@@ -62,5 +87,22 @@ public class Restaurant extends Location{
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(this.getId());
+        parcel.writeDouble(this.getLatitude());
+        parcel.writeDouble(this.getLongitude());
+        parcel.writeString(this.getName());
+        parcel.writeString(this.url);
+        parcel.writeDouble(this.open);
+        parcel.writeDouble(this.close);
+        parcel.writeString(this.description);
     }
 }

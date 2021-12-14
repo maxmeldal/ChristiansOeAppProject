@@ -41,12 +41,13 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.example.christiansoeappproject.databinding.ActivityMapsBinding;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, Updatable {
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private final MarkerOptions options = new MarkerOptions();
@@ -56,21 +57,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     LocationListener locationListener;
     SharedPreferences sharedPreferences;
     boolean info;
-    RestaurantService restaurantService;
-    FacilityService facilityService;
-    List<Restaurant> resliste;
-    List<Facility> facilities;
+    private Bundle extras;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        restaurantService = new RestaurantService(this);
-        facilityService = new FacilityService(this);
 
         binding = ActivityMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        resliste = restaurantService.getRestaurants();
-        facilities = facilityService.getFacilities();
+        extras = getIntent().getExtras();
+
 
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -146,7 +142,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         }
 
-        if (getIntent().getExtras().getString("type").equals("restaurant")) {
+        if (extras.getString("type").equals("restaurant")) {
+            ArrayList<Restaurant> resliste = extras.getParcelableArrayList("list");
             System.out.println("res listen er: " + resliste.size());
             for (int i = 0; i < resliste.size(); i++) {
                 LatLng latll = new LatLng(resliste.get(i).getLatitude(), resliste.get(i).getLongitude());
@@ -173,9 +170,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     }
                 });
             }
-        } else if (getIntent().getExtras().getString("type").equals("facility")) {
+        } else if (extras.getString("type").equals("facility")) {
+            ArrayList<Facility> facilities = extras.getParcelableArrayList("list");
             System.out.println("facility listen er: " + facilities.size());
-
             for (Facility facility : facilities) {
                 System.out.println("her kaldes foreach løkke for facility");
                 LatLng latll = new LatLng(facility.getLatitude(), facility.getLongitude());
@@ -209,12 +206,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         });
     }
 
-
-    @Override
-    public void update() {
-        resliste = restaurantService.getRestaurants();
-        facilities = facilityService.getFacilities();
-    }
 
     //oprette en menu til map udseende
     @Override

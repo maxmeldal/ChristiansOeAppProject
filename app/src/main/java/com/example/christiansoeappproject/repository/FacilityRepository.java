@@ -26,8 +26,8 @@ public class FacilityRepository implements ICrudRepository<Facility>{
             .build();
     final IFacilityEndpoint apiService = retrofit.create(IFacilityEndpoint.class);
 
-    public void init (Context context){
-        caller = (Updatable) context;
+    public void init (Updatable updatable){
+        caller = updatable;
         startListener();
     }
 
