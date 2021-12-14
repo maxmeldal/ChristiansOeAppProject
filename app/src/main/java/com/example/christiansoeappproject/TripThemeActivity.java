@@ -30,6 +30,7 @@ import com.example.christiansoeappproject.databinding.ActivityMapsBinding;
 import com.example.christiansoeappproject.model.Attraction;
 import com.example.christiansoeappproject.model.Restaurant;
 import com.example.christiansoeappproject.model.Trip;
+import com.example.christiansoeappproject.ui.dashboard.ThemeFragment;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -60,7 +61,6 @@ public class TripThemeActivity extends AppCompatActivity implements OnMapReadyCa
     private TextView tripInfo;
     private TextView tripTheme;
     private Trip currentTrip;
-    private int index;
     private Bundle extras;
     private ActivityMapsBinding binding;
     private ActivityResultLauncher<String> permissionLauncher;
@@ -81,13 +81,15 @@ public class TripThemeActivity extends AppCompatActivity implements OnMapReadyCa
         tripName = findViewById(R.id.tripName);
         tripInfo = findViewById(R.id.tripInfo);
         //tripTheme = findViewById(R.id.tripTheme);
-        themeTrips = MainActivity.themeTrips;
+        //themeTrips = ThemeFragment.themeTrips;
 
         extras = getIntent().getExtras();
         if (extras!=null){
-            index = extras.getInt("index");
+            currentTrip = extras.getParcelable("trip");
         }
-        currentTrip = themeTrips.get(index);
+        //System.out.println("index: " +index);
+        //System.out.println("current trip: + "  + themeTrips);
+        //currentTrip = themeTrips.get(index);
 
         tripName.setText(currentTrip.getName());
         tripInfo.setText(currentTrip.getInfo());

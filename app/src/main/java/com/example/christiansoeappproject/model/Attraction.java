@@ -1,6 +1,8 @@
 package com.example.christiansoeappproject.model;
 
 import android.os.Build;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import androidx.annotation.RequiresApi;
 
@@ -9,7 +11,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Base64;
 
 
-public class Attraction extends Location {
+public class Attraction extends Location implements Parcelable {
 
     @SerializedName("video")
     private String video;
@@ -52,6 +54,26 @@ public class Attraction extends Location {
         super(latitude, longitude, name);
         this.description = description;
     }
+
+    protected Attraction(Parcel in) {
+        super(in.readString(), in.readDouble(), in.readDouble(), in.readString());
+        video = in.readString();
+        audio = in.readString();
+        image = in.readString();
+        description = in.readString();
+    }
+
+    public static final Creator<Attraction> CREATOR = new Creator<Attraction>() {
+        @Override
+        public Attraction createFromParcel(Parcel in) {
+            return new Attraction(in);
+        }
+
+        @Override
+        public Attraction[] newArray(int size) {
+            return new Attraction[size];
+        }
+    };
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public byte[] getVideo() {
@@ -128,5 +150,22 @@ public class Attraction extends Location {
                 "video='" + video.substring(0, 10) + '\'' +
                 ", audio='" + audio.substring(0, 10) + '\'' +
                 '}';
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.getId());
+        dest.writeDouble(this.getLatitude());
+        dest.writeDouble(this.getLongitude());
+        dest.writeString(this.getName());
+        dest.writeString(video);
+        dest.writeString(audio);
+        dest.writeString(image);
+        dest.writeString(description);
     }
 }

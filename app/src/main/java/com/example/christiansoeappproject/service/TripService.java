@@ -5,6 +5,7 @@ import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
+import com.example.christiansoeappproject.Updatable;
 import com.example.christiansoeappproject.model.Attraction;
 import com.example.christiansoeappproject.model.Theme;
 import com.example.christiansoeappproject.model.Trip;
@@ -17,9 +18,9 @@ import java.util.List;
 public class TripService {
     TripRepository repo;
 
-    public TripService(Context context) {
+    public TripService(Updatable updatable) {
         repo  = new TripRepository();
-        repo.init(context);
+        repo.init(updatable);
     }
 
     public List<Trip> getTrips(){

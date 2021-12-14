@@ -49,8 +49,6 @@ public class TripsActivity extends AppCompatActivity implements Updatable {
     }
 
     public void createPressed(View view){
-        //Intent intent = new Intent(this, TripDetailActivity.class);
-        //startActivity(intent);
         List<Attraction> list = new ArrayList<>();
         service.create(new Trip("Ny route", "...", 4, list));
         update();
@@ -58,7 +56,6 @@ public class TripsActivity extends AppCompatActivity implements Updatable {
 
     @Override
     public void update() {
-        //update();
         adapter.notifyDataSetChanged();
     }
 }

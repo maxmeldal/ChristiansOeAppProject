@@ -1,11 +1,14 @@
 package com.example.christiansoeappproject.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 import java.util.UUID;
 
-public class Trip {
+public class Trip implements Parcelable {
 
     @SerializedName("id")
     private String id;
@@ -37,6 +40,26 @@ public class Trip {
         this.theme = theme;
         this.attractions = attractions;
     }
+
+    protected Trip(Parcel in) {
+        id = in.readString();
+        name = in.readString();
+        info = in.readString();
+        theme = in.readInt();
+        attractions = in.createTypedArrayList(Attraction.CREATOR);
+    }
+
+    public static final Creator<Trip> CREATOR = new Creator<Trip>() {
+        @Override
+        public Trip createFromParcel(Parcel in) {
+            return new Trip(in);
+        }
+
+        @Override
+        public Trip[] newArray(int size) {
+            return new Trip[size];
+        }
+    };
 
     public String getId() {
         return id;
@@ -87,5 +110,30 @@ public class Trip {
 
     public void setAttractions(List<Attraction> attractions) {
         this.attractions = attractions;
+    }
+
+    @Override
+    public String toString() {
+        return "Trip{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", info='" + info + '\'' +
+                ", theme=" + theme +
+                ", attractions=" + attractions +
+                '}';
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(name);
+        dest.writeString(info);
+        dest.writeInt(theme);
+        dest.writeTypedList(attractions);
     }
 }

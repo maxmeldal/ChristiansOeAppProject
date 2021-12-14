@@ -45,12 +45,7 @@ import java.util.Random;
 public class MainActivity extends AppCompatActivity implements Updatable {
 
     private ActivityMainBinding binding;
-
-    public static TripService service;
-    public static AttractionService attractionService;
     ActivityResultLauncher<String> permissionLauncher;//bruges til at søge om tilladelser
-    private List<Trip> allTrips = new ArrayList<>();
-    public static List<Trip> themeTrips = new ArrayList<>();
 
     @SuppressLint({"MissingPermission", "SetTextI18n"})
     @Override
@@ -102,75 +97,6 @@ public class MainActivity extends AppCompatActivity implements Updatable {
                 permissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
             }
         }
-
-        service = new TripService(this);
-        attractionService = new AttractionService(this);
-        //TODO: switch getTripsData with getTrips when it works
-        allTrips = service.getTrips();
-    }
-
-    //TODO:Remember to compress images or chose lower dif images
-
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    public void naturePressed(View view){
-        themeTrips.addAll(allTrips);
-        themeTrips.removeIf(trip -> trip.getTheme() != 1);
-        if(themeTrips.size() != 0){
-            Intent intent = new Intent(getApplicationContext(), TripThemeActivity.class);
-            intent.putExtra("index", getRandomIndex());
-            startActivity(intent);
-        } else {
-            Toast.makeText(this, "Ingen tilgængelige router", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    public void warPressed(View view){
-        themeTrips.addAll(allTrips);
-        themeTrips.removeIf(trip -> trip.getTheme() != 3);
-        if(themeTrips.size() != 0){
-            Intent intent = new Intent(getApplicationContext(), TripThemeActivity.class);
-            intent.putExtra("index", getRandomIndex());
-            startActivity(intent);
-        }else {
-            Toast.makeText(this, "Ingen tilgængelige router", Toast.LENGTH_SHORT).show();
-        }
-
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    public void otherPressed(View view){
-        themeTrips.addAll(allTrips);
-        themeTrips.removeIf(trip -> trip.getTheme() != 4);
-        if(themeTrips.size() != 0){
-            Intent intent = new Intent(getApplicationContext(), TripThemeActivity.class);
-            intent.putExtra("index", getRandomIndex());
-            startActivity(intent);
-        } else {
-            Toast.makeText(this, "Ingen tilgængelige router", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    public void historyPressed(View view){
-        themeTrips.addAll(allTrips);
-        themeTrips.removeIf(trip -> trip.getTheme() != 2);
-        if(themeTrips.size() != 0){
-            Intent intent = new Intent(getApplicationContext(), TripThemeActivity.class);
-            intent.putExtra("index", getRandomIndex());
-            startActivity(intent);
-        } else {
-            Toast.makeText(this, "Ingen tilgængelige router", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    public int getRandomIndex(){
-        Random random = new Random();
-        int index = 0;
-        if(themeTrips.size() > 1){
-            index = random.nextInt(themeTrips.size());
-        }
-        return index;
     }
 
     @Override

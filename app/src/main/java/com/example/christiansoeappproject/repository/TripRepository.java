@@ -10,6 +10,10 @@ import com.example.christiansoeappproject.Updatable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.OkHttp;
+import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -19,15 +23,15 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class TripRepository implements ICrudRepository<Trip>{
     Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(BaseUrl.BASE_URL)
+            .client(okClient())
             .addConverterFactory(GsonConverterFactory.create())
             .build();
     public static List<Trip> trips = new ArrayList<>();
     private static Updatable caller;
     final ITripEndpoint apiService = retrofit.create(ITripEndpoint.class);
 
-
-    public void init(Context context) {
-        caller = (Updatable) context;
+    public void init(Updatable updatable) {
+        caller = updatable;
         startListener();
     }
 
@@ -171,6 +175,14 @@ public class TripRepository implements ICrudRepository<Trip>{
                 System.out.println(t.toString());
             }
         });
+    }
+
+    private OkHttpClient okClient(){
+        OkHttpClient client = new OkHttpClient.Builder()
+                .connectTimeout(15, TimeUnit.SECONDS)
+                .readTimeout(15, TimeUnit.SECONDS)
+                .build();
+        return client;
     }
 }
 
