@@ -109,18 +109,6 @@ public class MainActivity extends AppCompatActivity implements Updatable {
         allTrips = service.getTrips();
     }
 
-    public void loginPressed(View view){
-        Intent intent = new Intent(this, AdminActivity.class);
-        EditText pas = findViewById(R.id.passwordEditText);
-        String password = pas.getText().toString();
-        String expected = "1";
-        if(password.equals(expected)){
-            startActivity(intent);
-        } else {
-            Toast.makeText(this, "Wrong password", Toast.LENGTH_SHORT).show();
-        }
-    }
-
     public void resOgButikBTN(View view){
         Intent intent = new Intent(MainActivity.this,MapsActivity.class);
         intent.putExtra("type", "restaurant");
