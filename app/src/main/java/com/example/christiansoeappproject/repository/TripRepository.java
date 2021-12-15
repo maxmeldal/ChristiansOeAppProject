@@ -1,5 +1,7 @@
 package com.example.christiansoeappproject.repository;
+import android.content.Context;
 import android.os.Build;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 
@@ -26,10 +28,14 @@ public class TripRepository implements ICrudRepository<Trip>{
             .build();
     public static List<Trip> trips;
     private static Updatable caller;
+    private Context mainContext;
     final ITripEndpoint apiService = retrofit.create(ITripEndpoint.class);
 
     public TripRepository (Updatable updatable){
         caller = updatable;
+        if (updatable instanceof Context && mainContext!=null){
+            mainContext = (Context) updatable;
+        }
         if (trips==null){
             trips = new ArrayList<>();
             System.out.println("Henter ruter");
@@ -55,31 +61,12 @@ public class TripRepository implements ICrudRepository<Trip>{
 
             @Override
             public void onFailure(Call<Trip> call, Throwable t) {
-                System.out.println(t.toString());
-            }
-        });
-    }
-
-    @Override
-    public Trip readById(String id) {
-        final Trip[] trips = {null};
-
-        Call<Trip> call = apiService.readTrip(id);
-        call.enqueue(new Callback<Trip>() {
-            @Override
-            public void onResponse(Call<Trip> call, Response<Trip> response) {
-                if (response.body()!=null){
-                    trips[0] = response.body();
+                System.out.println("Error creating trip: " + t.toString());
+                if (mainContext!=null){
+                    Toast.makeText(mainContext, "Fejl ved oprettelse af rute", Toast.LENGTH_LONG).show();
                 }
             }
-
-            @Override
-            public void onFailure(Call<Trip> call, Throwable t) {
-                System.out.println(t.toString());
-            }
         });
-
-        return trips[0];
     }
 
     @Override
@@ -97,7 +84,10 @@ public class TripRepository implements ICrudRepository<Trip>{
 
             @Override
             public void onFailure(Call<List<Trip>> call, Throwable t) {
-                System.out.println(t.toString());
+                System.out.println("Error reading trips: " + t.toString());
+                if (mainContext!=null){
+                    Toast.makeText(mainContext, "Timeout indlæsning af ruter", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
@@ -122,7 +112,10 @@ public class TripRepository implements ICrudRepository<Trip>{
 
             @Override
             public void onFailure(Call<Trip> call, Throwable t) {
-                System.out.println(t.toString());
+                System.out.println("Error updating trip: " + t.toString());
+                if (mainContext!=null){
+                    Toast.makeText(mainContext, "Fejl ved opdatering af rute", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
@@ -146,7 +139,10 @@ public class TripRepository implements ICrudRepository<Trip>{
 
             @Override
             public void onFailure(Call<Trip> call, Throwable t) {
-                System.out.println(t.toString());
+                System.out.println("Error deleting trip: " + t.toString());
+                if (mainContext!=null){
+                    Toast.makeText(mainContext, "Fejl ved sletning af rute", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }

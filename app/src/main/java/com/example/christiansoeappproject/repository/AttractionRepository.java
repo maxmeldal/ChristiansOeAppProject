@@ -36,7 +36,7 @@ public class AttractionRepository implements ICrudRepository<Attraction>{
 
     public AttractionRepository(Updatable updatable){
         caller = updatable;
-        if (updatable instanceof Context){
+        if (updatable instanceof Context && mainContext!=null){
             mainContext = (Context) updatable;
         }
         if (attractions==null){
@@ -64,32 +64,12 @@ public class AttractionRepository implements ICrudRepository<Attraction>{
 
             @Override
             public void onFailure(Call<Attraction> call, Throwable t) {
-                System.out.println(t.toString());
-            }
-        });
-    }
-
-    @Override
-    public Attraction readById(String id) {
-        final Attraction[] attraction = {null};
-
-        Call<Attraction> call = apiService.readAttraction(id);
-        call.enqueue(new Callback<Attraction>() {
-            @Override
-            public void onResponse(Call<Attraction> call, Response<Attraction> response) {
-                if (response.body()!=null){
-                    System.out.println(response.body());
-                    attraction[0] = response.body();
+                System.out.println("Error creating attraction: " + t.toString());
+                if (mainContext!=null){
+                    Toast.makeText(mainContext, "Fejl ved oprettelse af attraktion", Toast.LENGTH_LONG).show();
                 }
             }
-
-            @Override
-            public void onFailure(Call<Attraction> call, Throwable t) {
-                System.out.println(t.toString());
-            }
         });
-
-        return attraction[0];
     }
 
     @Override
@@ -108,6 +88,7 @@ public class AttractionRepository implements ICrudRepository<Attraction>{
 
             @Override
             public void onFailure(Call<List<Attraction>> call, Throwable t) {
+                System.out.println("Error reading attractions: " + t.toString());
                 if (mainContext!=null){
                     Toast.makeText(mainContext, "Timeout indlæsning af attraktioner", Toast.LENGTH_LONG).show();
                 }
@@ -135,7 +116,10 @@ public class AttractionRepository implements ICrudRepository<Attraction>{
 
             @Override
             public void onFailure(Call<Attraction> call, Throwable t) {
-                System.out.println(t.toString());
+                System.out.println("Error updating attraction: " + t.toString());
+                if (mainContext!=null){
+                    Toast.makeText(mainContext, "Fejl ved opdatering af attraktion", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
@@ -159,7 +143,10 @@ public class AttractionRepository implements ICrudRepository<Attraction>{
 
             @Override
             public void onFailure(Call<Attraction> call, Throwable t) {
-                System.out.println(t.toString());
+                System.out.println("Error deleting attraction: " + t.toString());
+                if (mainContext!=null){
+                    Toast.makeText(mainContext, "Fejl ved sletning af attraktion", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }

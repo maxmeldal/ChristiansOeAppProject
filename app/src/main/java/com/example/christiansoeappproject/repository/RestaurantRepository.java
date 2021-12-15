@@ -1,5 +1,7 @@
 package com.example.christiansoeappproject.repository;
+import android.content.Context;
 import android.os.Build;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 
@@ -18,6 +20,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RestaurantRepository implements ICrudRepository<Restaurant>{
 
     public static List<Restaurant> restaurants;
+    private Context mainContext;
 
     private static Updatable caller;
     Retrofit retrofit = new Retrofit.Builder()
@@ -28,6 +31,9 @@ public class RestaurantRepository implements ICrudRepository<Restaurant>{
 
     public RestaurantRepository(Updatable updatable){
         caller = updatable;
+        if (updatable instanceof Context && mainContext!=null){
+            mainContext = (Context) updatable;
+        }
         if (restaurants==null){
             restaurants = new ArrayList<>();
             System.out.println("Henter restauranter");
@@ -53,32 +59,12 @@ public class RestaurantRepository implements ICrudRepository<Restaurant>{
 
             @Override
             public void onFailure(Call<Restaurant> call, Throwable t) {
-                System.out.println(t.toString());
-            }
-        });
-    }
-
-    @Override
-    public Restaurant readById(String id) {
-        final Restaurant[] restaurants = {null};
-
-        Call<Restaurant> call = apiService.readRestaurant(id);
-        call.enqueue(new Callback<Restaurant>() {
-            @Override
-            public void onResponse(Call<Restaurant> call, Response<Restaurant> response) {
-                if (response.body()!=null){
-                    System.out.println(response.body());
-                    restaurants[0] = response.body();
+                System.out.println("Error creating restaurant: " + t.toString());
+                if (mainContext!=null){
+                    Toast.makeText(mainContext, "Fejl ved oprettelse af restaurant", Toast.LENGTH_LONG).show();
                 }
             }
-
-            @Override
-            public void onFailure(Call<Restaurant> call, Throwable t) {
-                System.out.println(t.toString());
-            }
         });
-
-        return restaurants[0];
     }
 
     @Override
@@ -96,7 +82,10 @@ public class RestaurantRepository implements ICrudRepository<Restaurant>{
 
             @Override
             public void onFailure(Call<List<Restaurant>> call, Throwable t) {
-                System.out.println(t.toString());
+                System.out.println("Error reading restaurants: " +t.toString());
+                if (mainContext!=null){
+                    Toast.makeText(mainContext, "Timeout indlæsning af restaurants", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
@@ -121,7 +110,10 @@ public class RestaurantRepository implements ICrudRepository<Restaurant>{
 
             @Override
             public void onFailure(Call<Restaurant> call, Throwable t) {
-                System.out.println(t.toString());
+                System.out.println("Error updating restaurant: " + t.toString());
+                if (mainContext!=null){
+                    Toast.makeText(mainContext, "Fejl ved opdatering af restaurant", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
@@ -145,7 +137,10 @@ public class RestaurantRepository implements ICrudRepository<Restaurant>{
 
             @Override
             public void onFailure(Call<Restaurant> call, Throwable t) {
-                System.out.println(t.toString());
+                System.out.println("Error deleting restaurant: " + t.toString());
+                if (mainContext!=null){
+                    Toast.makeText(mainContext, "Fejl ved sletning af restaurant", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }

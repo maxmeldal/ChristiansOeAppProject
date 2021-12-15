@@ -1,5 +1,7 @@
 package com.example.christiansoeappproject.repository;
+import android.content.Context;
 import android.os.Build;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 
@@ -18,6 +20,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class FacilityRepository implements ICrudRepository<Facility>{
     public static List<Facility> facilities;
     private static Updatable caller;
+    private Context mainContext;
 
     Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(BaseUrl.BASE_URL)
@@ -35,6 +38,9 @@ public class FacilityRepository implements ICrudRepository<Facility>{
 
     public FacilityRepository(Updatable updatable) {
         caller = updatable;
+        if (updatable instanceof Context && mainContext!=null){
+            mainContext = (Context) updatable;
+        }
         if (facilities==null){
             facilities = new ArrayList<>();
             System.out.println("Henter faciliteter");
@@ -60,32 +66,12 @@ public class FacilityRepository implements ICrudRepository<Facility>{
 
             @Override
             public void onFailure(Call<Facility> call, Throwable t) {
-                System.out.println(t.toString());
-            }
-        });
-    }
-
-    @Override
-    public Facility readById(String id) {
-        final Facility[] facilities = {null};
-
-        Call<Facility> call = apiService.readFacility(id);
-        call.enqueue(new Callback<Facility>() {
-            @Override
-            public void onResponse(Call<Facility> call, Response<Facility> response) {
-                if (response.body()!=null){
-                    System.out.println(response.body());
-                    facilities[0] = response.body();
+                System.out.println("Error creating facility: " + t.toString());
+                if (mainContext!=null){
+                    Toast.makeText(mainContext, "Fejl ved oprettelse af facilitet", Toast.LENGTH_LONG).show();
                 }
             }
-
-            @Override
-            public void onFailure(Call<Facility> call, Throwable t) {
-                System.out.println(t.toString());
-            }
         });
-
-        return facilities[0];
     }
 
     @Override
@@ -103,7 +89,10 @@ public class FacilityRepository implements ICrudRepository<Facility>{
 
             @Override
             public void onFailure(Call<List<Facility>> call, Throwable t) {
-                System.out.println(t.toString());
+                System.out.println("Error reading facilities: " + t.toString());
+                if (mainContext!=null){
+                    Toast.makeText(mainContext, "Timeout indlæsning af faciliteter", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
@@ -127,7 +116,10 @@ public class FacilityRepository implements ICrudRepository<Facility>{
 
             @Override
             public void onFailure(Call<Facility> call, Throwable t) {
-                System.out.println(t.toString());
+                System.out.println("Error updating facility: " + t.toString());
+                if (mainContext!=null){
+                    Toast.makeText(mainContext, "Fejl ved opdatering af facilitet", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
@@ -151,7 +143,10 @@ public class FacilityRepository implements ICrudRepository<Facility>{
 
             @Override
             public void onFailure(Call<Facility> call, Throwable t) {
-                System.out.println(t.toString());
+                System.out.println("Error deleting facility: " + t.toString());
+                if (mainContext!=null){
+                    Toast.makeText(mainContext, "Fejl ved sletning af facilitet", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
