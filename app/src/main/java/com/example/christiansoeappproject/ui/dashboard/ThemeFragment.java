@@ -37,7 +37,6 @@ public class ThemeFragment extends Fragment implements View.OnClickListener, Upd
     private CardView cardView4;
     
     private List<Trip> trips = new ArrayList<>();
-    private ArrayList<Trip> themeTrips = new ArrayList<>();
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -91,7 +90,7 @@ public class ThemeFragment extends Fragment implements View.OnClickListener, Upd
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void themePressed(String s) {
         Intent intent = new Intent(getActivity(), TripThemeActivity.class);
-        themeTrips.clear();
+        List<Trip> themeTrips = new ArrayList<>(trips);
         themeTrips.addAll(trips);
         switch (s) {
             case ("nature"):
@@ -144,6 +143,6 @@ public class ThemeFragment extends Fragment implements View.OnClickListener, Upd
 
     @Override
     public void update() {
-        themeTrips = (ArrayList<Trip>) service.getTrips();
+        trips = service.getTrips();
     }
 }
