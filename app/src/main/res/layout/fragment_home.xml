@@ -26,8 +26,8 @@
 
         <TextView
             android:id="@+id/textView"
-            android:layout_width="382dp"
-            android:layout_height="153dp"
+            android:layout_width="351dp"
+            android:layout_height="158dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
@@ -52,6 +52,20 @@
             app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
         <ImageButton
+            android:id="@+id/facilitiesHomeButton"
+            android:layout_width="77dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="204dp"
+            android:adjustViewBounds="true"
+            android:background="@drawable/roundcorner"
+            android:onClick="onClick"
+            android:scaleType="fitCenter"
+            android:src="@drawable/facility_icon_white_2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+        <ImageButton
             android:id="@+id/restaurantsHomeButton"
             android:layout_width="77dp"
             android:layout_height="40dp"
@@ -65,22 +79,10 @@
             android:src="@drawable/restaurant_store_icon_white"
             app:layout_constraintBottom_toBottomOf="@+id/facilitiesHomeButton"
             app:layout_constraintEnd_toStartOf="@+id/facilitiesHomeButton"
+            app:layout_constraintHorizontal_bias="0.818"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView" />
-
-        <ImageButton
-            android:id="@+id/facilitiesHomeButton"
-            android:layout_width="77dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="17dp"
-            android:layout_marginEnd="221dp"
-            android:adjustViewBounds="true"
-            android:background="@drawable/roundcorner"
-            android:onClick="onClick"
-            android:scaleType="fitCenter"
-            android:src="@drawable/facility_icon_white_2"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView" />
+            app:layout_constraintTop_toBottomOf="@+id/textView"
+            app:layout_constraintVertical_bias="0.0" />
 
         <ImageView
             android:id="@+id/imageView2"
@@ -127,13 +129,15 @@
 
         <TextView
             android:id="@+id/textView3"
-            android:layout_width="376dp"
-            android:layout_height="235dp"
+            android:layout_width="340dp"
+            android:layout_height="240dp"
             android:layout_marginStart="15dp"
-            android:layout_marginTop="80dp"
+            android:layout_marginTop="76dp"
             android:layout_marginEnd="20dp"
-            android:text="den noi ohj ijh oij oihj oihj oiltkrejhng oitregoikjtrnegploiket rjyilkortejhopilrtnjhoritlnhopirtjhynoprithnjmrepothjimper5oih  r hptroie hjprteo hjretpoh jerth oerth"
+            android:text="I denne applikation vil i kunne finde forudbestemte ruter som fører jer rundt på øen. Hvis i trykker på en af ovenstående knapper vil i kunne få vist hhv. restauranter og faciliteter på øen. I kan derudover trykke på afgangs knappen for at få vist hvor lang tid der er til jeres afgang."
+            android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.555"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView" />
 
@@ -148,8 +152,10 @@
             android:text="Afgang"
             app:layout_constraintBottom_toTopOf="@+id/textView3"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toEndOf="@+id/facilitiesHomeButton"
-            app:layout_constraintTop_toBottomOf="@+id/textView" />
+            app:layout_constraintTop_toBottomOf="@+id/textView"
+            app:layout_constraintVertical_bias="0.25" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
