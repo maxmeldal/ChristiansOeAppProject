@@ -1,5 +1,4 @@
 package com.example.christiansoeappproject.repository;
-import android.content.Context;
 import android.os.Build;
 
 import androidx.annotation.RequiresApi;
@@ -17,7 +16,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class FacilityRepository implements ICrudRepository<Facility>{
-    public static List<Facility> facilities = new ArrayList<>();
+    public static List<Facility> facilities;
     private static Updatable caller;
 
     Retrofit retrofit = new Retrofit.Builder()
@@ -28,17 +27,35 @@ public class FacilityRepository implements ICrudRepository<Facility>{
 
     public void init (Updatable updatable){
         caller = updatable;
-        startListener();
+        if (facilities.isEmpty()){
+            System.out.println("Henter faciliteter");
+            readAll();
+        }
+    }
+
+    public FacilityRepository(Updatable updatable) {
+        caller = updatable;
+        if (facilities==null){
+            facilities = new ArrayList<>();
+            System.out.println("Henter faciliteter");
+            readAll();
+        }
+
     }
 
     @Override
     public void create(Facility facility) {
+        //Opdater liste før database, for hurtigere loadingtider
+        //Normalt dårlig praksis, men grundet Azure gratis pakkes loading tider, en nødvendighed
         facilities.add(facility);
+        caller.update();
+
         Call<Facility> call = apiService.createFacility(facility);
         call.enqueue(new Callback<Facility>() {
             @Override
             public void onResponse(Call<Facility> call, Response<Facility> response) {
                 System.out.println(response.body() + " has been created!");
+                readAll();
             }
 
             @Override
@@ -71,7 +88,8 @@ public class FacilityRepository implements ICrudRepository<Facility>{
         return facilities[0];
     }
 
-    public void startListener(){
+    @Override
+    public void readAll(){
         Call<List<Facility>> call = apiService.readFacilities();
         call.enqueue(new Callback<List<Facility>>() {
             @Override
@@ -90,41 +108,21 @@ public class FacilityRepository implements ICrudRepository<Facility>{
         });
     }
 
-    @Override
-    public List<Facility> readAll() {
-
-        List<Facility> facilityList = new ArrayList<>();
-
-        Call<List<Facility>> call = apiService.readFacilities();
-        call.enqueue(new Callback<List<Facility>>() {
-            @Override
-            public void onResponse(Call<List<Facility>> call, Response<List<Facility>> response) {
-                if (response.body()!=null) {
-                    System.out.println(response.body());
-                    facilityList.addAll(response.body());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Facility>> call, Throwable t) {
-                System.out.println(t.toString());
-            }
-        });
-
-        return facilityList;
-    }
-
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void update(Facility newFacility) {
+        //Opdater liste før database, for hurtigere loadingtider
+        //Normalt dårlig praksis, men grundet Azure gratis pakkes loading tider, en nødvendighed
         facilities.removeIf(facility -> facility.getId().equals(newFacility.getId()));
         facilities.add(newFacility);
+        caller.update();
 
         Call<Facility> call = apiService.updateFacility(newFacility);
         call.enqueue(new Callback<Facility>() {
             @Override
             public void onResponse(Call<Facility> call, Response<Facility> response) {
                 System.out.println(newFacility + " has been updated!");
+                readAll();
             }
 
             @Override
@@ -137,13 +135,18 @@ public class FacilityRepository implements ICrudRepository<Facility>{
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void delete(String id) {
+
+        //Opdater liste før database, for hurtigere loadingtider
+        //Normalt dårlig praksis, men grundet Azure gratis pakkes loading tider, en nødvendighed
         facilities.removeIf(facility -> facility.getId().equals(id));
+        caller.update();
 
         Call<Facility> call = apiService.deleteFacility(id);
         call.enqueue(new Callback<Facility>() {
             @Override
             public void onResponse(Call<Facility> call, Response<Facility> response) {
                 System.out.println("Facility: " + id + " has been deleted!");
+                readAll();
             }
 
             @Override

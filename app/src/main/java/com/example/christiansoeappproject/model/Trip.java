@@ -49,6 +49,15 @@ public class Trip implements Parcelable {
         attractions = in.createTypedArrayList(Attraction.CREATOR);
     }
 
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(name);
+        dest.writeString(info);
+        dest.writeInt(theme);
+        dest.writeTypedList(attractions);
+    }
+
     public static final Creator<Trip> CREATOR = new Creator<Trip>() {
         @Override
         public Trip createFromParcel(Parcel in) {
@@ -60,6 +69,11 @@ public class Trip implements Parcelable {
             return new Trip[size];
         }
     };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
 
     public String getId() {
         return id;
@@ -121,19 +135,5 @@ public class Trip implements Parcelable {
                 ", theme=" + theme +
                 ", attractions=" + attractions +
                 '}';
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(id);
-        dest.writeString(name);
-        dest.writeString(info);
-        dest.writeInt(theme);
-        dest.writeTypedList(attractions);
     }
 }

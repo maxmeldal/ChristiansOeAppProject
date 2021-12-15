@@ -69,6 +69,11 @@ public class Restaurant extends Location implements Parcelable {
         }
     };
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
     public String getUrl() {
         return url;
     }
@@ -99,10 +104,5 @@ public class Restaurant extends Location implements Parcelable {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
     }
 }

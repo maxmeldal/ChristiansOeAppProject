@@ -17,20 +17,11 @@ public class FacilityService {
     FacilityRepository repo;
 
     public FacilityService(Updatable updatable) {
-        this.repo = new FacilityRepository();
-        repo.init(updatable);
+        this.repo = new FacilityRepository(updatable);
     }
 
     public void create(Facility facility){
         repo.create(facility);
-    }
-
-    public Facility readById(String id){
-        return  repo.readById(id);
-    }
-
-    public List<Facility> readAll(){
-        return repo.readAll();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)

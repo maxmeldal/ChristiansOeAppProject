@@ -19,8 +19,7 @@ public class TripService {
     TripRepository repo;
 
     public TripService(Updatable updatable) {
-        repo  = new TripRepository();
-        repo.init(updatable);
+        repo  = new TripRepository(updatable);
     }
 
     public List<Trip> getTrips(){
@@ -29,14 +28,6 @@ public class TripService {
 
     public void create(Trip trip){
         repo.create(trip);
-    }
-
-    public Trip readById(String id){
-        return  repo.readById(id);
-    }
-
-    public List<Trip> readAll(){
-        return repo.readAll();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)

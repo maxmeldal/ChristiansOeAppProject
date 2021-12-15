@@ -144,7 +144,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         if (extras.getString("type").equals("restaurant")) {
             ArrayList<Restaurant> resliste = extras.getParcelableArrayList("list");
-            System.out.println("res listen er: " + resliste.size());
             for (int i = 0; i < resliste.size(); i++) {
                 LatLng latll = new LatLng(resliste.get(i).getLatitude(), resliste.get(i).getLongitude());
                 String name = resliste.get(i).getName();
@@ -172,9 +171,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         } else if (extras.getString("type").equals("facility")) {
             ArrayList<Facility> facilities = extras.getParcelableArrayList("list");
-            System.out.println("facility listen er: " + facilities.size());
             for (Facility facility : facilities) {
-                System.out.println("her kaldes foreach løkke for facility");
                 LatLng latll = new LatLng(facility.getLatitude(), facility.getLongitude());
                 String name = facility.getName();
                 mMap.addMarker(new MarkerOptions().position(latll).title(name));

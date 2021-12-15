@@ -1,6 +1,5 @@
 package com.example.christiansoeappproject.service;
 
-import android.content.Context;
 import android.os.Build;
 
 import androidx.annotation.RequiresApi;
@@ -9,32 +8,23 @@ import com.example.christiansoeappproject.Updatable;
 import com.example.christiansoeappproject.model.Restaurant;
 import com.example.christiansoeappproject.repository.RestaurantRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class RestaurantService {
     RestaurantRepository repo;
 
     public RestaurantService(Updatable updatable){
-        repo = new RestaurantRepository();
-        repo.init(updatable);
+        repo = new RestaurantRepository(updatable);
     }
     public List<Restaurant> getRestaurants(){
-        return RestaurantRepository.restaurantList;
+        return RestaurantRepository.restaurants;
     }
 
     public void create(Restaurant restaurant){
         repo.create(restaurant);
     }
 
-    public Restaurant readById(String id){
-        return  repo.readById(id);
-    }
-
-    public List<Restaurant> readAll(){
-        return repo.readAll();
-    }
-
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public void update(Restaurant restaurant){
         repo.update(restaurant);
     }

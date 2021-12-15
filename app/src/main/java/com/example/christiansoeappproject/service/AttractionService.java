@@ -1,6 +1,5 @@
 package com.example.christiansoeappproject.service;
 
-import android.content.Context;
 import android.os.Build;
 
 import androidx.annotation.RequiresApi;
@@ -13,28 +12,18 @@ import java.util.List;
 
 public class AttractionService{
 
-    AttractionRepository repo;
+    private AttractionRepository repo;
 
     public AttractionService(Updatable updatable) {
-        repo  = new AttractionRepository();
-        repo.init(updatable);
-
+        repo  = new AttractionRepository(updatable);
     }
 
     public List<Attraction> getAttractions(){
-        return AttractionRepository.attractionList;
+        return AttractionRepository.attractions;
     }
 
     public void create(Attraction attraction){
         repo.create(attraction);
-    }
-
-    public Attraction readById(String id){
-        return  repo.readById(id);
-    }
-
-    public List<Attraction> readAll(){
-        return repo.readAll();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)

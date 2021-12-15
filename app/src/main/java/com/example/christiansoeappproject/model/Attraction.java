@@ -63,6 +63,18 @@ public class Attraction extends Location implements Parcelable {
         description = in.readString();
     }
 
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.getId());
+        dest.writeDouble(this.getLatitude());
+        dest.writeDouble(this.getLongitude());
+        dest.writeString(this.getName());
+        dest.writeString(video);
+        dest.writeString(audio);
+        dest.writeString(image);
+        dest.writeString(description);
+    }
+
     public static final Creator<Attraction> CREATOR = new Creator<Attraction>() {
         @Override
         public Attraction createFromParcel(Parcel in) {
@@ -74,6 +86,11 @@ public class Attraction extends Location implements Parcelable {
             return new Attraction[size];
         }
     };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public byte[] getVideo() {
@@ -118,54 +135,8 @@ public class Attraction extends Location implements Parcelable {
 
     @Override
     public String toString() {
-        if (audio==null && video==null && image==null){
-            return super.toString() + "Attraction{" +
-                    "video='null" + '\'' +
-                    ", audio='null" + '\'' +
-                    ", image='null" + '\'' +
-                    '}';
-        }
-        if (audio == null && image==null){
-            return super.toString() + "Attraction{" +
-                    "video='" + video.substring(0, 10) + '\'' +
-                    ", audio='null" + '\'' +
-                    ", image='null" + '\'' +
-                    '}';
-        }
-        if (video==null && image==null){
-            return super.toString() + "Attraction{" +
-                    "video='null" + '\'' +
-                    ", audio='" + audio.substring(0, 10) + '\'' +
-                    ", image='null" + '\'' +
-                    '}';
-        }
-        if (audio==null && video==null){
-            return super.toString() + "Attraction{" +
-                    "video='null" + '\'' +
-                    ", audio='null" + '\'' +
-                    ", image='" + image.substring(0,10) +  '\'' +
-                    '}';
-        }
         return super.toString() + "Attraction{" +
-                "video='" + video.substring(0, 10) + '\'' +
-                ", audio='" + audio.substring(0, 10) + '\'' +
+                "description='" + description + '\'' +
                 '}';
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.getId());
-        dest.writeDouble(this.getLatitude());
-        dest.writeDouble(this.getLongitude());
-        dest.writeString(this.getName());
-        dest.writeString(video);
-        dest.writeString(audio);
-        dest.writeString(image);
-        dest.writeString(description);
     }
 }

@@ -85,8 +85,13 @@ public class MainActivity extends AppCompatActivity implements Updatable {
                 permissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
             }
         }
-        TripService tripService = new TripService(this);
+
+        /**
+         * Initialiser alle services ved opstart så
+         * indlæsning af modeller går i gang
+         */
         AttractionService attractionService = new AttractionService(this);
+        TripService tripService = new TripService(this);
         FacilityService facilityService = new FacilityService(this);
         RestaurantService restaurantService = new RestaurantService(this);
     }

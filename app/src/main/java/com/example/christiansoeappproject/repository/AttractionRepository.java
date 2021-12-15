@@ -2,6 +2,7 @@ package com.example.christiansoeappproject.repository;
 
 import android.content.Context;
 import android.os.Build;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 
@@ -22,8 +23,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class AttractionRepository implements ICrudRepository<Attraction>{
 
-    public static List<Attraction> attractionList = new ArrayList<>();
+    public static List<Attraction> attractions;
     private static Updatable caller;
+    private Context mainContext;
 
     Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(BaseUrl.BASE_URL)
@@ -32,41 +34,32 @@ public class AttractionRepository implements ICrudRepository<Attraction>{
             .build();
     final IAttractionEndpoint apiService = retrofit.create(IAttractionEndpoint.class);
 
-
-    public void init(Updatable updatable) {
+    public AttractionRepository(Updatable updatable){
         caller = updatable;
-        startListener();
+        if (updatable instanceof Context){
+            mainContext = (Context) updatable;
+        }
+        if (attractions==null){
+            attractions = new ArrayList<>();
+            System.out.println("Henter attraktioner");
+            readAll();
+        }
     }
-
-    private void startListener() {
-        Call<List<Attraction>> call = apiService.readAttractions();
-        call.enqueue(new Callback<List<Attraction>>() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
-            @Override
-            public void onResponse(Call<List<Attraction>> call, Response<List<Attraction>> response) {
-                if (response.body() != null) {
-                    attractionList.clear();
-                    attractionList.addAll(response.body());
-                }
-                caller.update();
-            }
-
-            @Override
-            public void onFailure(Call<List<Attraction>> call, Throwable t) {
-                System.out.println(t.toString());
-            }
-        });
-    }
-
 
     @Override
     public void create(Attraction attraction) {
-        attractionList.add(attraction);
+
+        //Opdater liste før database, for hurtigere loadingtider
+        //Normalt dårlig praksis, men grundet Azure gratis pakkes loading tider, en nødvendighed
+        attractions.add(attraction);
+        caller.update();
+
         Call<Attraction> call = apiService.createAttraction(attraction);
         call.enqueue(new Callback<Attraction>() {
             @Override
             public void onResponse(Call<Attraction> call, Response<Attraction> response) {
                 System.out.println(response.body() + " has been created!");
+                readAll();
             }
 
             @Override
@@ -100,22 +93,44 @@ public class AttractionRepository implements ICrudRepository<Attraction>{
     }
 
     @Override
-    public List<Attraction> readAll() {
-        return null;
+    public void readAll() {
+        Call<List<Attraction>> call = apiService.readAttractions();
+        call.enqueue(new Callback<List<Attraction>>() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onResponse(Call<List<Attraction>> call, Response<List<Attraction>> response) {
+                if (response.body() != null) {
+                    attractions.clear();
+                    attractions.addAll(response.body());
+                }
+                caller.update();
+            }
+
+            @Override
+            public void onFailure(Call<List<Attraction>> call, Throwable t) {
+                if (mainContext!=null){
+                    Toast.makeText(mainContext, "Timeout indlæsning af attraktioner", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void update(Attraction newAttraction) {
-        attractionList.removeIf(attraction -> attraction.getId().equals(newAttraction.getId()));
-        attractionList.add(newAttraction);
+
+        //Opdater liste før database, for hurtigere loadingtider
+        //Normalt dårlig praksis, men grundet Azure gratis pakkes loading tider, en nødvendighed
+        attractions.removeIf(attraction -> attraction.getId().equals(newAttraction.getId()));
+        attractions.add(newAttraction);
+        caller.update();
 
         Call<Attraction> call = apiService.updateAttraction(newAttraction);
         call.enqueue(new Callback<Attraction>() {
             @Override
             public void onResponse(Call<Attraction> call, Response<Attraction> response) {
                 System.out.println("updated: " + newAttraction);
-                caller.update();
+                readAll();
             }
 
             @Override
@@ -128,13 +143,18 @@ public class AttractionRepository implements ICrudRepository<Attraction>{
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void delete(String id) {
-        attractionList.removeIf(attraction -> attraction.getId().equals(id));
+
+        //Opdater liste før database, for hurtigere loadingtider
+        //Normalt dårlig praksis, men grundet Azure gratis pakkes loading tider, en nødvendighed
+        attractions.removeIf(attraction -> attraction.getId().equals(id));
+        caller.update();
 
         Call<Attraction> call = apiService.deleteAttraction(id);
         call.enqueue(new Callback<Attraction>() {
             @Override
             public void onResponse(Call<Attraction> call, Response<Attraction> response) {
                 System.out.println("Attraction: " + id + " has been deleted!");
+                readAll();
             }
 
             @Override

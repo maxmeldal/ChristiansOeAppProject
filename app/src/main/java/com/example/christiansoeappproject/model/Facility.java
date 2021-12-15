@@ -16,6 +16,14 @@ public class Facility extends Location implements Parcelable{
         super(in.readString(), in.readDouble(), in.readDouble(), in.readString());
     }
 
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(this.getId());
+        parcel.writeDouble(this.getLatitude());
+        parcel.writeDouble(this.getLongitude());
+        parcel.writeString(this.getName());
+    }
+
     public static final Creator<Facility> CREATOR = new Creator<Facility>() {
         @Override
         public Facility createFromParcel(Parcel in) {
@@ -31,13 +39,5 @@ public class Facility extends Location implements Parcelable{
     @Override
     public int describeContents() {
         return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(this.getId());
-        parcel.writeDouble(this.getLatitude());
-        parcel.writeDouble(this.getLongitude());
-        parcel.writeString(this.getName());
     }
 }
