@@ -200,6 +200,7 @@ public class TripThemeActivity extends AppCompatActivity implements OnMapReadyCa
         LatLng end = new LatLng(55.32045, 15.18763);
         polylineOptions.add(end);
         polylineOptions.pattern(pattern);
+        polylineOptions.width(4);
         polylineOptions.color(Color.BLUE);
         mMap.addPolyline(polylineOptions);
     }
