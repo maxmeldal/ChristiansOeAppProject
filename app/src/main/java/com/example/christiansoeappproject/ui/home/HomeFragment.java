@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -47,6 +48,7 @@ import com.example.christiansoeappproject.service.RestaurantService;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -100,11 +102,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Upda
         }
 
         final ImageView imageView = binding.weatherImageView;
-        if(MainActivity.lastWeatherBitmap!=null) imageView.setImageBitmap(MainActivity.lastWeatherBitmap);
+        if(MainActivity.lastWeatherBitmap!=null){
+            imageView.setImageBitmap(MainActivity.lastWeatherBitmap);
+            imageView.setVisibility(View.VISIBLE);
+        }
         homeViewModel.getImage().observe(getViewLifecycleOwner(), new Observer<Bitmap>() {
             @Override
             public void onChanged(Bitmap bitmap) {
                     imageView.setImageBitmap(bitmap);
+                    imageView.setVisibility(View.VISIBLE);
                     MainActivity.lastWeatherBitmap = bitmap;
             }
         });
@@ -156,7 +162,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Upda
             public void onTimeSet(TimePicker view, int selectedHour, int selectedMinute) {
                 hour = selectedHour;
                 minute = selectedMinute;
-                timeButton.setText(String.format(Locale.getDefault(), "%02d:%02d", hour, minute));
+                LocalTime selected = LocalTime.of(selectedHour, selectedMinute);
+                if (selected.isAfter(LocalTime.now())){
+                    timeButton.setText(String.format(Locale.getDefault(), "%02d:%02d", hour, minute));
+                    departureTime.setVisibility(View.VISIBLE);
+                    setTime();
+                } else {
+                    Toast.makeText(getActivity(), "Du kan ikke vælge det tidspunkt!", Toast.LENGTH_SHORT).show();
+                }
             }
         };
 
@@ -164,7 +177,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Upda
 
         timePickerDialog.setTitle(" - Vælg færge afgang -");
         timePickerDialog.show();
-        setTime();
     }
 
     public void openMap(String type){
@@ -183,19 +195,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Upda
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void setTime(){
-        LocalTime localTime = LocalTime.now();
-        int currentHour = localTime.getHour();
-        int currentMinute = localTime.getMinute();
-        int milisInAMinute = 60000;
-        long time = System.currentTimeMillis();
+
 
         Runnable update = new Runnable() {
-            int departureHour;
-            int departureMinute;
             public void run() {
-                departureHour = currentHour - hour;
-                departureMinute = currentMinute - minute;
-                departureTime.setText(String.format(Locale.getDefault(), "%02d:%02d", departureHour, departureMinute));
+                LocalTime localTime = LocalTime.now();
+                LocalTime departure = LocalTime.of(hour, minute);
+                long departureHour = localTime.until(departure, ChronoUnit.HOURS);
+                long departureMinute = localTime.until(departure, ChronoUnit.MINUTES)-(60*departureHour);
+                departureTime.setText(String.format(Locale.getDefault(), "%02d:%02d", departureHour, departureMinute+1));
             }
         };
 
@@ -204,7 +212,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Upda
             public void run() {
                 update.run();
             }
-        }, time % milisInAMinute, milisInAMinute);
+        }, System.currentTimeMillis() % 10000, 10000);
 
         // This will update for the current minute, it will be updated again in at most one minute.
         update.run();
