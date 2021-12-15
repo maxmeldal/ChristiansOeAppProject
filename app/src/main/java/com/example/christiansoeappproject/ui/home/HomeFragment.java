@@ -2,6 +2,7 @@ package com.example.christiansoeappproject.ui.home;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -9,6 +10,8 @@ import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.wifi.p2p.WifiP2pManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,9 +21,11 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -39,8 +44,16 @@ import com.example.christiansoeappproject.service.DistanceService;
 import com.example.christiansoeappproject.service.FacilityService;
 import com.example.christiansoeappproject.service.RestaurantService;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class HomeFragment extends Fragment implements View.OnClickListener, Updatable {
 
@@ -56,7 +69,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Upda
     private ArrayList<Facility> facilities;
 
     private ImageButton restaurantsButton, facilitiesButton;
+    private Button timeButton;
+    private int hour, minute;
+    private TextView departureTime;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @SuppressLint("MissingPermission")
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -94,6 +111,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Upda
 
         restaurantsButton = binding.restaurantsHomeButton;
         facilitiesButton = binding.facilitiesHomeButton;
+        timeButton = binding.timeButton;
+        departureTime = binding.departureTime;
+
+        timeButton.setOnClickListener(this);
         restaurantsButton.setOnClickListener(this);
         facilitiesButton.setOnClickListener(this);
 
@@ -112,6 +133,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Upda
         binding = null;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onClick(View view) {
         switch (view.getId()){
@@ -121,7 +143,28 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Upda
             case (R.id.facilitiesHomeButton):
                 openMap("facility");
                 break;
+            case(R.id.timeButton):
+                setDepartureTime();
+                break;
         }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void setDepartureTime(){
+        TimePickerDialog.OnTimeSetListener onTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int selectedHour, int selectedMinute) {
+                hour = selectedHour;
+                minute = selectedMinute;
+                timeButton.setText(String.format(Locale.getDefault(), "%02d:%02d", hour, minute));
+            }
+        };
+
+        TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(), onTimeSetListener, hour, minute, true);
+
+        timePickerDialog.setTitle(" - Vælg færge afgang -");
+        timePickerDialog.show();
+        setTime();
     }
 
     public void openMap(String type){
@@ -136,6 +179,35 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Upda
                 break;
         }
         startActivity(intent);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void setTime(){
+        LocalTime localTime = LocalTime.now();
+        int currentHour = localTime.getHour();
+        int currentMinute = localTime.getMinute();
+        int milisInAMinute = 60000;
+        long time = System.currentTimeMillis();
+
+        Runnable update = new Runnable() {
+            int departureHour;
+            int departureMinute;
+            public void run() {
+                departureHour = currentHour - hour;
+                departureMinute = currentMinute - minute;
+                departureTime.setText(String.format(Locale.getDefault(), "%02d:%02d", departureHour, departureMinute));
+            }
+        };
+
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            public void run() {
+                update.run();
+            }
+        }, time % milisInAMinute, milisInAMinute);
+
+        // This will update for the current minute, it will be updated again in at most one minute.
+        update.run();
     }
 
     @Override
