@@ -32,6 +32,8 @@
         <entry key="app/src/main/res/layout/activity_maps.xml" value="0.335" />
         <entry key="app/src/main/res/layout/activity_restaurant.xml" value="0.21422101449275363" />
         <entry key="app/src/main/res/layout/activity_restaurant_detail.xml" value="0.21422101449275363" />
+        <entry key="app/src/main/res/layout/activity_select_location_on_map.xml" value="0.1875" />
+        <entry key="app/src/main/res/layout/activity_show_restaurant.xml" value="0.1875" />
         <entry key="app/src/main/res/layout/activity_show_trip_attraction.xml" value="0.14387031408308004" />
         <entry key="app/src/main/res/layout/activity_theme_trip.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_trip_detail.xml" value="0.2953703703703704" />
