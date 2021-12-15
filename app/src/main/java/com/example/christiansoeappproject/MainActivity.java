@@ -20,10 +20,14 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.christiansoeappproject.databinding.ActivityMainBinding;
+import com.example.christiansoeappproject.service.AttractionService;
+import com.example.christiansoeappproject.service.FacilityService;
+import com.example.christiansoeappproject.service.RestaurantService;
+import com.example.christiansoeappproject.service.TripService;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements Updatable {
 
     private ActivityMainBinding binding;
     ActivityResultLauncher<String> permissionLauncher;//bruges til at søge om tilladelser
@@ -81,5 +85,14 @@ public class MainActivity extends AppCompatActivity {
                 permissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
             }
         }
+        TripService tripService = new TripService(this);
+        AttractionService attractionService = new AttractionService(this);
+        FacilityService facilityService = new FacilityService(this);
+        RestaurantService restaurantService = new RestaurantService(this);
+    }
+
+    @Override
+    public void update() {
+        // ignored
     }
 }

@@ -45,7 +45,6 @@ public class TripAdapter extends BaseAdapter {
         TextView titleTextView = view.findViewById(R.id.titleTextView);
         titleTextView.setText(trips.get(i).getName());
         TextView subtitleTextView = view.findViewById(R.id.subtitleTextView);
-        System.out.println(trips.get(i).getTheme());
         subtitleTextView.setText(trips.get(i).getInfo()+ ", Tema: " + convertToTheme(trips.get(i).getTheme()));
 
         return view;

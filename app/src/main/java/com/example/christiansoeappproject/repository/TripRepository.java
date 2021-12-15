@@ -94,7 +94,6 @@ public class TripRepository implements ICrudRepository<Trip>{
             @Override
             public void onResponse(Call<Trip> call, Response<Trip> response) {
                 if (response.body()!=null){
-                    System.out.println(response.body());
                     trips[0] = response.body();
                 }
             }

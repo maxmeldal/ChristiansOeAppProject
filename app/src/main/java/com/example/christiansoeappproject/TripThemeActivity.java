@@ -177,13 +177,13 @@ public class TripThemeActivity extends AppCompatActivity implements OnMapReadyCa
             for (int i = 0; i< attractions.size(); i++){
                 LatLng dest = new LatLng(attractions.get(i).getLatitude(),attractions.get(i).getLongitude());
                 String name = attractions.get(i).getName();
-                mMap.addMarker(new MarkerOptions().position(dest).title(i+": "+name));
+                mMap.addMarker(new MarkerOptions().position(dest).title(i+1+": "+name));
                 polylineOptions.add(dest);
                 mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onInfoWindowClick(@NonNull Marker marker) {
-                        Optional<Attraction> selected = attractions.stream().filter(attraction -> attraction.getName().equals(marker.getTitle())).findFirst();
+                        Optional<Attraction> selected = attractions.stream().filter(attraction -> attraction.getName().equals(marker.getTitle().substring(3))).findFirst();
                         if ((!selected.isPresent())) {
                             Toast.makeText(TripThemeActivity.this, "Kunne ikke vælge attraktion", Toast.LENGTH_LONG).show();
                             return;

@@ -5,6 +5,7 @@ import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
+import com.example.christiansoeappproject.Updatable;
 import com.example.christiansoeappproject.model.Attraction;
 import com.example.christiansoeappproject.repository.AttractionRepository;
 
@@ -14,9 +15,9 @@ public class AttractionService{
 
     AttractionRepository repo;
 
-    public AttractionService(Context context) {
+    public AttractionService(Updatable updatable) {
         repo  = new AttractionRepository();
-        repo.init(context);
+        repo.init(updatable);
 
     }
 

@@ -33,8 +33,8 @@ public class AttractionRepository implements ICrudRepository<Attraction>{
     final IAttractionEndpoint apiService = retrofit.create(IAttractionEndpoint.class);
 
 
-    public void init(Context context) {
-        caller = (Updatable) context;
+    public void init(Updatable updatable) {
+        caller = updatable;
         startListener();
     }
 
