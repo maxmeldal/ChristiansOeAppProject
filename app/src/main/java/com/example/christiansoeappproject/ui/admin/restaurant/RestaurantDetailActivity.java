@@ -1,5 +1,6 @@
 package com.example.christiansoeappproject.ui.admin.restaurant;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -10,10 +11,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.christiansoeappproject.R;
 import com.example.christiansoeappproject.model.Restaurant;
+import com.example.christiansoeappproject.ui.admin.SelectLocationOnMapActivity;
 
 public class RestaurantDetailActivity extends AppCompatActivity {
     private EditText nameEditText, latitudeEditText, longitudeEditText,restaurantURLEditText ,openEditText, closeEditText, descriptionEditText;
-
+    private static final int REQUEST_GET_LATLNG = 1;
     private Bundle extras;
     private String id;
 
@@ -48,6 +50,26 @@ public class RestaurantDetailActivity extends AppCompatActivity {
         }
     }
 
+    public void locationRestaurantPressed(View view){
+        Intent intent = new Intent(this, SelectLocationOnMapActivity.class);
+        double lat = Double.parseDouble(latitudeEditText.getText().toString());
+        double longg = Double.parseDouble(longitudeEditText.getText().toString());
+        if (lat!=0 && longg!=0){
+            intent.putExtra("lat", lat);
+            intent.putExtra("long", longg);
+        }
+        startActivityForResult(intent, REQUEST_GET_LATLNG);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_GET_LATLNG && resultCode==1){
+            Bundle dataExtras = data.getExtras();
+            latitudeEditText.setText(String.valueOf(dataExtras.getDouble("lat")));
+            longitudeEditText.setText(String.valueOf(dataExtras.getDouble("long")));
+        }
+    }
 
     public void updateRestaurantPressed(View view){
         RestaurantActivity.service.update(new Restaurant(id, Double.parseDouble(latitudeEditText.getText().toString())

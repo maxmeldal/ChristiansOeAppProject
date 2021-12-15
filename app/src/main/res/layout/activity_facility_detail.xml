@@ -25,23 +25,23 @@
         android:id="@+id/deleteFacilityButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
         android:layout_marginEnd="100dp"
-        android:layout_marginBottom="160dp"
         android:onClick="deleteFacilityPressed"
         android:text="Slet"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/locationFacilityButton" />
 
     <Button
         android:id="@+id/updateFacilityButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="96dp"
-        android:layout_marginBottom="160dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="28dp"
         android:onClick="updateFacilityPressed"
         android:text="Opdater"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/locationFacilityButton" />
 
     <EditText
         android:id="@+id/facilityLongitudeEditText"
@@ -50,6 +50,7 @@
         android:layout_marginTop="16dp"
         android:ems="10"
         android:hint="Længdegrad"
+        android:enabled="false"
         android:inputType="number|numberDecimal"
         app:layout_constraintEnd_toEndOf="@+id/facilityLatitudeEditText"
         app:layout_constraintHorizontal_bias="0.0"
@@ -63,10 +64,22 @@
         android:layout_marginTop="12dp"
         android:ems="10"
         android:hint="Breddegrad"
+        android:enabled="false"
         android:inputType="number|numberDecimal"
         app:layout_constraintEnd_toEndOf="@+id/facilityNameEditText"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/facilityNameEditText"
         app:layout_constraintTop_toBottomOf="@+id/facilityNameEditText" />
+
+    <Button
+        android:id="@+id/locationFacilityButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:onClick="locationFacilityPressed"
+        android:text="placering"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/facilityLongitudeEditText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

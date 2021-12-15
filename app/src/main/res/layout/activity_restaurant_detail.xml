@@ -29,6 +29,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="100dp"
         android:ems="10"
+        android:enabled="false"
         android:hint="Breddegrad"
         android:inputType="number|numberDecimal"
         app:layout_constraintEnd_toEndOf="parent"
@@ -43,6 +44,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="100dp"
         android:ems="10"
+        android:enabled="false"
         android:hint="Længdegrad"
         android:inputType="number|numberDecimal"
         app:layout_constraintEnd_toEndOf="parent"
@@ -95,25 +97,23 @@
         android:id="@+id/updateRestaurantButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="101dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="11dp"
+        android:layout_marginEnd="13dp"
         android:onClick="updateRestaurantPressed"
         android:text="Opdater"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/deleteRestaurantButton"
+        app:layout_constraintStart_toEndOf="@+id/locationRestaurantButton"
         app:layout_constraintTop_toBottomOf="@+id/restaurantDescriptionEditText" />
 
     <Button
         android:id="@+id/deleteRestaurantButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="101dp"
         android:onClick="deleteRestaurantPressed"
         android:text="Slet"
+        app:layout_constraintBaseline_toBaselineOf="@+id/updateRestaurantButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/updateRestaurantButton"
-        app:layout_constraintTop_toBottomOf="@+id/restaurantDescriptionEditText" />
+        app:layout_constraintStart_toEndOf="@+id/updateRestaurantButton" />
 
     <EditText
         android:id="@+id/restaurantDescriptionEditText"
@@ -128,4 +128,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/restaurantCloseEditText" />
+
+    <Button
+        android:id="@+id/locationRestaurantButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="10dp"
+        android:onClick="locationRestaurantPressed"
+        android:text="placering"
+        app:layout_constraintBaseline_toBaselineOf="@+id/updateRestaurantButton"
+        app:layout_constraintEnd_toStartOf="@+id/updateRestaurantButton"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.christiansoeappproject">
+
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
@@ -22,12 +23,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ChristiansOeAppProject">
-        <activity
-            android:name=".ShowTripAttractionActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ShowRestaurantActivity"
-            android:exported="false" />
+
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -40,6 +36,16 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="${MAPS_API_KEY}" />
 
+        <activity
+            android:name=".ui.admin.SelectLocationOnMapActivity"
+            android:exported="false"
+            android:label="@string/title_activity_select_location_on_map" />
+        <activity
+            android:name=".ShowTripAttractionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ShowRestaurantActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.admin.attraction.AudioActivity"
             android:exported="false" />

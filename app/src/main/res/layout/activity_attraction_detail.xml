@@ -31,6 +31,7 @@
         android:layout_marginBottom="14dp"
         android:ems="10"
         android:hint="Breddegrad"
+        android:enabled="false"
         android:inputType="number|numberDecimal"
         app:layout_constraintBottom_toTopOf="@+id/longitudeEditText"
         app:layout_constraintEnd_toEndOf="@+id/nameEditText"
@@ -44,6 +45,7 @@
         android:layout_marginTop="14dp"
         android:ems="10"
         android:hint="længdegrad"
+        android:enabled="false"
         android:inputType="number|numberDecimal"
         app:layout_constraintEnd_toEndOf="@+id/latitudeEditText"
         app:layout_constraintStart_toStartOf="@+id/latitudeEditText"
@@ -134,5 +136,17 @@
         app:layout_constraintEnd_toEndOf="@+id/longitudeEditText"
         app:layout_constraintStart_toStartOf="@+id/longitudeEditText"
         app:layout_constraintTop_toBottomOf="@+id/longitudeEditText" />
+
+    <Button
+        android:id="@+id/locationAttractionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:onClick="locationAttractionPressed"
+        android:text="placering"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.253"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

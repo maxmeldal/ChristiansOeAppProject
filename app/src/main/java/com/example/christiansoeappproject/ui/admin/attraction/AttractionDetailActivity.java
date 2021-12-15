@@ -19,6 +19,7 @@ import android.widget.ImageView;
 
 import com.example.christiansoeappproject.R;
 import com.example.christiansoeappproject.model.Attraction;
+import com.example.christiansoeappproject.ui.admin.SelectLocationOnMapActivity;
 
 import org.apache.commons.io.IOUtils;
 
@@ -27,6 +28,7 @@ import java.io.InputStream;
 
 public class AttractionDetailActivity extends AppCompatActivity {
     private static final int REQUEST_GET_AUDIO_ARRAY = 0;
+    private static final int REQUEST_GET_LATLNG =1;
     private EditText nameEditText;
     private EditText latitudeEditText;
     private EditText longitudeEditText;
@@ -69,6 +71,33 @@ public class AttractionDetailActivity extends AppCompatActivity {
 
         setupVideoGalleryLauncher();
         setupImageGalleryLauncher();
+    }
+
+    public void locationAttractionPressed(View view){
+        Intent intent = new Intent(this, SelectLocationOnMapActivity.class);
+        double lat = Double.parseDouble(latitudeEditText.getText().toString());
+        double longg = Double.parseDouble(longitudeEditText.getText().toString());
+        if (lat!=0 && longg!=0){
+            intent.putExtra("lat", lat);
+            intent.putExtra("long", longg);
+        }
+        startActivityForResult(intent, REQUEST_GET_LATLNG);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_GET_LATLNG && resultCode==1){
+            Bundle dataExtras = data.getExtras();
+            latitudeEditText.setText(String.valueOf(dataExtras.getDouble("lat")));
+            longitudeEditText.setText(String.valueOf(dataExtras.getDouble("long")));
+        }
+        /*
+        if (requestCode == REQUEST_GET_AUDIO_ARRAY && resultCode == Activity.RESULT_OK) {
+            audio = data.getByteArrayExtra("audio");
+        }
+
+         */
     }
 
     private void setupImageGalleryLauncher() {
@@ -145,13 +174,5 @@ public class AttractionDetailActivity extends AppCompatActivity {
     public void audioPressed(View view) {
         Intent intent = new Intent(this, AudioActivity.class);
         startActivityForResult(intent, REQUEST_GET_AUDIO_ARRAY);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_GET_AUDIO_ARRAY && resultCode == Activity.RESULT_OK) {
-            audio = data.getByteArrayExtra("audio");
-        }
     }
 }
