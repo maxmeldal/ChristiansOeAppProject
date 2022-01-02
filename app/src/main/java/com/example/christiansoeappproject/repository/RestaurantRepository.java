@@ -31,7 +31,7 @@ public class RestaurantRepository implements ICrudRepository<Restaurant>{
 
     public RestaurantRepository(Updatable updatable){
         caller = updatable;
-        if (updatable instanceof Context && mainContext!=null){
+        if (updatable instanceof Context && mainContext==null){
             mainContext = (Context) updatable;
         }
         if (restaurants==null){

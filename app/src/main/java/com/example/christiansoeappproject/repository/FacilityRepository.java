@@ -38,7 +38,7 @@ public class FacilityRepository implements ICrudRepository<Facility>{
 
     public FacilityRepository(Updatable updatable) {
         caller = updatable;
-        if (updatable instanceof Context && mainContext!=null){
+        if (updatable instanceof Context && mainContext==null){
             mainContext = (Context) updatable;
         }
         if (facilities==null){

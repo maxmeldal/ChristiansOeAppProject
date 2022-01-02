@@ -33,7 +33,7 @@ public class TripRepository implements ICrudRepository<Trip>{
 
     public TripRepository (Updatable updatable){
         caller = updatable;
-        if (updatable instanceof Context && mainContext!=null){
+        if (updatable instanceof Context && mainContext==null){
             mainContext = (Context) updatable;
         }
         if (trips==null){

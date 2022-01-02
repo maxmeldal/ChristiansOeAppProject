@@ -36,7 +36,7 @@ public class AttractionRepository implements ICrudRepository<Attraction>{
 
     public AttractionRepository(Updatable updatable){
         caller = updatable;
-        if (updatable instanceof Context && mainContext!=null){
+        if (updatable instanceof Context && mainContext==null){
             mainContext = (Context) updatable;
         }
         if (attractions==null){
