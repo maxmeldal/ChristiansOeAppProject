@@ -52,7 +52,7 @@ public class FacilityActivity extends AppCompatActivity implements Updatable {
 
     @Override
     public void update() {
+        facilities = service.getFacilities();
         adapter.notifyDataSetChanged();
-        setupList();
     }
 }

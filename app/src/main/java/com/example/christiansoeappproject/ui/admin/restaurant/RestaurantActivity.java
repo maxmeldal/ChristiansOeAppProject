@@ -59,6 +59,5 @@ public class RestaurantActivity extends AppCompatActivity implements Updatable {
     public void update() {
         restaurants = service.getRestaurants();
         adapter.notifyDataSetChanged();
-        setupList();
     }
 }

@@ -56,15 +56,15 @@ public class AttractionsActivity extends AppCompatActivity implements Updatable 
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public void create(View view){
-        service.create(new Attraction(0,0, "Ny Attraktion", "Ingen beskrivelse"));
-        update();
+    @Override
+    public void update() {
+        attractions = service.getAttractions();
+        adapter.notifyDataSetChanged();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    @Override
-    public void update() {
-        adapter.notifyDataSetChanged();
-        setupList();
+    public void create(View view){
+        service.create(new Attraction(0,0, "Ny Attraktion", "Ingen beskrivelse"));
+        update();
     }
 }

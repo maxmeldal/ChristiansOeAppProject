@@ -56,6 +56,7 @@ public class TripsActivity extends AppCompatActivity implements Updatable {
 
     @Override
     public void update() {
+        trips = service.getTrips();
         adapter.notifyDataSetChanged();
     }
 }
