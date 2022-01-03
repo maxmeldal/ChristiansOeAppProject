@@ -163,7 +163,6 @@ public class TripThemeActivity extends AppCompatActivity implements OnMapReadyCa
     public void addMarkers() {
         List<Attraction> attractions = currentTrip.getAttractions();
         PolylineOptions polylineOptions = new PolylineOptions();
-        List<PatternItem> pattern = Arrays.<PatternItem>asList(new Dash(30), new Gap(15), new Dash(30), new Gap(15));
 
         //add route start location
         LatLng start = new LatLng(55.32045, 15.18763);
@@ -199,7 +198,10 @@ public class TripThemeActivity extends AppCompatActivity implements OnMapReadyCa
         }
         LatLng end = new LatLng(55.32045, 15.18763);
         polylineOptions.add(end);
+
+        List<PatternItem> pattern = Arrays.<PatternItem>asList(new Dash(30), new Gap(15), new Dash(30), new Gap(15));
         polylineOptions.pattern(pattern);
+
         polylineOptions.width(4);
         polylineOptions.color(Color.BLUE);
         mMap.addPolyline(polylineOptions);
